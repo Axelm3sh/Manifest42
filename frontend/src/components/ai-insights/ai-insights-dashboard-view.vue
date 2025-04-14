@@ -6,7 +6,7 @@ import AiInsightsModelSettings from './ai-insights-model-settings.vue';
 import AiInsightsPredictions from './ai-insights-predictions.vue';
 import AiInsightsRecommendations from './ai-insights-recommendations.vue';
 import AiInsightsRiskTable from './ai-insights-risk-table.vue';
-
+//Currently might not be in use. Potentially used in analyst dashboard and views
 const { t } = useI18n();
 const aiInsightsStore = useAiInsightsStore();
 

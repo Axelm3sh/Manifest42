@@ -11,7 +11,7 @@ import InventoryOverview from './inventory-overview.vue';
 import InventoryItemsTable from './inventory-items-table.vue';
 import InventoryWarehouses from './inventory-warehouses.vue';
 import InventoryStockAlerts from './inventory-stock-alerts.vue';
-
+//Currently not in use, might have ported over to the router-based view
 const { t } = useI18n();
 const { formatDateTime } = useFormatters();
 const inventoryDataStore = useInventoryDataStore();
