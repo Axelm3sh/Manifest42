@@ -73,13 +73,58 @@ A prototype web UI for a warehouse management system that:
 - UI Components: Custom-built with Vue 3
 
 ## Development
-```
+
+### Setup and Installation
+```bash
+# Install dependencies
 npm install
+
+# Start development server
 npm run dev
 ```
 
-## Build for Production
+### Testing
+```bash
+# Run unit tests
+npm run test
+
+# Run unit tests in watch mode
+npm run test:watch
+
+# Run unit tests with coverage
+npm run test:coverage
+
+# Run end-to-end tests
+npm run test:e2e
+
+# Open Cypress for end-to-end testing
+npm run test:e2e:open
 ```
+
+### Storybook
+```bash
+# Start Storybook development server
+npm run storybook
+
+# Build Storybook for static deployment
+npm run build-storybook
+```
+
+### Build
+```bash
+# Build for development
 npm run build
+
+# Preview build
 npm run preview
 ```
+
+### Style Guidelines
+This project follows a comprehensive set of Vue.js style guidelines. Please refer to the [Vue.js Style Guide](./.junie/guidelines.md) for detailed information on:
+
+- JavaScript naming conventions and code style
+- Vue.js component structure and best practices
+- Composition API usage
+- Component design patterns
+- Common pitfalls to avoid
+- Performance considerations
