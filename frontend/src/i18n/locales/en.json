@@ -1,0 +1,131 @@
+{
+  "app": {
+    "vite_logo_alt": "Vite logo",
+    "vue_logo_alt": "Vue logo",
+    "title": "Vite + Vue",
+    "skip_to_content": "Skip to main content",
+    "footer_text": "© 2025 AI-Powered Inventory Management Dashboard"
+  },
+  "language": {
+    "select": "Select language",
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "refresh": "Refresh",
+    "settings": "Settings",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "submit": "Submit",
+    "reset": "Reset"
+  },
+  "time": {
+    "just_now": "Just now",
+    "minutes_ago": "{count} minute(s) ago",
+    "hours_ago": "{count} hour(s) ago",
+    "days_ago": "{count} day(s) ago",
+    "date_format": "MMM d, yyyy",
+    "date_time_format": "MMM d, yyyy h:mm a"
+  },
+  "admin": {
+    "dashboard_title": "Admin Dashboard",
+    "dashboard_description": "Manage system settings, users, and view overall metrics",
+    "welcome": "Welcome, {name}",
+    "system_status": "System Status",
+    "users_online": "Users Online",
+    "pending_approvals": "Pending Approvals",
+    "system_health": "System Health",
+    "last_backup": "Last Backup",
+    "recent_activities": "Recent Activities",
+    "quick_actions": "Quick Actions",
+    "kpi": {
+      "users": "Total Users",
+      "pending_approvals": "Pending Approvals",
+      "system_alerts": "System Alerts",
+      "inventory_items": "Inventory Items"
+    },
+    "health": {
+      "optimal": "Optimal",
+      "warning": "Warning",
+      "critical": "Critical"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "inventory": "Inventory",
+      "ai_insights": "AI Insights",
+      "notifications": "Notifications"
+    },
+    "actions": {
+      "manage_users": "Manage Users",
+      "system_settings": "System Settings",
+      "view_logs": "View Logs",
+      "backup_system": "Backup System"
+    }
+  },
+  "ai_insights": {
+    "title": "AI Insights",
+    "model_settings": "Model Settings",
+    "refresh": "Refresh Data",
+    "model_parameters": "Model Parameters",
+    "confidence_threshold": "Confidence Threshold",
+    "time_horizon": "Time Horizon",
+    "seasonality": "Seasonality",
+    "external_factors": "External Factors",
+    "days": "days",
+    "user_overrides": "User Overrides",
+    "clear_all_overrides": "Clear All Overrides",
+    "predictions": "Predictions",
+    "recommendations": "Recommendations",
+    "stock_risk": "Stock Risk",
+    "no_predictions": "No predictions available",
+    "no_recommendations": "No recommendations available",
+    "no_risk_items": "No high-risk items found",
+    "current_stock": "Current Stock",
+    "predicted_demand": "Predicted Demand",
+    "confidence": "Confidence",
+    "predicted_stockout": "Predicted Stockout",
+    "increase_demand": "Increase Demand",
+    "decrease_demand": "Decrease Demand",
+    "recommendation_type": "Recommendation Type",
+    "recommended_order": "Recommended Order",
+    "excess_stock": "Excess Stock",
+    "reason": "Reason",
+    "create_order": "Create Order",
+    "manage_stock": "Manage Stock",
+    "dismiss": "Dismiss",
+    "high_risk_items": "{count} High Risk Items",
+    "product": "Product",
+    "risk_level": "Risk Level",
+    "stockout_date": "Stockout Date",
+    "actions": "Actions",
+    "restock": "Restock",
+    "risk_levels": {
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "none": "None"
+    },
+    "urgency_levels": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "recommendation_types": {
+      "restock": "Restock",
+      "overstock": "Overstock",
+      "optimize": "Optimize"
+    }
+  }
+}
