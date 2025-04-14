@@ -1,0 +1,131 @@
+{
+  "app": {
+    "vite_logo_alt": "Logo de Vite",
+    "vue_logo_alt": "Logo de Vue",
+    "title": "Vite + Vue",
+    "skip_to_content": "Saltar al contenido principal",
+    "footer_text": "© 2025 Panel de Control de Gestión de Inventario con IA"
+  },
+  "language": {
+    "select": "Seleccionar idioma",
+    "en": "Inglés",
+    "es": "Español",
+    "fr": "Francés"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "refresh": "Actualizar",
+    "settings": "Configuración",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "submit": "Enviar",
+    "reset": "Restablecer"
+  },
+  "time": {
+    "just_now": "Ahora mismo",
+    "minutes_ago": "hace {count} minuto(s)",
+    "hours_ago": "hace {count} hora(s)",
+    "days_ago": "hace {count} día(s)",
+    "date_format": "d MMM, yyyy",
+    "date_time_format": "d MMM, yyyy h:mm a"
+  },
+  "admin": {
+    "dashboard_title": "Panel de Administrador",
+    "dashboard_description": "Administra la configuración del sistema, usuarios y visualiza métricas generales",
+    "welcome": "Bienvenido, {name}",
+    "system_status": "Estado del Sistema",
+    "users_online": "Usuarios en Línea",
+    "pending_approvals": "Aprobaciones Pendientes",
+    "system_health": "Salud del Sistema",
+    "last_backup": "Última Copia de Seguridad",
+    "recent_activities": "Actividades Recientes",
+    "quick_actions": "Acciones Rápidas",
+    "kpi": {
+      "users": "Total de Usuarios",
+      "pending_approvals": "Aprobaciones Pendientes",
+      "system_alerts": "Alertas del Sistema",
+      "inventory_items": "Elementos de Inventario"
+    },
+    "health": {
+      "optimal": "Óptimo",
+      "warning": "Advertencia",
+      "critical": "Crítico"
+    },
+    "tabs": {
+      "overview": "Resumen",
+      "inventory": "Inventario",
+      "ai_insights": "Insights de IA",
+      "notifications": "Notificaciones"
+    },
+    "actions": {
+      "manage_users": "Administrar Usuarios",
+      "system_settings": "Configuración del Sistema",
+      "view_logs": "Ver Registros",
+      "backup_system": "Copia de Seguridad"
+    }
+  },
+  "ai_insights": {
+    "title": "Insights de IA",
+    "model_settings": "Configuración del Modelo",
+    "refresh": "Actualizar Datos",
+    "model_parameters": "Parámetros del Modelo",
+    "confidence_threshold": "Umbral de Confianza",
+    "time_horizon": "Horizonte Temporal",
+    "seasonality": "Estacionalidad",
+    "external_factors": "Factores Externos",
+    "days": "días",
+    "user_overrides": "Anulaciones de Usuario",
+    "clear_all_overrides": "Borrar Todas las Anulaciones",
+    "predictions": "Predicciones",
+    "recommendations": "Recomendaciones",
+    "stock_risk": "Riesgo de Stock",
+    "no_predictions": "No hay predicciones disponibles",
+    "no_recommendations": "No hay recomendaciones disponibles",
+    "no_risk_items": "No se encontraron elementos de alto riesgo",
+    "current_stock": "Stock Actual",
+    "predicted_demand": "Demanda Prevista",
+    "confidence": "Confianza",
+    "predicted_stockout": "Agotamiento Previsto",
+    "increase_demand": "Aumentar Demanda",
+    "decrease_demand": "Disminuir Demanda",
+    "recommendation_type": "Tipo de Recomendación",
+    "recommended_order": "Pedido Recomendado",
+    "excess_stock": "Exceso de Stock",
+    "reason": "Razón",
+    "create_order": "Crear Pedido",
+    "manage_stock": "Gestionar Stock",
+    "dismiss": "Descartar",
+    "high_risk_items": "{count} Elementos de Alto Riesgo",
+    "product": "Producto",
+    "risk_level": "Nivel de Riesgo",
+    "stockout_date": "Fecha de Agotamiento",
+    "actions": "Acciones",
+    "restock": "Reabastecer",
+    "risk_levels": {
+      "critical": "Crítico",
+      "high": "Alto",
+      "medium": "Medio",
+      "low": "Bajo",
+      "none": "Ninguno"
+    },
+    "urgency_levels": {
+      "high": "Alta",
+      "medium": "Media",
+      "low": "Baja"
+    },
+    "recommendation_types": {
+      "restock": "Reabastecer",
+      "overstock": "Exceso de Stock",
+      "optimize": "Optimizar"
+    }
+  }
+}
