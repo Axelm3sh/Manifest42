@@ -1,0 +1,716 @@
+<script setup>
+import {computed, onMounted, ref} from 'vue';
+import {useI18n} from 'vue-i18n';
+import {useRoute} from 'vue-router';
+import {useAuthStore} from '../stores/auth';
+import {useInventoryStore} from '../stores/inventoryData';
+import {useAiInsightsStore} from '../stores/aiInsights';
+import {useSimulationStore} from '../stores/simulationControls';
+import DashboardLayout from '../components/dashboard-layout.vue';
+
+const { t } = useI18n();
+const route = useRoute();
+const authStore = useAuthStore();
+const inventoryStore = useInventoryStore();
+const aiInsightsStore = useAiInsightsStore();
+const simulationStore = useSimulationStore();
+
+// Determine if we're on the main dashboard route (not a child route)
+const isMainDashboardRoute = computed(() => {
+  return route.path === '/analyst';
+});
+
+// Get the active sidebar item based on the current route
+const getActiveItem = () => {
+  const path = route.path;
+  if (path === '/analyst') return 'dashboard';
+  if (path === '/analyst/inventory') return 'inventory';
+  if (path === '/analyst/simulations') return 'simulations';
+  if (path === '/analyst/reports') return 'reports';
+  if (path === '/analyst/ai-insights') return 'ai_insights';
+  return 'dashboard';
+};
+
+// Dashboard state
+const isLoading = ref(true);
+
+// Analyst-specific metrics
+const analystMetrics = ref({
+  activeSimulations: 0,
+  completedReports: 0,
+  dataAccuracy: 0,
+  predictionsGenerated: 0,
+});
+
+// KPIs
+const kpis = computed(() => [
+  {
+    id: 'simulations',
+    title: t('analyst.kpi.active_simulations'),
+    value: analystMetrics.value.activeSimulations,
+    change: '+3',
+    trend: 'up',
+  },
+  {
+    id: 'reports',
+    title: t('analyst.kpi.completed_reports'),
+    value: analystMetrics.value.completedReports,
+    change: '+5',
+    trend: 'up',
+  },
+  {
+    id: 'accuracy',
+    title: t('analyst.kpi.data_accuracy'),
+    value: `${analystMetrics.value.dataAccuracy}%`,
+    change: '+2.5%',
+    trend: 'up',
+  },
+  {
+    id: 'predictions',
+    title: t('analyst.kpi.predictions_generated'),
+    value: analystMetrics.value.predictionsGenerated,
+    change: '+12',
+    trend: 'up',
+  },
+]);
+
+// Recent reports
+const recentReports = ref([]);
+
+// Recent simulations
+const recentSimulations = ref([]);
+
+// AI recommendations
+const aiRecommendations = ref([]);
+
+// Load dashboard data
+onMounted(async () => {
+  try {
+    // Simulate API calls
+    await Promise.all([
+      loadAnalystMetrics(),
+      loadRecentReports(),
+      loadRecentSimulations(),
+      loadAiRecommendations(),
+    ]);
+  } catch (error) {
+    console.error('Error loading analyst dashboard data:', error);
+  } finally {
+    isLoading.value = false;
+  }
+});
+
+// Load analyst metrics
+const loadAnalystMetrics = async () => {
+  // Simulate API call
+  await new Promise(resolve => setTimeout(resolve, 800));
+
+  analystMetrics.value = {
+    activeSimulations: 3,
+    completedReports: 28,
+    dataAccuracy: 94.5,
+    predictionsGenerated: 156,
+  };
+};
+
+// Load recent reports
+const loadRecentReports = async () => {
+  // Simulate API call
+  await new Promise(resolve => setTimeout(resolve, 600));
+
+  recentReports.value = [
+    {
+      id: 1,
+      title: 'Q3 Inventory Turnover Analysis',
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+      status: 'completed',
+      insights: 'Turnover rate increased by 12% compared to Q2',
+    },
+    {
+      id: 2,
+      title: 'Supply Chain Bottleneck Identification',
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+      status: 'completed',
+      insights: 'Identified 3 critical bottlenecks in the distribution network',
+    },
+    {
+      id: 3,
+      title: 'Seasonal Demand Forecast',
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+      status: 'completed',
+      insights: 'Predicted 18% increase in holiday season demand',
+    },
+  ];
+};
+
+// Load recent simulations
+const loadRecentSimulations = async () => {
+  // Simulate API call
+  await new Promise(resolve => setTimeout(resolve, 700));
+
+  recentSimulations.value = [
+    {
+      id: 1,
+      title: 'Supply Chain Disruption Scenario',
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
+      status: 'in_progress',
+      progress: 65,
+      description: 'Simulating impact of 2-week shipping delay from primary suppliers',
+    },
+    {
+      id: 2,
+      title: 'Demand Spike Response',
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 36).toISOString(),
+      status: 'completed',
+      progress: 100,
+      description: 'Analyzed inventory response to 30% sudden demand increase',
+    },
+    {
+      id: 3,
+      title: 'New Distribution Center Impact',
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
+      status: 'completed',
+      progress: 100,
+      description: 'Evaluated logistics improvements from adding East Coast distribution center',
+    },
+  ];
+};
+
+// Load AI recommendations
+const loadAiRecommendations = async () => {
+  // Simulate API call
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  aiRecommendations.value = [
+    {
+      id: 1,
+      title: 'Increase safety stock for high-demand items',
+      confidence: 92,
+      impact: 'high',
+      description: 'Based on recent stockout patterns, increasing safety stock by 15% for top 20 SKUs would reduce stockouts by an estimated 35%',
+    },
+    {
+      id: 2,
+      title: 'Optimize reorder points for seasonal items',
+      confidence: 87,
+      impact: 'medium',
+      description: 'Adjusting reorder points based on seasonal demand patterns could reduce carrying costs by approximately 8%',
+    },
+    {
+      id: 3,
+      title: 'Consolidate shipments to western region',
+      confidence: 78,
+      impact: 'medium',
+      description: 'Consolidating shipments to the western region could reduce transportation costs by 12% with minimal impact on delivery times',
+    },
+  ];
+};
+
+// Navigate to route
+const navigateTo = (route) => {
+  // In a real app, this would use router.push
+  console.log(`Navigate to ${route}`);
+};
+
+// Format date
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(date);
+};
+
+// Get time ago
+const getTimeAgo = (dateString) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+
+  if (diffMins < 60) return t('time.minutes_ago', { count: diffMins });
+
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return t('time.hours_ago', { count: diffHours });
+
+  const diffDays = Math.floor(diffHours / 24);
+  return t('time.days_ago', { count: diffDays });
+};
+
+// Get status class
+const getStatusClass = (status) => {
+  switch (status) {
+    case 'completed': return 'status-completed';
+    case 'in_progress': return 'status-in-progress';
+    case 'pending': return 'status-pending';
+    default: return '';
+  }
+};
+
+// Get impact class
+const getImpactClass = (impact) => {
+  switch (impact) {
+    case 'high': return 'impact-high';
+    case 'medium': return 'impact-medium';
+    case 'low': return 'impact-low';
+    default: return '';
+  }
+};
+
+// Get confidence class
+const getConfidenceClass = (confidence) => {
+  if (confidence >= 90) return 'confidence-high';
+  if (confidence >= 70) return 'confidence-medium';
+  return 'confidence-low';
+};
+
+// Create new simulation
+const createNewSimulation = () => {
+  // In a real app, this would navigate to a simulation creation page
+  console.log('Create new simulation');
+};
+
+// Create new report
+const createNewReport = () => {
+  // In a real app, this would navigate to a report creation page
+  console.log('Create new report');
+};
+</script>
+
+<template>
+  <DashboardLayout 
+    :title="t('analyst.dashboard_title')" 
+    :activeItem="getActiveItem()"
+  >
+    <!-- Main content or router view for child routes -->
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+
+    <!-- Default content when on the main dashboard route -->
+    <div v-if="isMainDashboardRoute" class="analyst-dashboard">
+      <div v-if="isLoading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>{{ t('common.loading') }}</p>
+      </div>
+
+      <div v-else>
+        <!-- Analyst welcome section -->
+        <div class="welcome-section">
+          <h2 class="welcome-title">{{ t('analyst.welcome', { name: authStore.user?.name }) }}</h2>
+          <p class="welcome-subtitle">{{ t('analyst.dashboard_description') }}</p>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-grid">
+          <div v-for="kpi in kpis" :key="kpi.id" class="kpi-card">
+            <h3 class="kpi-title">{{ kpi.title }}</h3>
+            <div class="kpi-value">{{ kpi.value }}</div>
+            <div class="kpi-trend" :class="kpi.trend">
+              {{ kpi.change }}
+              <span class="trend-icon">
+                {{ kpi.trend === 'up' ? '↑' : kpi.trend === 'down' ? '↓' : '→' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard sections -->
+        <div class="dashboard-sections">
+          <!-- Quick actions -->
+          <div class="analyst-actions">
+            <h3 class="card-title">{{ t('analyst.quick_actions') }}</h3>
+            <div class="actions-grid">
+              <router-link to="/analyst/simulations" class="action-button">
+                {{ t('analyst.actions.create_simulation') }}
+              </router-link>
+              <router-link to="/analyst/reports" class="action-button">
+                {{ t('analyst.actions.generate_report') }}
+              </router-link>
+              <router-link to="/analyst/ai-insights" class="action-button">
+                {{ t('analyst.actions.analyze_trends') }}
+              </router-link>
+              <router-link to="/analyst/inventory" class="action-button">
+                {{ t('analyst.actions.view_inventory') }}
+              </router-link>
+            </div>
+          </div>
+
+          <!-- Recent simulations -->
+          <div class="overview-card">
+            <div class="card-header">
+              <h3 class="card-title">{{ t('analyst.recent_simulations') }}</h3>
+              <router-link to="/analyst/simulations" class="action-link">
+                {{ t('analyst.new_simulation') }}
+              </router-link>
+            </div>
+
+            <div v-if="recentSimulations.length === 0" class="empty-state">
+              {{ t('analyst.no_recent_simulations') }}
+            </div>
+
+            <div v-else class="simulations-list">
+              <div v-for="simulation in recentSimulations.slice(0, 2)" :key="simulation.id" class="simulation-item">
+                <div class="simulation-header">
+                  <div class="simulation-title">{{ simulation.title }}</div>
+                  <div class="simulation-status" :class="getStatusClass(simulation.status)">
+                    {{ t(`analyst.status.${simulation.status}`) }}
+                  </div>
+                </div>
+
+                <div class="simulation-description">{{ simulation.description }}</div>
+
+                <div v-if="simulation.status === 'in_progress'" class="simulation-progress">
+                  <div class="progress-bar-container">
+                    <div class="progress-bar" :style="`width: ${simulation.progress}%`"></div>
+                  </div>
+                  <div class="progress-value">{{ simulation.progress }}%</div>
+                </div>
+
+                <div class="simulation-meta">
+                  <span>{{ getTimeAgo(simulation.createdAt) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <router-link v-if="recentSimulations.length > 0" to="/analyst/simulations" class="view-all-button">
+              {{ t('analyst.view_all_simulations') }}
+            </router-link>
+          </div>
+
+          <!-- Recent reports -->
+          <div class="overview-card">
+            <div class="card-header">
+              <h3 class="card-title">{{ t('analyst.recent_reports') }}</h3>
+              <router-link to="/analyst/reports" class="action-link">
+                {{ t('analyst.new_report') }}
+              </router-link>
+            </div>
+
+            <div v-if="recentReports.length === 0" class="empty-state">
+              {{ t('analyst.no_recent_reports') }}
+            </div>
+
+            <div v-else class="reports-list">
+              <div v-for="report in recentReports.slice(0, 2)" :key="report.id" class="report-item">
+                <div class="report-header">
+                  <div class="report-title">{{ report.title }}</div>
+                  <div class="report-date">{{ formatDate(report.createdAt) }}</div>
+                </div>
+
+                <div class="report-insights">{{ report.insights }}</div>
+              </div>
+            </div>
+
+            <router-link v-if="recentReports.length > 0" to="/analyst/reports" class="view-all-button">
+              {{ t('analyst.view_all_reports') }}
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </DashboardLayout>
+</template>
+
+<style scoped>
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.loading-spinner {
+  border: 4px solid var(--color-border);
+  border-top: 4px solid var(--color-primary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.analyst-dashboard {
+  width: 100%;
+}
+
+.welcome-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.welcome-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
+}
+
+.welcome-subtitle {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.kpi-card {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
+}
+
+.kpi-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.kpi-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.kpi-value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.kpi-trend {
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+}
+
+.kpi-trend.up {
+  color: var(--color-success);
+}
+
+.kpi-trend.down {
+  color: var(--color-error);
+}
+
+.kpi-trend.neutral {
+  color: var(--color-text-tertiary);
+}
+
+.trend-icon {
+  margin-left: var(--spacing-xs);
+}
+
+.dashboard-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-primary);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.action-link {
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.action-link:hover {
+  text-decoration: underline;
+}
+
+.overview-card {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-lg);
+  transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
+}
+
+.overview-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.empty-state {
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  padding: var(--spacing-md) 0;
+}
+
+.simulations-list, .reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.simulation-item, .report-item {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-xs);
+}
+
+.simulation-header, .report-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+}
+
+.simulation-title, .report-title {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.simulation-status {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-full);
+}
+
+.status-completed {
+  background-color: var(--color-success-light);
+  color: var(--color-success-dark);
+}
+
+.status-in-progress {
+  background-color: var(--color-info-light);
+  color: var(--color-info-dark);
+}
+
+.status-pending {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning-dark);
+}
+
+.simulation-description, .report-insights {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.simulation-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.progress-bar-container {
+  flex: 1;
+  height: 6px;
+  background-color: var(--color-border);
+  border-radius: var(--border-radius-full);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: var(--border-radius-full);
+}
+
+.progress-value {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  min-width: 36px;
+  text-align: right;
+}
+
+.simulation-meta, .report-date {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.view-all-button {
+  display: inline-block;
+  margin-top: var(--spacing-md);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.view-all-button:hover {
+  text-decoration: underline;
+}
+
+.analyst-actions {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-lg);
+  transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
+}
+
+.analyst-actions:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  background-color: var(--color-background);
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  text-decoration: none;
+}
+
+.action-button:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-primary);
+  text-decoration: none;
+}
+
+/* Fade transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
