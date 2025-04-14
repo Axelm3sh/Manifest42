@@ -1,0 +1,45 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yml'
+  workflow_dispatch:
+
+jobs:
+  # This is a placeholder workflow for the backend service
+  # Uncomment and customize these jobs when the backend is implemented
+  
+  # build:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: ./backend
+  #
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   
+  #   - name: Set up environment
+  #     run: echo "Setting up backend environment..."
+  #   
+  #   - name: Install dependencies
+  #     run: echo "Installing backend dependencies..."
+  #   
+  #   - name: Run tests
+  #     run: echo "Running backend tests..."
+  #   
+  #   - name: Build
+  #     run: echo "Building backend..."
+
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Placeholder step
+      run: echo "This is a placeholder workflow for the backend service. Update this file when the backend is implemented."

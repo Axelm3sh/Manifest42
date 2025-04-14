@@ -1,0 +1,131 @@
+{
+  "app": {
+    "vite_logo_alt": "Logo Vite",
+    "vue_logo_alt": "Logo Vue",
+    "title": "Vite + Vue",
+    "skip_to_content": "Passer au contenu principal",
+    "footer_text": "© 2025 Tableau de Bord de Gestion d'Inventaire avec IA"
+  },
+  "language": {
+    "select": "Sélectionner la langue",
+    "en": "Anglais",
+    "es": "Espagnol",
+    "fr": "Français"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "refresh": "Actualiser",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "submit": "Soumettre",
+    "reset": "Réinitialiser"
+  },
+  "time": {
+    "just_now": "À l'instant",
+    "minutes_ago": "il y a {count} minute(s)",
+    "hours_ago": "il y a {count} heure(s)",
+    "days_ago": "il y a {count} jour(s)",
+    "date_format": "d MMM yyyy",
+    "date_time_format": "d MMM yyyy à h:mm"
+  },
+  "admin": {
+    "dashboard_title": "Tableau de Bord Administrateur",
+    "dashboard_description": "Gérer les paramètres système, les utilisateurs et visualiser les métriques globales",
+    "welcome": "Bienvenue, {name}",
+    "system_status": "État du Système",
+    "users_online": "Utilisateurs en Ligne",
+    "pending_approvals": "Approbations en Attente",
+    "system_health": "Santé du Système",
+    "last_backup": "Dernière Sauvegarde",
+    "recent_activities": "Activités Récentes",
+    "quick_actions": "Actions Rapides",
+    "kpi": {
+      "users": "Total des Utilisateurs",
+      "pending_approvals": "Approbations en Attente",
+      "system_alerts": "Alertes Système",
+      "inventory_items": "Articles d'Inventaire"
+    },
+    "health": {
+      "optimal": "Optimal",
+      "warning": "Avertissement",
+      "critical": "Critique"
+    },
+    "tabs": {
+      "overview": "Aperçu",
+      "inventory": "Inventaire",
+      "ai_insights": "Insights IA",
+      "notifications": "Notifications"
+    },
+    "actions": {
+      "manage_users": "Gérer les Utilisateurs",
+      "system_settings": "Paramètres Système",
+      "view_logs": "Voir les Journaux",
+      "backup_system": "Sauvegarder le Système"
+    }
+  },
+  "ai_insights": {
+    "title": "Insights IA",
+    "model_settings": "Paramètres du Modèle",
+    "refresh": "Actualiser les Données",
+    "model_parameters": "Paramètres du Modèle",
+    "confidence_threshold": "Seuil de Confiance",
+    "time_horizon": "Horizon Temporel",
+    "seasonality": "Saisonnalité",
+    "external_factors": "Facteurs Externes",
+    "days": "jours",
+    "user_overrides": "Remplacements Utilisateur",
+    "clear_all_overrides": "Effacer Tous les Remplacements",
+    "predictions": "Prédictions",
+    "recommendations": "Recommandations",
+    "stock_risk": "Risque de Stock",
+    "no_predictions": "Aucune prédiction disponible",
+    "no_recommendations": "Aucune recommandation disponible",
+    "no_risk_items": "Aucun article à haut risque trouvé",
+    "current_stock": "Stock Actuel",
+    "predicted_demand": "Demande Prévue",
+    "confidence": "Confiance",
+    "predicted_stockout": "Rupture de Stock Prévue",
+    "increase_demand": "Augmenter la Demande",
+    "decrease_demand": "Diminuer la Demande",
+    "recommendation_type": "Type de Recommandation",
+    "recommended_order": "Commande Recommandée",
+    "excess_stock": "Excès de Stock",
+    "reason": "Raison",
+    "create_order": "Créer une Commande",
+    "manage_stock": "Gérer le Stock",
+    "dismiss": "Ignorer",
+    "high_risk_items": "{count} Articles à Haut Risque",
+    "product": "Produit",
+    "risk_level": "Niveau de Risque",
+    "stockout_date": "Date de Rupture",
+    "actions": "Actions",
+    "restock": "Réapprovisionner",
+    "risk_levels": {
+      "critical": "Critique",
+      "high": "Élevé",
+      "medium": "Moyen",
+      "low": "Faible",
+      "none": "Aucun"
+    },
+    "urgency_levels": {
+      "high": "Élevée",
+      "medium": "Moyenne",
+      "low": "Faible"
+    },
+    "recommendation_types": {
+      "restock": "Réapprovisionner",
+      "overstock": "Surstock",
+      "optimize": "Optimiser"
+    }
+  }
+}
