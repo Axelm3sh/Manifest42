@@ -81,6 +81,30 @@ To ensure application reliability, consider expanding the testing infrastructure
    - Ensure keyboard navigation works properly
    - Test with screen readers and fix issues
 
+### Recent Test Updates for Router-Based Refactor
+
+As part of the component organization improvements, the dashboard components were refactored to use router-based navigation instead of tab-based navigation. This required updating the test files to work with the new router-based navigation pattern.
+
+The following test files were updated:
+- `LogisticsDashboard.spec.js`
+- `AnalystDashboard.spec.js`
+
+Key changes included:
+1. Added Vue Router mocking
+2. Changed from `mount` to `shallowMount` for more efficient testing
+3. Removed tests for tab switching (replaced with router-based navigation)
+4. Added tests for router-specific functionality
+5. Updated tests to focus on component methods and behavior
+
+Specific improvements to test files:
+- LogisticsDashboard.spec.js: Added tests for time calculation and alert level styling
+- AnalystDashboard.spec.js: Added tests for impact classification and simulation actions
+
+Future test improvements to consider:
+- Add more comprehensive tests for router-based navigation functionality
+- Ensure all edge cases are properly tested
+- Standardize testing approach across all dashboard components (currently some inconsistencies exist)
+
 ## 6. Documentation and Maintenance
 
 ### Documentation Enhancements
@@ -96,5 +120,38 @@ To improve code maintainability, consider enhancing documentation:
    - Configure GitHub Actions or similar CI/CD tool
    - Implement automated testing in the pipeline
    - Set up automated deployment to staging/production
+
+## 7. Coding Standards and Best Practices
+
+### Vue.js Style Guide
+
+To maintain code quality and consistency, follow these key Vue.js development standards:
+
+1. **Naming Conventions**:
+   - Use camelCase for variables and functions
+   - Use PascalCase for component names
+   - Use kebab-case for file names
+   - Use UPPER_SNAKE_CASE for constants
+
+2. **Component Structure**:
+   - Use Single File Components (SFC)
+   - Prefer Composition API with `<script setup>` for new components
+   - Keep components focused on a single responsibility
+   - Follow a consistent order of sections: `<script>`, `<template>`, `<style>`
+
+3. **Best Practices**:
+   - Define prop types explicitly and use validation
+   - Use kebab-case for event names
+   - Always provide a unique `:key` with `v-for`
+   - Use shorthand syntax for directives (`:`, `@`, `#`)
+   - Implement performance optimizations like `v-memo` and `shallowRef`
+
+4. **Common Pitfalls to Avoid**:
+   - Mutating props directly
+   - Complex logic in templates
+   - Deep nesting of components
+   - Side effects in computed properties
+
+For a comprehensive guide, refer to the full Vue.js style guide in the project.
 
 These long-term improvements will help ensure that the Cargomatic frontend application remains maintainable, performant, and user-friendly as it evolves over time.
