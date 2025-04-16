@@ -20,12 +20,7 @@ vi.mock('../../src/components/dashboard-layout.vue', () => ({
   }
 }));
 
-vi.mock('../../src/components/inventory-dashboard.vue', () => ({
-  default: {
-    name: 'InventoryDashboard',
-    template: '<div class="mock-inventory-dashboard"></div>'
-  }
-}));
+// No need to mock inventory components as they are loaded via router-view
 
 vi.mock('../../src/components/notification-center.vue', () => ({
   default: {
