@@ -1,10 +1,10 @@
-# Manifest42 Frontend Requirements
+# Cargomatic Frontend Requirements
 
-This document outlines the high-level specifications, architectural decisions, and coding standards for the Manifest42 frontend application.
+This document outlines the high-level specifications, architectural decisions, and coding standards for the Cargomatic frontend application.
 
 ## 1. Project Overview
 
-The Manifest42 frontend is an AI-Powered Inventory Management Dashboard with the following key features:
+The Cargomatic frontend is an AI-Powered Inventory Management Dashboard with the following key features:
 - Role-Based Access Control (RBAC)
 - Real-Time Inventory Tracking
 - AI-Driven Predictive Insights

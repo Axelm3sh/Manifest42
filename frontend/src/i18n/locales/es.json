@@ -3,8 +3,9 @@
     "vite_logo_alt": "Logo de Vite",
     "vue_logo_alt": "Logo de Vue",
     "title": "Vite + Vue",
+    "name": "Cargomatic",
     "skip_to_content": "Saltar al contenido principal",
-    "footer_text": "© 2025 Panel de Control de Gestión de Inventario con IA"
+    "footer_text": "© 2025 Cargomatic - Panel de Control de Gestión de Inventario con IA"
   },
   "language": {
     "select": "Seleccionar idioma",
