@@ -7,6 +7,7 @@ import {useInventoryStore} from '../stores/inventoryData';
 import {useAiInsightsStore} from '../stores/aiInsights';
 import {useSimulationStore} from '../stores/simulationControls';
 import DashboardLayout from '../components/dashboard-layout.vue';
+import {PhArrowDown, PhArrowRight, PhArrowUp} from 'phosphor-vue';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -312,7 +313,7 @@ const createNewReport = () => {
             <div class="kpi-trend" :class="kpi.trend">
               {{ kpi.change }}
               <span class="trend-icon">
-                {{ kpi.trend === 'up' ? '↑' : kpi.trend === 'down' ? '↓' : '→' }}
+                <component :is="kpi.trend === 'up' ? PhArrowUp : kpi.trend === 'down' ? PhArrowDown : PhArrowRight" weight="regular" />
               </span>
             </div>
           </div>

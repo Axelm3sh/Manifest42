@@ -180,9 +180,7 @@ const getDashboardRoute = () => {
           @click="toggleSidebar"
           :aria-label="isSidebarOpen ? t('navigation.collapse_sidebar') : t('navigation.expand_sidebar')"
         >
-          <span class="toggle-icon" :class="{ 'rotated': !isSidebarOpen }">
-            &#9664;
-          </span>
+          <PhCaretLeft class="toggle-icon" :class="{ 'rotated': !isSidebarOpen }" weight="regular" />
         </button>
       </div>
 
