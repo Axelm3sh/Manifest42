@@ -1,67 +1,127 @@
 <script setup>
-import {onMounted, ref, watch} from 'vue';
-import {PhMoon, PhSun} from 'phosphor-vue';
+import {onBeforeUnmount, onMounted, ref} from 'vue';
 
-const theme = ref('light');
+// Theme state
+const currentTheme = ref(localStorage.getItem('theme') || 'light');
 
-// Initialize theme based on user preference or system preference
-onMounted(() => {
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    theme.value = savedTheme;
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    theme.value = 'dark';
-  }
-  applyTheme(theme.value);
-});
-
-// Watch for changes to theme and apply them
-watch(theme, (newTheme) => {
-  applyTheme(newTheme);
-  localStorage.setItem('theme', newTheme);
-});
-
-// Apply theme to document
-function applyTheme(newTheme) {
-  document.documentElement.setAttribute('data-theme', newTheme);
-}
+// Apply theme on component mount and when it changes
+const applyTheme = (theme) => {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+  currentTheme.value = theme;
+};
 
 // Toggle between light and dark themes
-function toggleTheme() {
-  theme.value = theme.value === 'light' ? 'dark' : 'light';
-}
+const toggleTheme = () => {
+  const newTheme = currentTheme.value === 'light' ? 'dark' : 'light';
+  applyTheme(newTheme);
+};
+
+// Initialize theme on component mount
+onMounted(() => {
+  // Check for saved theme preference or use system preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  } else {
+    // Check system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+  }
+
+  // Listen for system theme changes
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const handleChange = (e) => {
+    if (!localStorage.getItem('theme')) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
+  };
+  
+  mediaQuery.addEventListener('change', handleChange);
+  
+  // Cleanup
+  onBeforeUnmount(() => {
+    mediaQuery.removeEventListener('change', handleChange);
+  });
+});
 </script>
 
 <template>
   <button 
     class="theme-toggle" 
     @click="toggleTheme" 
-    :aria-label="theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'"
+    :aria-label="currentTheme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'"
+    :title="currentTheme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'"
   >
-    <PhMoon v-if="theme === 'light'" class="theme-icon" />
-    <PhSun v-else class="theme-icon" />
+    <!-- Sun icon for light mode -->
+    <span v-if="currentTheme === 'dark'" class="icon sun" aria-hidden="true">
+      ☀️
+    </span>
+    <!-- Moon icon for dark mode -->
+    <span v-else class="icon moon" aria-hidden="true">
+      🌙
+    </span>
+    <span class="theme-label">{{ currentTheme === 'light' ? 'Dark Mode' : 'Light Mode' }}</span>
   </button>
 </template>
 
 <style scoped>
 .theme-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--spacing-sm);
-  border-radius: var(--border-radius-full);
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: background-color var(--transition-normal);
+  gap: var(--spacing-sm);
+  background-color: var(--color-surface);
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), 
+              box-shadow var(--transition-fast), 
+              border-color var(--transition-fast);
 }
 
 .theme-toggle:hover {
   background-color: var(--color-surface-hover);
+  border-color: var(--color-primary);
 }
 
-.theme-icon {
-  font-size: var(--font-size-xl);
-  color: var(--color-text-primary);
+.theme-toggle:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.icon {
+  font-size: var(--font-size-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-label {
+  margin-left: var(--spacing-xs);
+}
+
+/* Add animation for icon transitions */
+.sun, .moon {
+  transition: transform var(--transition-normal);
+}
+
+.sun {
+  transform: rotate(0deg);
+}
+
+.theme-toggle:hover .sun {
+  transform: rotate(45deg);
+}
+
+.theme-toggle:hover .moon {
+  transform: scale(1.1);
+}
+
+@media (max-width: 640px) {
+  .theme-label {
+    display: none;
+  }
 }
 </style>

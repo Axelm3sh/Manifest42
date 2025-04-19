@@ -2,22 +2,51 @@
   /* Base colors */
   --color-primary: #646cff;
   --color-primary-hover: #535bf2;
+  --color-primary-light: #8891ff;
+  --color-primary-dark: #4b51cc;
+
   --color-secondary: #42b883;
   --color-secondary-hover: #33a06f;
+  --color-secondary-light: #65d4a3;
+  --color-secondary-dark: #2a8057;
+
   --color-success: #10b981;
+  --color-success-light: #34d399;
+  --color-success-dark: #059669;
+
   --color-warning: #f59e0b;
+  --color-warning-light: #fbbf24;
+  --color-warning-dark: #d97706;
+
   --color-error: #ef4444;
+  --color-error-light: #f87171;
+  --color-error-dark: #dc2626;
+
   --color-info: #3b82f6;
+  --color-info-light: #60a5fa;
+  --color-info-dark: #2563eb;
 
   /* Light theme (default) */
   --color-background: #ffffff;
+  --color-background-secondary: #f3f4f6;
+  --color-background-tertiary: #e5e7eb;
+
   --color-surface: #f9f9f9;
   --color-surface-hover: #f3f4f6;
+  --color-surface-active: #e5e7eb;
+  --color-surface-selected: #dbeafe;
+
   --color-border: #e5e7eb;
+  --color-border-light: #f3f4f6;
+  --color-border-dark: #d1d5db;
+
   --color-text-primary: #213547;
   --color-text-secondary: #4b5563;
   --color-text-tertiary: #9ca3af;
+  --color-text-disabled: #d1d5db;
+
   --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-shadow-dark: rgba(0, 0, 0, 0.2);
 
   /* Typography */
   --font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -81,14 +110,29 @@
 
 /* Dark theme */
 [data-theme="dark"] {
+  /* Base colors remain the same */
+
+  /* Dark theme specific colors */
   --color-background: #242424;
+  --color-background-secondary: #1a1a1a;
+  --color-background-tertiary: #2d3748;
+
   --color-surface: #1a1a1a;
   --color-surface-hover: #2d3748;
+  --color-surface-active: #374151;
+  --color-surface-selected: #3b4a69;
+
   --color-border: #4a5568;
+  --color-border-light: #374151;
+  --color-border-dark: #64748b;
+
   --color-text-primary: rgba(255, 255, 255, 0.87);
   --color-text-secondary: rgba(255, 255, 255, 0.6);
   --color-text-tertiary: rgba(255, 255, 255, 0.4);
+  --color-text-disabled: rgba(255, 255, 255, 0.25);
+
   --color-shadow: rgba(0, 0, 0, 0.3);
+  --color-shadow-dark: rgba(0, 0, 0, 0.5);
 }
 
 a {
@@ -108,7 +152,10 @@ body {
   min-height: 100vh;
   background-color: var(--color-background);
   color: var(--color-text-primary);
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  transition: background-color var(--transition-normal), 
+              color var(--transition-normal),
+              border-color var(--transition-normal),
+              box-shadow var(--transition-normal);
 }
 
 h1 {
@@ -151,8 +198,31 @@ button:focus-visible {
   text-align: center;
 }
 
-/* Add a class for theme-aware elements that need transitions */
+/* Add classes for theme-aware elements that need transitions */
 .theme-aware-element {
+  transition: background-color var(--transition-normal), 
+              color var(--transition-normal), 
+              border-color var(--transition-normal),
+              box-shadow var(--transition-normal);
+}
+
+/* Different transition speeds for theme changes */
+.theme-transition-fast {
+  transition: background-color var(--transition-fast), 
+              color var(--transition-fast), 
+              border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.theme-transition-slow {
+  transition: background-color var(--transition-slow), 
+              color var(--transition-slow), 
+              border-color var(--transition-slow),
+              box-shadow var(--transition-slow);
+}
+
+/* Apply theme-aware to common elements */
+.card, .panel, .modal, .dropdown, .tooltip {
   transition: background-color var(--transition-normal), 
               color var(--transition-normal), 
               border-color var(--transition-normal),
