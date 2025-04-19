@@ -2,6 +2,7 @@
 import {computed} from 'vue';
 import {useI18n} from 'vue-i18n';
 import BaseCard from '../base/base-card.vue';
+import {PhCheckCircle, PhInfo, PhWarning, PhX} from 'phosphor-vue';
 
 const { t } = useI18n();
 
@@ -56,14 +57,14 @@ const clearAllNotifications = () => {
 };
 
 // Helper methods
-const getNotificationTypeIcon = (type) => {
+const getNotificationTypeComponent = (type) => {
   const typeMap = {
-    info: 'ℹ️',
-    success: '✅',
-    warning: '⚠️',
-    error: '❌'
+    info: PhInfo,
+    success: PhCheckCircle,
+    warning: PhWarning,
+    error: PhX
   };
-  
+
   return typeMap[type] || typeMap.info;
 };
 
@@ -74,7 +75,7 @@ const getNotificationTypeClass = (type) => {
     warning: 'notification-warning',
     error: 'notification-error'
   };
-  
+
   return typeMap[type] || typeMap.info;
 };
 
@@ -96,7 +97,7 @@ const formatDate = (dateString) => {
           class="notification-group"
         >
           <div class="date-header">{{ date }}</div>
-          
+
           <BaseCard 
             v-for="notification in group" 
             :key="notification.id"
@@ -110,13 +111,13 @@ const formatDate = (dateString) => {
           >
             <div class="notification-content">
               <div class="notification-icon">
-                {{ getNotificationTypeIcon(notification.type) }}
+                <component :is="getNotificationTypeComponent(notification.type)" weight="regular" />
               </div>
               <div class="notification-body">
                 <div class="notification-title">{{ notification.title }}</div>
                 <div class="notification-message">{{ notification.message }}</div>
                 <div class="notification-time">{{ formatDate(notification.timestamp) }}</div>
-                
+
                 <div v-if="notification.actions && notification.actions.length > 0" class="notification-actions">
                   <button 
                     v-for="action in notification.actions" 
@@ -134,13 +135,13 @@ const formatDate = (dateString) => {
                 class="dismiss-button"
                 aria-label="Dismiss notification"
               >
-                ×
+                <PhX weight="regular" />
               </button>
             </div>
           </BaseCard>
         </div>
       </template>
-      
+
       <template v-else>
         <!-- Filtered by type -->
         <BaseCard 
@@ -156,13 +157,13 @@ const formatDate = (dateString) => {
         >
           <div class="notification-content">
             <div class="notification-icon">
-              {{ getNotificationTypeIcon(notification.type) }}
+              <component :is="getNotificationTypeComponent(notification.type)" weight="regular" />
             </div>
             <div class="notification-body">
               <div class="notification-title">{{ notification.title }}</div>
               <div class="notification-message">{{ notification.message }}</div>
               <div class="notification-time">{{ formatDate(notification.timestamp) }}</div>
-              
+
               <div v-if="notification.actions && notification.actions.length > 0" class="notification-actions">
                 <button 
                   v-for="action in notification.actions" 
@@ -180,19 +181,19 @@ const formatDate = (dateString) => {
               class="dismiss-button"
               aria-label="Dismiss notification"
             >
-              ×
+              <PhX weight="regular" />
             </button>
           </div>
         </BaseCard>
       </template>
-      
+
       <div class="clear-all-container">
         <button @click="clearAllNotifications" class="clear-all-button">
           {{ t('notifications.clear_all') }}
         </button>
       </div>
     </template>
-    
+
     <div v-else class="no-notifications">
       {{ t('notifications.no_notifications') }}
     </div>
