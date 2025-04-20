@@ -97,7 +97,6 @@ export default defineConfig(({ command, mode }) => {
           // Chunk files by type
           manualChunks: {
             'vendor': ['vue', 'vue-router', 'pinia'],
-            // Removed reference to non-existent ui directory
           },
           // Control chunk file naming
           chunkFileNames: 'assets/js/[name]-[hash].js',
