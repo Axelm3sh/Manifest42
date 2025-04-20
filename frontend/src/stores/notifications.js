@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import {computed, ref} from 'vue';
+import {computed, ref, shallowRef} from 'vue';
 
 /**
  * Store for notification system
@@ -7,7 +7,7 @@ import {computed, ref} from 'vue';
  */
 export const useNotificationsStore = defineStore('notifications', () => {
   // State
-  const notifications = ref([]);
+  const notifications = shallowRef([]);
   const preferences = ref({
     showInventoryAlerts: true,
     showAiInsights: true,
