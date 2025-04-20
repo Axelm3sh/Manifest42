@@ -28,17 +28,19 @@ defineProps({
 
 <style scoped>
 .base-card {
-  background-color: white;
+  background-color: var(--color-surface);
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  transition: background-color var(--transition-normal), 
+              box-shadow var(--transition-normal);
 }
 
 .card-header {
   padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -48,7 +50,7 @@ defineProps({
   margin: 0;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-text-primary);
 }
 
 .card-body {
@@ -62,6 +64,6 @@ defineProps({
 
 .card-footer {
   padding: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-border);
 }
 </style>
