@@ -2,16 +2,16 @@
   <div class="notifications-view">
     <h1>{{ $t('notifications.title') }}</h1>
     <p>{{ $t('notifications.description') }}</p>
-    
-    <!-- Placeholder content -->
-    <div class="placeholder-content">
-      <p>{{ $t('common.placeholder_content') }}</p>
+
+    <div class="notification-center-container">
+      <NotificationCenterView />
     </div>
   </div>
 </template>
 
 <script setup>
 import {useI18n} from 'vue-i18n';
+import NotificationCenterView from '../components/notification/notification-center-view.vue';
 
 const { t } = useI18n();
 </script>
@@ -21,11 +21,9 @@ const { t } = useI18n();
   padding: var(--spacing-lg);
 }
 
-.placeholder-content {
+.notification-center-container {
   margin-top: var(--spacing-xl);
-  padding: var(--spacing-lg);
-  background-color: var(--color-surface);
-  border-radius: var(--border-radius-md);
-  border: var(--border-width-thin) solid var(--color-border);
+  display: flex;
+  justify-content: center;
 }
 </style>
