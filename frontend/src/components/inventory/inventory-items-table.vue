@@ -94,17 +94,17 @@ const getLastActivityClass = (lastActivity) => {
 .items-table th {
   text-align: left;
   padding: 0.75rem;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--color-border);
   font-weight: 600;
 }
 
 .items-table td {
   padding: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .item-row:hover {
-  background-color: #f9fafb;
+  background-color: var(--color-hover);
 }
 
 .stock-level {
@@ -115,18 +115,18 @@ const getLastActivityClass = (lastActivity) => {
 }
 
 .stock-level-normal {
-  background-color: #dcfce7;
-  color: #15803d;
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .stock-level-low {
-  background-color: #fef3c7;
-  color: #b45309;
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .stock-level-out {
-  background-color: #fee2e2;
-  color: #b91c1c;
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text);
 }
 
 .activity-time {
@@ -134,14 +134,14 @@ const getLastActivityClass = (lastActivity) => {
 }
 
 .activity-recent {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .activity-today {
-  color: #3b82f6;
+  color: var(--color-primary);
 }
 
 .activity-old {
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 </style>

@@ -184,20 +184,20 @@ const getLastActivityClass = (lastActivity) => {
 
 .bar-container {
   height: 1.5rem;
-  background-color: #f3f4f6;
+  background-color: var(--color-background-muted);
   border-radius: 0.25rem;
   overflow: hidden;
 }
 
 .bar-fill {
   height: 100%;
-  background-color: #3b82f6;
+  background-color: var(--color-primary);
   transition: width 0.5s ease-in-out;
 }
 
 .category-value {
   font-size: 0.875rem;
-  color: #4b5563;
+  color: var(--color-text-secondary);
   text-align: right;
 }
 
@@ -221,7 +221,7 @@ const getLastActivityClass = (lastActivity) => {
 
 .utilization-container {
   height: 1.5rem;
-  background-color: #f3f4f6;
+  background-color: var(--color-background-muted);
   border-radius: 0.25rem;
   overflow: hidden;
 }
@@ -232,20 +232,20 @@ const getLastActivityClass = (lastActivity) => {
 }
 
 .utilization-normal {
-  background-color: #10b981;
+  background-color: var(--color-success);
 }
 
 .utilization-medium {
-  background-color: #f59e0b;
+  background-color: var(--color-warning);
 }
 
 .utilization-high {
-  background-color: #ef4444;
+  background-color: var(--color-danger);
 }
 
 .utilization-value {
   font-size: 0.875rem;
-  color: #4b5563;
+  color: var(--color-text-secondary);
   text-align: right;
 }
 
@@ -262,7 +262,7 @@ const getLastActivityClass = (lastActivity) => {
   align-items: center;
   padding: 0.5rem;
   border-radius: 0.25rem;
-  background-color: #f9fafb;
+  background-color: var(--color-surface);
 }
 
 .activity-product {
@@ -275,15 +275,15 @@ const getLastActivityClass = (lastActivity) => {
 }
 
 .activity-recent {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .activity-today {
-  color: #3b82f6;
+  color: var(--color-primary);
 }
 
 .activity-old {
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 /* Stock Summary */
@@ -299,7 +299,7 @@ const getLastActivityClass = (lastActivity) => {
 
 .status-label {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin-bottom: 0.25rem;
 }
 
@@ -321,14 +321,14 @@ const getLastActivityClass = (lastActivity) => {
 }
 
 .normal-stock {
-  background-color: #10b981;
+  background-color: var(--color-success);
 }
 
 .low-stock {
-  background-color: #f59e0b;
+  background-color: var(--color-warning);
 }
 
 .out-of-stock {
-  background-color: #ef4444;
+  background-color: var(--color-danger);
 }
 </style>

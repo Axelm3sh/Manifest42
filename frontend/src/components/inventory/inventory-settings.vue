@@ -112,7 +112,7 @@ const setRefreshInterval = (seconds) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--color-border);
   transition: .4s;
   border-radius: 24px;
 }
@@ -124,13 +124,13 @@ const setRefreshInterval = (seconds) => {
   width: 16px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--color-background);
   transition: .4s;
   border-radius: 50%;
 }
 
 input:checked + .toggle-slider {
-  background-color: #3b82f6;
+  background-color: var(--color-primary);
 }
 
 input:checked + .toggle-slider:before {
@@ -144,7 +144,7 @@ input:checked + .toggle-slider:before {
 
 .last-updated {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin-left: auto;
 }
 </style>

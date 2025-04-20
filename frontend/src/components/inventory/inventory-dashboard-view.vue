@@ -200,7 +200,7 @@ const handleRestock = ({ itemId, urgent }) => {
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 </style>

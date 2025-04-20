@@ -103,7 +103,7 @@ const getUtilizationClass = (utilization) => {
 
 .info-label {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .info-value {
@@ -115,15 +115,15 @@ const getUtilizationClass = (utilization) => {
 }
 
 .utilization-normal {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .utilization-medium {
-  color: #f59e0b;
+  color: var(--color-warning);
 }
 
 .utilization-high {
-  color: #ef4444;
+  color: var(--color-danger);
 }
 
 .utilization-chart {
@@ -139,7 +139,7 @@ const getUtilizationClass = (utilization) => {
 
 .utilization-container {
   height: 1.5rem;
-  background-color: #f3f4f6;
+  background-color: var(--color-background-muted);
   border-radius: 0.25rem;
   overflow: hidden;
 }
@@ -153,6 +153,6 @@ const getUtilizationClass = (utilization) => {
   display: flex;
   justify-content: space-between;
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 </style>

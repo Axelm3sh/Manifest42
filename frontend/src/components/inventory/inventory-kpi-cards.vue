@@ -110,6 +110,6 @@ const props = defineProps({
 
 .kpi-label {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 </style>
