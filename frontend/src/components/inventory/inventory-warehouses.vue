@@ -26,6 +26,7 @@ const getUtilizationClass = (utilization) => {
     <BaseCard 
       v-for="warehouse in warehouseData" 
       :key="warehouse.id"
+      v-memo="[warehouse.name, warehouse.location, warehouse.totalCapacity, warehouse.currentCapacity, warehouse.utilizationRate]"
       :title="warehouse.name"
       class="warehouse-card"
     >

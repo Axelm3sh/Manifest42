@@ -54,6 +54,7 @@ const getLastActivityClass = (lastActivity) => {
         <tr 
           v-for="item in inventoryItems" 
           :key="item.id"
+          v-memo="[item.name, item.category, item.stockLevel, item.reorderPoint, item.unitPrice, item.warehouseId, item.lastActivity]"
           class="item-row"
         >
           <td>{{ item.name }}</td>

@@ -60,6 +60,7 @@ const handleRestock = (itemId, urgent = false) => {
           <tr 
             v-for="item in lowStockItems" 
             :key="item.id"
+            v-memo="[item.name, item.category, item.stockLevel, item.reorderPoint, item.unitPrice, item.warehouseId]"
             class="alert-row"
           >
             <td>{{ item.name }}</td>
@@ -109,6 +110,7 @@ const handleRestock = (itemId, urgent = false) => {
           <tr 
             v-for="item in outOfStockItems" 
             :key="item.id"
+            v-memo="[item.name, item.category, item.reorderPoint, item.unitPrice, item.warehouseId, item.lastActivity]"
             class="alert-row"
           >
             <td>{{ item.name }}</td>
