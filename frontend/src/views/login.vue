@@ -3,7 +3,7 @@ import {computed, onMounted, reactive, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router/dist/vue-router.esm-bundler.js';
 import {useAuthStore} from '../stores/auth';
 import {useI18n} from 'vue-i18n';
-import DotMatrixBackground from '../components/DotMatrixBackground.vue';
+import DotMatrixBackground from "@/components/DotMatrixBackground.vue";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -128,7 +128,7 @@ const quickLogin = (role) => {
 <template>
   <div class="login-container" :class="{ 'page-loaded': isPageLoaded, 'login-expanding': isLoginExpanding }">
     <!-- Dot Matrix Background -->
-    <DotMatrixBackground />
+    <DotMatrixBackground /> <!--FIXME App.vue HAS ONE TOO-->
 
     <div class="login-card">
       <h1 class="login-title">{{ t('login.title') }}</h1>
@@ -137,7 +137,7 @@ const quickLogin = (role) => {
       <form @submit.prevent="handleSubmit" class="login-form" novalidate>
         <div class="form-group" :class="{ 'has-error': formErrors.username }">
           <label for="username">{{ t('login.username') }}</label>
-          <input 
+          <input
             id="username"
             v-model="credentials.username"
             type="text"
@@ -155,7 +155,7 @@ const quickLogin = (role) => {
         <div class="form-group" :class="{ 'has-error': formErrors.password }">
           <label for="password">{{ t('login.password') }}</label>
           <div class="password-input-container">
-            <input 
+            <input
               id="password"
               v-model="credentials.password"
               :type="showPassword ? 'text' : 'password'"
@@ -165,8 +165,8 @@ const quickLogin = (role) => {
               aria-required="true"
               @blur="validateForm"
             />
-            <button 
-              type="button" 
+            <button
+              type="button"
               class="password-toggle"
               @click="togglePasswordVisibility"
               :aria-label="showPassword ? t('login.hide_password') : t('login.show_password')"
@@ -183,8 +183,8 @@ const quickLogin = (role) => {
           {{ errorMessage }}
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           class="login-button"
           :disabled="isSubmitting || !isFormValid"
           aria-live="polite"
@@ -196,32 +196,32 @@ const quickLogin = (role) => {
       <div class="demo-section">
         <h2 class="demo-title">{{ t('login.demo_title') }}</h2>
         <div class="demo-buttons">
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="demo-button admin"
             @click="quickLogin('admin')"
             :disabled="isSubmitting"
           >
             {{ t('login.admin_role') }}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="demo-button manager"
             @click="quickLogin('manager')"
             :disabled="isSubmitting"
           >
             {{ t('login.manager_role') }}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="demo-button analyst"
             @click="quickLogin('analyst')"
             :disabled="isSubmitting"
           >
             {{ t('login.analyst_role') }}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="demo-button logistics"
             @click="quickLogin('logistics')"
             :disabled="isSubmitting"
@@ -313,7 +313,7 @@ const quickLogin = (role) => {
   /* Animation */
   transform: scale(0.95);
   opacity: 0;
-  transition: 
+  transition:
     transform var(--transition-normal) ease-out,
     opacity var(--transition-normal) ease-in-out,
     box-shadow var(--transition-normal) ease;
@@ -428,7 +428,7 @@ const quickLogin = (role) => {
   position: relative;
   z-index: 2;
   overflow: hidden;
-  transition: 
+  transition:
     background-color var(--transition-fast),
     transform var(--transition-normal),
     box-shadow var(--transition-normal);
@@ -489,7 +489,7 @@ const quickLogin = (role) => {
   cursor: pointer;
   position: relative;
   z-index: 2;
-  transition: 
+  transition:
     opacity var(--transition-fast),
     transform var(--transition-normal),
     box-shadow var(--transition-normal);
