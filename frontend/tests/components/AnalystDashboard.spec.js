@@ -29,7 +29,7 @@ vi.mock('../../src/components/ai-insights-dashboard.vue', () => ({
   }
 }));
 
-vi.mock('../../src/components/simulation-controls.vue', () => ({
+vi.mock('../../src/components/simulation/simulation-controls-view.vue', () => ({
   default: {
     name: 'SimulationControls',
     template: '<div class="mock-simulation-controls"></div>'
