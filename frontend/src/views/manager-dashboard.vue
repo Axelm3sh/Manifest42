@@ -366,9 +366,9 @@ export const getPerformanceClass = (value) => {
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(0, 0, 0, 0.1);
+  border: 4px solid var(--color-border);
   border-radius: 50%;
-  border-top-color: #4299e1;
+  border-top-color: var(--color-primary);
   animation: spin 1s ease-in-out infinite;
   margin-bottom: 1rem;
 }
@@ -391,12 +391,12 @@ export const getPerformanceClass = (value) => {
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0 0 0.5rem;
-  color: #1a202c;
+  color: var(--color-text-primary);
 }
 
 .welcome-subtitle {
   font-size: 1rem;
-  color: #718096;
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -408,23 +408,23 @@ export const getPerformanceClass = (value) => {
 }
 
 .kpi-card {
-  background-color: white;
+  background-color: var(--color-background);
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .kpi-title {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #718096;
+  color: var(--color-text-secondary);
   margin: 0 0 0.5rem;
 }
 
 .kpi-value {
   font-size: 2rem;
   font-weight: 600;
-  color: #1a202c;
+  color: var(--color-text-primary);
   margin-bottom: 0.5rem;
 }
 
@@ -436,15 +436,15 @@ export const getPerformanceClass = (value) => {
 }
 
 .kpi-trend.up {
-  color: #38a169;
+  color: var(--color-success);
 }
 
 .kpi-trend.down {
-  color: #e53e3e;
+  color: var(--color-error);
 }
 
 .kpi-trend.neutral {
-  color: #718096;
+  color: var(--color-text-secondary);
 }
 
 .trend-icon {
@@ -455,7 +455,7 @@ export const getPerformanceClass = (value) => {
 .card-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1a202c;
+  color: var(--color-text-primary);
   margin: 0 0 1rem;
 }
 
@@ -466,10 +466,10 @@ export const getPerformanceClass = (value) => {
 }
 
 .overview-card {
-  background-color: #f8fafc;
+  background-color: var(--color-background-secondary);
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .approvals-summary {
@@ -484,7 +484,7 @@ export const getPerformanceClass = (value) => {
   align-items: center;
   padding: 1rem;
   border-radius: 8px;
-  background-color: white;
+  background-color: var(--color-background);
   min-width: 80px;
 }
 
@@ -495,21 +495,21 @@ export const getPerformanceClass = (value) => {
 }
 
 .priority-high {
-  color: #e53e3e;
+  color: var(--color-error);
 }
 
 .priority-medium {
-  color: #dd6b20;
+  color: var(--color-warning);
 }
 
 .priority-low {
-  color: #38a169;
+  color: var(--color-success);
 }
 
 .priority-count {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1a202c;
+  color: var(--color-text-primary);
 }
 
 .team-summary {
@@ -524,12 +524,12 @@ export const getPerformanceClass = (value) => {
   align-items: center;
   padding: 1rem;
   border-radius: 8px;
-  background-color: white;
+  background-color: var(--color-background);
 }
 
 .metric-label {
   font-size: 0.875rem;
-  color: #718096;
+  color: var(--color-text-secondary);
   margin-bottom: 0.5rem;
   text-align: center;
 }
@@ -537,23 +537,23 @@ export const getPerformanceClass = (value) => {
 .metric-value {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1a202c;
+  color: var(--color-text-primary);
 }
 
 .view-all-button {
   width: 100%;
   padding: 0.75rem;
-  background-color: white;
-  border: 1px solid #e2e8f0;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-weight: 500;
-  color: #4299e1;
+  color: var(--color-primary);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .view-all-button:hover {
-  background-color: #ebf8ff;
+  background-color: var(--color-primary-muted);
 }
 
 .actions-grid {
@@ -564,25 +564,25 @@ export const getPerformanceClass = (value) => {
 
 .action-button {
   padding: 1rem;
-  background-color: white;
-  border: 1px solid #e2e8f0;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-weight: 500;
-  color: #1a202c;
+  color: var(--color-text-primary);
   cursor: pointer;
   transition: all 0.2s;
   text-align: center;
 }
 
 .action-button:hover {
-  background-color: #edf2f7;
-  border-color: #cbd5e0;
+  background-color: var(--color-bg-hover);
+  border-color: var(--color-border-hover);
 }
 
 .empty-state {
   padding: 2rem;
   text-align: center;
-  color: #718096;
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 
@@ -595,20 +595,20 @@ export const getPerformanceClass = (value) => {
 .approval-item {
   padding: 1.5rem;
   border-radius: 8px;
-  background-color: #f8fafc;
-  border-left: 4px solid #4299e1;
+  background-color: var(--color-background-secondary);
+  border-left: 4px solid var(--color-primary);
 }
 
 .approval-item.priority-high {
-  border-left-color: #e53e3e;
+  border-left-color: var(--color-error);
 }
 
 .approval-item.priority-medium {
-  border-left-color: #dd6b20;
+  border-left-color: var(--color-warning);
 }
 
 .approval-item.priority-low {
-  border-left-color: #38a169;
+  border-left-color: var(--color-success);
 }
 
 .approval-header {
@@ -619,7 +619,7 @@ export const getPerformanceClass = (value) => {
 
 .approval-type {
   font-weight: 600;
-  color: #1a202c;
+  color: var(--color-text-primary);
 }
 
 .approval-priority {
@@ -629,7 +629,7 @@ export const getPerformanceClass = (value) => {
 
 .approval-details {
   margin-bottom: 1rem;
-  color: #4a5568;
+  color: var(--color-text-tertiary);
 }
 
 .approval-meta {
@@ -637,7 +637,7 @@ export const getPerformanceClass = (value) => {
   justify-content: space-between;
   margin-bottom: 1rem;
   font-size: 0.875rem;
-  color: #718096;
+  color: var(--color-text-secondary);
 }
 
 .approval-actions {
@@ -647,8 +647,8 @@ export const getPerformanceClass = (value) => {
 
 .approve-button {
   padding: 0.5rem 1rem;
-  background-color: #38a169;
-  color: white;
+  background-color: var(--color-success);
+  color: var(--color-button-text);
   border: none;
   border-radius: 4px;
   font-weight: 500;
@@ -657,8 +657,8 @@ export const getPerformanceClass = (value) => {
 
 .reject-button {
   padding: 0.5rem 1rem;
-  background-color: #e53e3e;
-  color: white;
+  background-color: var(--color-error);
+  color: var(--color-button-text);
   border: none;
   border-radius: 4px;
   font-weight: 500;
@@ -667,8 +667,8 @@ export const getPerformanceClass = (value) => {
 
 .more-info-button {
   padding: 0.5rem 1rem;
-  background-color: #4299e1;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-button-text);
   border: none;
   border-radius: 4px;
   font-weight: 500;
@@ -684,8 +684,8 @@ export const getPerformanceClass = (value) => {
 .team-member {
   padding: 1.5rem;
   border-radius: 8px;
-  background-color: #f8fafc;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-color: var(--color-background-secondary);
+  box-shadow: var(--shadow-sm);
 }
 
 .member-header {
@@ -704,8 +704,8 @@ export const getPerformanceClass = (value) => {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #4299e1;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-button-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -720,13 +720,13 @@ export const getPerformanceClass = (value) => {
 
 .member-name {
   font-weight: 600;
-  color: #1a202c;
+  color: var(--color-text-primary);
   margin-bottom: 0.25rem;
 }
 
 .member-role {
   font-size: 0.875rem;
-  color: #718096;
+  color: var(--color-text-secondary);
 }
 
 .member-status {
@@ -737,18 +737,18 @@ export const getPerformanceClass = (value) => {
 }
 
 .status-online {
-  background-color: #c6f6d5;
-  color: #22543d;
+  background-color: var(--color-success-muted);
+  color: var(--color-success-text);
 }
 
 .status-away {
-  background-color: #feebc8;
-  color: #7b341e;
+  background-color: var(--color-warning-muted);
+  color: var(--color-warning-text);
 }
 
 .status-offline {
-  background-color: #e2e8f0;
-  color: #4a5568;
+  background-color: var(--color-background-muted);
+  color: var(--color-text-tertiary);
 }
 
 .member-metrics {
@@ -762,19 +762,19 @@ export const getPerformanceClass = (value) => {
 }
 
 .performance-excellent {
-  color: #38a169;
+  color: var(--color-success);
 }
 
 .performance-good {
-  color: #4299e1;
+  color: var(--color-primary);
 }
 
 .performance-average {
-  color: #dd6b20;
+  color: var(--color-warning);
 }
 
 .performance-poor {
-  color: #e53e3e;
+  color: var(--color-error);
 }
 
 .member-progress {
@@ -783,20 +783,20 @@ export const getPerformanceClass = (value) => {
 
 .progress-label {
   font-size: 0.875rem;
-  color: #718096;
+  color: var(--color-text-secondary);
   margin-bottom: 0.5rem;
 }
 
 .progress-bar-container {
   height: 6px;
-  background-color: #e2e8f0;
+  background-color: var(--color-border);
   border-radius: 9999px;
   overflow: hidden;
 }
 
 .progress-bar {
   height: 100%;
-  background-color: #4299e1;
+  background-color: var(--color-primary);
 }
 
 .member-actions {
@@ -807,16 +807,16 @@ export const getPerformanceClass = (value) => {
 .member-action-button {
   flex: 1;
   padding: 0.5rem;
-  background-color: #f7fafc;
-  border: 1px solid #e2e8f0;
+  background-color: var(--color-background-muted);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #4a5568;
+  color: var(--color-text-tertiary);
   cursor: pointer;
 }
 
 .member-action-button:hover {
-  background-color: #edf2f7;
+  background-color: var(--color-bg-hover);
 }
 </style>
