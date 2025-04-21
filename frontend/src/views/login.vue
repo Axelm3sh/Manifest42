@@ -4,6 +4,7 @@ import {useRoute, useRouter} from 'vue-router/dist/vue-router.esm-bundler.js';
 import {useAuthStore} from '../stores/auth';
 import {useI18n} from 'vue-i18n';
 import DotMatrixBackground from "@/components/DotMatrixBackground.vue";
+import ThemeToggle from "@/components/theme-toggle.vue";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -64,6 +65,9 @@ onMounted(() => {
   }, 300);
 });
 
+// Reference to the DotMatrixBackground component
+const dotMatrixRef = ref(null);
+
 // Handle form submission
 const handleSubmit = async () => {
   if (isSubmitting.value) return;
@@ -83,6 +87,11 @@ const handleSubmit = async () => {
     if (result.success) {
       // Trigger expanding animation before redirect
       isLoginExpanding.value = true;
+
+      // Fade out the dot matrix background
+      if (dotMatrixRef.value) {
+        dotMatrixRef.value.fadeOut(400);
+      }
 
       // Wait for animation to complete before redirecting
       setTimeout(() => {
@@ -128,7 +137,12 @@ const quickLogin = (role) => {
 <template>
   <div class="login-container" :class="{ 'page-loaded': isPageLoaded, 'login-expanding': isLoginExpanding }">
     <!-- Dot Matrix Background -->
-    <DotMatrixBackground />
+    <DotMatrixBackground ref="dotMatrixRef" />
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-container">
+      <ThemeToggle />
+    </div>
 
     <div class="login-card">
       <h1 class="login-title">{{ t('login.title') }}</h1>
@@ -235,42 +249,7 @@ const quickLogin = (role) => {
 </template>
 
 <style scoped>
-/* Variables for consistent theming */
-:root {
-  --color-primary: #4299e1;
-  --color-primary-dark: #3182ce;
-  --color-secondary: #718096;
-  --color-text: #1a202c;
-  --color-text-light: #4a5568;
-  --color-background: #f5f7fa;
-  --color-white: #ffffff;
-  --color-border: #e2e8f0;
-  --color-error: #c53030;
-  --color-error-bg: #fed7d7;
-  --color-disabled: #a0aec0;
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-glow-light: 0 0 20px rgba(66, 153, 225, 0.5);
-  --shadow-glow-dark: 0 0 20px rgba(255, 255, 255, 0.2);
-
-  --border-radius: 4px;
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 0.75rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 2.5rem;
-
-  --font-size-sm: 0.875rem;
-  --font-size-md: 1rem;
-  --font-size-lg: 1.75rem;
-
-  --transition-fast: 0.2s;
-  --transition-normal: 0.3s;
-  --transition-slow: 0.6s;
-}
+/* Using global CSS variables from style.css */
 
 /* Layout */
 .login-container {
@@ -303,7 +282,7 @@ const quickLogin = (role) => {
   width: 100%;
   max-width: 480px;
   padding: var(--spacing-2xl);
-  background-color: var(--color-white);
+  background-color: var(--color-surface);
   border-radius: var(--border-radius);
   z-index: 1; /* Above the background */
 
@@ -533,6 +512,14 @@ const quickLogin = (role) => {
 
 .demo-button.logistics {
   background-color: #dd6b20;
+}
+
+/* Theme Toggle Container */
+.theme-toggle-container {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: 10;
 }
 
 /* Responsive */
