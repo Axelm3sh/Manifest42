@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from 'vue';
+import {computed, onMounted, onUnmounted, ref, watch} from 'vue';
 
 // Props
 const props = defineProps({
@@ -116,45 +116,50 @@ const shouldReduceMotion = computed(() => {
   return props.reducedMotion || prefersReducedMotion.value;
 });
 
-// Initialize canvas and start animation
-onMounted(() => {
-  // Detect mobile devices
-  isMobile.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                   (window.innerWidth <= 768);
+const MOBILE_WIDTH_THRESHOLD = 768;
 
-  // Check if user prefers reduced motion
+// Updates isMobile and density live on resize or orientation change
+const updateResponsiveSettings = () => {
+  isMobile.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    || window.innerWidth <= MOBILE_WIDTH_THRESHOLD;
+  setupCanvas();
+};
+
+// Updates reduced motion status explicitly, for reuse
+const updateReducedMotion = () => {
   prefersReducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setupCanvas();
+};
 
-  // Listen for changes in reduced motion preference
-  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+// Handle reduced motion media query change
+const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+onMounted(() => {
+  updateResponsiveSettings();
+  updateReducedMotion();
+
+  // Listeners for responsive & accessibility features
+  window.addEventListener('resize', updateResponsiveSettings);
+  window.addEventListener('orientationchange', updateResponsiveSettings);
   reducedMotionQuery.addEventListener('change', handleReducedMotionChange);
 
-  // Set frame rate based on device
-  if (isMobile.value) {
-    frameInterval.value = 1000 / 30; // Target 30fps on mobile
-  }
+  // Adjust frame rate as-needed
+  watch(isMobile, (nowMobile) => {
+    frameInterval.value = nowMobile ? 1000 / 48 : 1000 / 72;
+  }, { immediate: true });
 
-  setupCanvas();
-  window.addEventListener('resize', setupCanvas);
-  window.addEventListener('mousemove', handleMouseMove);  // Listen globally
-
-  // Start animation loop
+  // Start the animation
   lastFrameTime.value = performance.now();
   animationFrameId.value = requestAnimationFrame(animate);
 });
 
-// Clean up
+// Clean up listeners on unmount
 onUnmounted(() => {
-  window.removeEventListener('resize', setupCanvas);
-  window.removeEventListener('mousemove', handleMouseMove);
-
-  // Remove reduced motion listener
-  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  window.removeEventListener('resize', updateResponsiveSettings);
+  window.removeEventListener('orientationchange', updateResponsiveSettings);
   reducedMotionQuery.removeEventListener('change', handleReducedMotionChange);
 
-  if (animationFrameId.value) {
-    cancelAnimationFrame(animationFrameId.value);
-  }
+  if (animationFrameId.value) cancelAnimationFrame(animationFrameId.value);
 });
 
 // Set up canvas dimensions and context
