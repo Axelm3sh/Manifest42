@@ -128,7 +128,7 @@ const quickLogin = (role) => {
 <template>
   <div class="login-container" :class="{ 'page-loaded': isPageLoaded, 'login-expanding': isLoginExpanding }">
     <!-- Dot Matrix Background -->
-    <DotMatrixBackground /> <!--FIXME App.vue HAS ONE TOO-->
+    <DotMatrixBackground />
 
     <div class="login-card">
       <h1 class="login-title">{{ t('login.title') }}</h1>

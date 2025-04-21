@@ -2,7 +2,6 @@
 import {onMounted} from 'vue';
 import {useRouter} from 'vue-router/dist/vue-router.esm-bundler.js';
 import {useAuthStore} from './stores/auth';
-import DotMatrixBackground from "@/components/DotMatrixBackground.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -34,9 +33,6 @@ const getDashboardByRole = (role) => {
 </script>
 
 <template>
-  <!-- Dot Matrix Background -->
-  <DotMatrixBackground />
-
   <!-- The router-view will render the appropriate component based on the current route -->
   <router-view v-slot="{ Component }">
     <transition name="fade" mode="out-in">
