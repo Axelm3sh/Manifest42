@@ -68,14 +68,42 @@ onMounted(() => {
 // Reference to the DotMatrixBackground component
 const dotMatrixRef = ref(null);
 
+// Trigger ripple effect on the dot matrix background
+const triggerRipple = (x, y) => {
+  if (dotMatrixRef.value) {
+    // Create a custom event with the coordinates
+    const rippleEvent = new MouseEvent('click', {
+      clientX: x,
+      clientY: y,
+      bubbles: true,
+      cancelable: true,
+    });
+
+    // Get the background element and dispatch the event
+    const backgroundEl = dotMatrixRef.value.$el;
+    backgroundEl.dispatchEvent(rippleEvent);
+  }
+};
+
 // Handle form submission
-const handleSubmit = async () => {
+const handleSubmit = async (event) => {
   if (isSubmitting.value) return;
 
   // Validate form
   if (!validateForm()) {
     errorMessage.value = t('login.error_required_fields');
     return;
+  }
+
+  // Trigger ripple effect from the center of the login card
+  if (event) {
+    const loginCard = document.querySelector('.login-card');
+    if (loginCard) {
+      const rect = loginCard.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      triggerRipple(centerX, centerY);
+    }
   }
 
   isSubmitting.value = true;
@@ -127,9 +155,18 @@ const togglePasswordVisibility = () => {
 };
 
 // Quick login buttons for demo purposes
-const quickLogin = (role) => {
+const quickLogin = (role, event) => {
   credentials.username = role;
   credentials.password = 'password';
+
+  // Trigger ripple effect from the button's position
+  if (event && event.target) {
+    const rect = event.target.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    triggerRipple(centerX, centerY);
+  }
+
   handleSubmit();
 };
 </script>
@@ -137,7 +174,7 @@ const quickLogin = (role) => {
 <template>
   <div class="login-container" :class="{ 'page-loaded': isPageLoaded, 'login-expanding': isLoginExpanding }">
     <!-- Dot Matrix Background -->
-    <DotMatrixBackground ref="dotMatrixRef" />
+    <DotMatrixBackground ref="dotMatrixRef" :reducedMotion="false" />
 
     <!-- Theme Toggle -->
     <div class="theme-toggle-container">
@@ -213,7 +250,7 @@ const quickLogin = (role) => {
           <button
             type="button"
             class="demo-button admin"
-            @click="quickLogin('admin')"
+            @click="(event) => quickLogin('admin', event)"
             :disabled="isSubmitting"
           >
             {{ t('login.admin_role') }}
@@ -221,7 +258,7 @@ const quickLogin = (role) => {
           <button
             type="button"
             class="demo-button manager"
-            @click="quickLogin('manager')"
+            @click="(event) => quickLogin('manager', event)"
             :disabled="isSubmitting"
           >
             {{ t('login.manager_role') }}
@@ -229,7 +266,7 @@ const quickLogin = (role) => {
           <button
             type="button"
             class="demo-button analyst"
-            @click="quickLogin('analyst')"
+            @click="(event) => quickLogin('analyst', event)"
             :disabled="isSubmitting"
           >
             {{ t('login.analyst_role') }}
@@ -237,7 +274,7 @@ const quickLogin = (role) => {
           <button
             type="button"
             class="demo-button logistics"
-            @click="quickLogin('logistics')"
+            @click="(event) => quickLogin('logistics', event)"
             :disabled="isSubmitting"
           >
             {{ t('login.logistics_role') }}

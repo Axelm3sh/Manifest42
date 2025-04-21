@@ -23,7 +23,7 @@ const props = defineProps({
   // Density of dots (higher = more dots)
   density: {
     type: Number,
-    default: 80
+    default: 60
   },
   // Radius of the glow effect around the mouse
   glowRadius: {
@@ -34,6 +34,11 @@ const props = defineProps({
   glowIntensity: {
     type: Number,
     default: 0.8
+  },
+  // Enable reduced motion mode
+  reducedMotion: {
+    type: Boolean,
+    default: false
   },
 });
 
@@ -69,6 +74,8 @@ const backgroundRef = ref(null);
 const canvasRef = ref(null);
 const mousePosition = ref({ x: 0, y: 0 });
 const animationFrameId = ref(null);
+const lastFrameTime = ref(0);
+const frameInterval = ref(1000 / 60); // Target 60fps by default
 
 // Ripple effect state
 const ripple = ref({
@@ -89,13 +96,50 @@ const isDarkTheme = computed(() => {
 // Focus state for accessibility
 const isFocused = ref(false);
 
+// Device detection
+const isMobile = ref(false);
+const prefersReducedMotion = ref(false);
+
+// Handler for reduced motion preference changes
+const handleReducedMotionChange = (e) => {
+  prefersReducedMotion.value = e.matches;
+};
+
+// Computed effective density based on device
+const effectiveDensity = computed(() => {
+  // Reduce density on mobile devices
+  return isMobile.value ? Math.floor(props.density / 2) : props.density;
+});
+
+// Computed effective motion reduction
+const shouldReduceMotion = computed(() => {
+  return props.reducedMotion || prefersReducedMotion.value;
+});
+
 // Initialize canvas and start animation
 onMounted(() => {
+  // Detect mobile devices
+  isMobile.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   (window.innerWidth <= 768);
+
+  // Check if user prefers reduced motion
+  prefersReducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Listen for changes in reduced motion preference
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  reducedMotionQuery.addEventListener('change', handleReducedMotionChange);
+
+  // Set frame rate based on device
+  if (isMobile.value) {
+    frameInterval.value = 1000 / 30; // Target 30fps on mobile
+  }
+
   setupCanvas();
   window.addEventListener('resize', setupCanvas);
   window.addEventListener('mousemove', handleMouseMove);  // Listen globally
 
-
+  // Start animation loop
+  lastFrameTime.value = performance.now();
   animationFrameId.value = requestAnimationFrame(animate);
 });
 
@@ -103,6 +147,11 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', setupCanvas);
   window.removeEventListener('mousemove', handleMouseMove);
+
+  // Remove reduced motion listener
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  reducedMotionQuery.removeEventListener('change', handleReducedMotionChange);
+
   if (animationFrameId.value) {
     cancelAnimationFrame(animationFrameId.value);
   }
@@ -158,8 +207,19 @@ const handleClick = (event) => {
 };
 
 // Animation loop
-const animate = () => {
+const animate = (timestamp) => {
   if (!canvasRef.value) return;
+
+  // Frame rate control
+  const elapsed = timestamp - lastFrameTime.value;
+  if (elapsed < frameInterval.value) {
+    // Skip this frame if not enough time has passed
+    animationFrameId.value = requestAnimationFrame(animate);
+    return;
+  }
+
+  // Update last frame time
+  lastFrameTime.value = timestamp;
 
   const canvas = canvasRef.value;
   const ctx = canvas.getContext('2d');
@@ -168,8 +228,8 @@ const animate = () => {
   // Clear canvas
   ctx.clearRect(0, 0, width, height);
 
-  // Update ripple radius if active
-  if (ripple.value.active) {
+  // Update ripple radius if active and not in reduced motion mode
+  if (ripple.value.active && !shouldReduceMotion.value) {
     const now = performance.now();
     const elapsed = now - ripple.value.startTime;
     const progress = Math.min(elapsed / ripple.value.duration, 1);
@@ -181,10 +241,13 @@ const animate = () => {
     if (progress >= 1) {
       ripple.value.active = false;
     }
+  } else if (ripple.value.active && shouldReduceMotion.value) {
+    // In reduced motion mode, complete ripple immediately
+    ripple.value.active = false;
   }
 
-  // Calculate dot spacing based on density
-  const spacing = Math.min(width, height) / props.density;
+  // Calculate dot spacing based on effective density
+  const spacing = Math.min(width, height) / effectiveDensity.value;
 
   // Draw dots
   for (let x = spacing; x < width; x += spacing) {
@@ -200,30 +263,40 @@ const animate = () => {
       let size = baseSize;
       let opacity = 0.3;
 
-      if (distance < props.glowRadius) {
-        // Increase size and opacity for dots near the mouse
-        const factor = 1 - (distance / props.glowRadius);
-        size = baseSize + (maxSize - baseSize) * factor * props.glowIntensity;
-        opacity = 0.3 + 0.7 * factor * props.glowIntensity;
-      }
+      // In reduced motion mode, use simpler rendering with less animation
+      if (shouldReduceMotion.value) {
+        // Minimal mouse interaction in reduced motion mode
+        if (distance < props.glowRadius) {
+          // Subtle highlight only
+          opacity = 0.4;
+        }
+      } else {
+        // Full animation when reduced motion is off
+        if (distance < props.glowRadius) {
+          // Increase size and opacity for dots near the mouse
+          const factor = 1 - (distance / props.glowRadius);
+          size = baseSize + (maxSize - baseSize) * factor * props.glowIntensity;
+          opacity = 0.3 + 0.7 * factor * props.glowIntensity;
+        }
 
-      // Apply ripple effect if active
-      if (ripple.value.active) {
-        const dxRipple = x - ripple.value.x;
-        const dyRipple = y - ripple.value.y;
-        const distanceFromRipple = Math.sqrt(dxRipple * dxRipple + dyRipple * dyRipple);
+        // Apply ripple effect if active
+        if (ripple.value.active) {
+          const dxRipple = x - ripple.value.x;
+          const dyRipple = y - ripple.value.y;
+          const distanceFromRipple = Math.sqrt(dxRipple * dxRipple + dyRipple * dyRipple);
 
-        // Calculate distance from ripple edge
-        const distanceFromRippleEdge = Math.abs(distanceFromRipple - ripple.value.radius);
+          // Calculate distance from ripple edge
+          const distanceFromRippleEdge = Math.abs(distanceFromRipple - ripple.value.radius);
 
-        // Apply effect to dots near the ripple edge (within a certain range)
-        const rippleEffectRange = 50;
-        if (distanceFromRippleEdge < rippleEffectRange) {
-          const rippleFactor = 1 - (distanceFromRippleEdge / rippleEffectRange);
+          // Apply effect to dots near the ripple edge (within a certain range)
+          const rippleEffectRange = 50;
+          if (distanceFromRippleEdge < rippleEffectRange) {
+            const rippleFactor = 1 - (distanceFromRippleEdge / rippleEffectRange);
 
-          // Enhance size and opacity based on proximity to ripple edge
-          size = Math.max(size, baseSize + (maxSize - baseSize) * rippleFactor);
-          opacity = Math.max(opacity, 0.3 + 0.7 * rippleFactor);
+            // Enhance size and opacity based on proximity to ripple edge
+            size = Math.max(size, baseSize + (maxSize - baseSize) * rippleFactor);
+            opacity = Math.max(opacity, 0.3 + 0.7 * rippleFactor);
+          }
         }
       }
 
