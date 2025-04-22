@@ -251,6 +251,7 @@ const getDashboardRoute = () => {
   min-height: 100vh;
   background-color: var(--color-background);
   transition: background-color var(--transition-normal);
+  align-items: stretch; /* Ensure sidebar and main content stretch to the same height */
 }
 
 /* Sidebar styles */
@@ -423,6 +424,7 @@ const getDashboardRoute = () => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-width: 768px; /* Add minimum width to prevent squishing */
 }
 
 .dashboard-header {
