@@ -40,7 +40,7 @@ const setRefreshInterval = (seconds) => {
     <div class="settings-content">
       <div class="setting-group">
         <label for="real-time-toggle">{{ t('inventory.real_time_updates') }}</label>
-        <div class="toggle-switch">
+        <div class="toggle-switch" @click="toggleRealTimeUpdates">
           <input 
             id="real-time-toggle"
             type="checkbox"
@@ -74,6 +74,10 @@ const setRefreshInterval = (seconds) => {
 </template>
 
 <style scoped>
+.settings-card {
+  margin-bottom: 1.5rem; /* Add margin to create space between settings card and cards below */
+}
+
 .settings-content {
   display: flex;
   flex-wrap: wrap;
