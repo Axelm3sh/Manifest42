@@ -18,6 +18,10 @@ const props = defineProps({
       outOfStockItems: 0,
       inventoryTurnover: 0
     })
+  },
+  isLoading: {
+    type: Boolean,
+    default: false
   }
 });
 </script>
@@ -25,7 +29,10 @@ const props = defineProps({
 <template>
   <div class="kpi-cards">
     <BaseCard class="kpi-card">
-      <div class="kpi-content">
+      <div v-if="isLoading" class="kpi-loading">
+        <div class="loading-spinner"></div>
+      </div>
+      <div v-else class="kpi-content">
         <div class="kpi-icon total-items-icon"><PhPackage weight="regular" /></div>
         <div class="kpi-data">
           <div class="kpi-value">{{ formatNumber(kpiData.totalItems) }}</div>
@@ -35,7 +42,10 @@ const props = defineProps({
     </BaseCard>
 
     <BaseCard class="kpi-card">
-      <div class="kpi-content">
+      <div v-if="isLoading" class="kpi-loading">
+        <div class="loading-spinner"></div>
+      </div>
+      <div v-else class="kpi-content">
         <div class="kpi-icon total-value-icon"><PhCurrencyCircleDollar weight="regular" /></div>
         <div class="kpi-data">
           <div class="kpi-value">{{ formatCurrency(kpiData.totalValue) }}</div>
@@ -45,7 +55,10 @@ const props = defineProps({
     </BaseCard>
 
     <BaseCard class="kpi-card">
-      <div class="kpi-content">
+      <div v-if="isLoading" class="kpi-loading">
+        <div class="loading-spinner"></div>
+      </div>
+      <div v-else class="kpi-content">
         <div class="kpi-icon low-stock-icon"><PhWarning weight="regular" /></div>
         <div class="kpi-data">
           <div class="kpi-value">{{ kpiData.lowStockItems }}</div>
@@ -55,7 +68,10 @@ const props = defineProps({
     </BaseCard>
 
     <BaseCard class="kpi-card">
-      <div class="kpi-content">
+      <div v-if="isLoading" class="kpi-loading">
+        <div class="loading-spinner"></div>
+      </div>
+      <div v-else class="kpi-content">
         <div class="kpi-icon out-of-stock-icon"><PhX weight="regular" /></div>
         <div class="kpi-data">
           <div class="kpi-value">{{ kpiData.outOfStockItems }}</div>
@@ -65,7 +81,10 @@ const props = defineProps({
     </BaseCard>
 
     <BaseCard class="kpi-card">
-      <div class="kpi-content">
+      <div v-if="isLoading" class="kpi-loading">
+        <div class="loading-spinner"></div>
+      </div>
+      <div v-else class="kpi-content">
         <div class="kpi-icon turnover-icon"><PhArrowsClockwise weight="regular" /></div>
         <div class="kpi-data">
           <div class="kpi-value">{{ kpiData.inventoryTurnover }}</div>
@@ -111,5 +130,26 @@ const props = defineProps({
 .kpi-label {
   font-size: 0.875rem;
   color: var(--color-text-secondary);
+}
+
+.kpi-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+}
+
+.loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--color-border);
+  border-top: 3px solid var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

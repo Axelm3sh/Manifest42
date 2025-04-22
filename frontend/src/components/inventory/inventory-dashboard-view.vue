@@ -119,7 +119,7 @@ const handleRestock = ({ itemId, urgent }) => {
     />
 
     <!-- KPI Cards -->
-    <InventoryKpiCards :kpiData="kpiData" />
+    <InventoryKpiCards :kpiData="kpiData" :isLoading="isLoading" />
 
     <!-- Loading Indicator -->
     <div v-if="isLoading" class="loading-indicator">
