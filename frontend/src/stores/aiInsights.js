@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import {computed, ref} from 'vue';
+import {computed, ref, shallowRef} from 'vue';
 
 /**
  * Store for AI-driven insights and predictions
@@ -7,8 +7,8 @@ import {computed, ref} from 'vue';
  */
 export const useAiInsightsStore = defineStore('aiInsights', () => {
   // State
-  const predictions = ref([]);
-  const recommendations = ref([]);
+  const predictions = shallowRef([]);
+  const recommendations = shallowRef([]);
   const modelParameters = ref({
     confidenceThreshold: 0.7,
     timeHorizon: 30, // days

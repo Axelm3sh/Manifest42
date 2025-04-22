@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, ref} from 'vue';
+import {computed, onMounted, ref, shallowRef} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useRoute} from 'vue-router';
 import {useAuthStore} from '../stores/auth';
@@ -73,13 +73,13 @@ const kpis = computed(() => [
 ]);
 
 // Recent shipments
-const recentShipments = ref([]);
+const recentShipments = shallowRef([]);
 
 // Inventory alerts
-const inventoryAlerts = ref([]);
+const inventoryAlerts = shallowRef([]);
 
 // Upcoming deliveries
-const upcomingDeliveries = ref([]);
+const upcomingDeliveries = shallowRef([]);
 
 // Load dashboard data
 onMounted(async () => {

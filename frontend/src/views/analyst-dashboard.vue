@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, ref} from 'vue';
+import {computed, onMounted, ref, shallowRef} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useRoute} from 'vue-router';
 import {useAuthStore} from '../stores/auth';
@@ -7,6 +7,7 @@ import {useInventoryStore} from '../stores/inventoryData';
 import {useAiInsightsStore} from '../stores/aiInsights';
 import {useSimulationStore} from '../stores/simulationControls';
 import DashboardLayout from '../components/dashboard-layout.vue';
+import {PhArrowDown, PhArrowRight, PhArrowUp} from 'phosphor-vue';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -75,13 +76,13 @@ const kpis = computed(() => [
 ]);
 
 // Recent reports
-const recentReports = ref([]);
+const recentReports = shallowRef([]);
 
 // Recent simulations
-const recentSimulations = ref([]);
+const recentSimulations = shallowRef([]);
 
 // AI recommendations
-const aiRecommendations = ref([]);
+const aiRecommendations = shallowRef([]);
 
 // Load dashboard data
 onMounted(async () => {
@@ -312,7 +313,7 @@ const createNewReport = () => {
             <div class="kpi-trend" :class="kpi.trend">
               {{ kpi.change }}
               <span class="trend-icon">
-                {{ kpi.trend === 'up' ? '↑' : kpi.trend === 'down' ? '↓' : '→' }}
+                <component :is="kpi.trend === 'up' ? PhArrowUp : kpi.trend === 'down' ? PhArrowDown : PhArrowRight" weight="regular" />
               </span>
             </div>
           </div>

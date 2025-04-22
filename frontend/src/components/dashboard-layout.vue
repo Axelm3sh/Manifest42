@@ -2,11 +2,12 @@
 import {computed, ref} from 'vue';
 import {useRouter} from 'vue-router/dist/vue-router.esm-bundler.js';
 import {useAuthStore} from '../stores/auth';
+import {useNotificationsStore} from '../stores/notifications';
 import {useI18n} from 'vue-i18n';
 import LanguageSwitcher from './language-switcher.vue';
 import ThemeToggle from './theme-toggle.vue';
+import NotificationCenterView from './notification/notification-center-view.vue';
 import {
-  PhBell,
   PhChartBar,
   PhChartLine,
   PhCheck,
@@ -49,6 +50,13 @@ const role = computed(() => authStore.role);
 // Sidebar state
 const isSidebarOpen = ref(true);
 
+// Notification store
+const notificationsStore = useNotificationsStore();
+// Initialize with some mock notifications for testing
+if (notificationsStore.notifications.length === 0) {
+  notificationsStore.generateMockNotifications();
+}
+
 // Toggle sidebar
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
@@ -74,12 +82,6 @@ const navigationItems = computed(() => {
       label: t('navigation.inventory'),
       icon: PhClipboardText,
       route: `${getDashboardRoute()}/inventory`,
-    },
-    {
-      id: 'notifications',
-      label: t('navigation.notifications'),
-      icon: PhBell,
-      route: `${getDashboardRoute()}/notifications`,
     },
   ];
 
@@ -180,9 +182,7 @@ const getDashboardRoute = () => {
           @click="toggleSidebar"
           :aria-label="isSidebarOpen ? t('navigation.collapse_sidebar') : t('navigation.expand_sidebar')"
         >
-          <span class="toggle-icon" :class="{ 'rotated': !isSidebarOpen }">
-            &#9664;
-          </span>
+          <PhCaretLeft class="toggle-icon" :class="{ 'rotated': !isSidebarOpen }" weight="regular" />
         </button>
       </div>
 
@@ -228,9 +228,7 @@ const getDashboardRoute = () => {
         <div class="header-actions">
           <ThemeToggle />
           <LanguageSwitcher />
-          <button class="notifications-button" aria-label="Notifications">
-            <PhBell weight="regular" />
-          </button>
+          <NotificationCenterView />
         </div>
       </header>
 
@@ -253,6 +251,7 @@ const getDashboardRoute = () => {
   min-height: 100vh;
   background-color: var(--color-background);
   transition: background-color var(--transition-normal);
+  align-items: stretch; /* Ensure sidebar and main content stretch to the same height */
 }
 
 /* Sidebar styles */
@@ -425,6 +424,7 @@ const getDashboardRoute = () => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-width: 768px; /* Add minimum width to prevent squishing */
 }
 
 .dashboard-header {
@@ -452,18 +452,6 @@ const getDashboardRoute = () => {
   gap: var(--spacing-md);
 }
 
-.notifications-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--spacing-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  color: var(--color-text-primary);
-  transition: color var(--transition-fast);
-}
 
 .content-area {
   flex: 1;

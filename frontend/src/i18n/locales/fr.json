@@ -3,8 +3,9 @@
     "vite_logo_alt": "Logo Vite",
     "vue_logo_alt": "Logo Vue",
     "title": "Vite + Vue",
+    "name": "Manifest42",
     "skip_to_content": "Passer au contenu principal",
-    "footer_text": "© 2025 Tableau de Bord de Gestion d'Inventaire avec IA"
+    "footer_text": "© 2025 Manifest42 - Tableau de Bord de Gestion d'Inventaire avec IA"
   },
   "language": {
     "select": "Sélectionner la langue",

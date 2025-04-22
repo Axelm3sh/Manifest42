@@ -60,6 +60,7 @@ const handleRestock = (itemId, urgent = false) => {
           <tr 
             v-for="item in lowStockItems" 
             :key="item.id"
+            v-memo="[item.name, item.category, item.stockLevel, item.reorderPoint, item.unitPrice, item.warehouseId]"
             class="alert-row"
           >
             <td>{{ item.name }}</td>
@@ -109,6 +110,7 @@ const handleRestock = (itemId, urgent = false) => {
           <tr 
             v-for="item in outOfStockItems" 
             :key="item.id"
+            v-memo="[item.name, item.category, item.reorderPoint, item.unitPrice, item.warehouseId, item.lastActivity]"
             class="alert-row"
           >
             <td>{{ item.name }}</td>
@@ -161,17 +163,17 @@ const handleRestock = (itemId, urgent = false) => {
 .alerts-table th {
   text-align: left;
   padding: 0.75rem;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--color-border);
   font-weight: 600;
 }
 
 .alerts-table td {
   padding: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .alert-row:hover {
-  background-color: #f9fafb;
+  background-color: var(--color-hover);
 }
 
 .stock-level {
@@ -182,8 +184,8 @@ const handleRestock = (itemId, urgent = false) => {
 }
 
 .stock-level-low {
-  background-color: #fef3c7;
-  color: #b45309;
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .activity-time {
@@ -191,21 +193,21 @@ const handleRestock = (itemId, urgent = false) => {
 }
 
 .activity-recent {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .activity-today {
-  color: #3b82f6;
+  color: var(--color-primary);
 }
 
 .activity-old {
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .no-alerts {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 </style>

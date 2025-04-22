@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import {computed, ref} from 'vue';
+import {computed, ref, shallowRef} from 'vue';
 
 /**
  * Store for simulation controls and data
@@ -19,7 +19,7 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
   });
 
   const simulationResults = ref(null);
-  const simulationHistory = ref([]);
+  const simulationHistory = shallowRef([]);
   const isRunning = ref(false);
   const currentScenario = ref('default');
   const savedScenarios = ref({

@@ -1,15 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router/dist/vue-router.esm-bundler.js';
 import {useAuthStore} from '../stores/auth';
 
-// Route components
-// We use lazy loading to improve initial load performance
-const Login = () => import('../views/login.vue');
-const AdminDashboard = () => import('../views/admin-dashboard.vue');
-const ManagerDashboard = () => import('../views/manager-dashboard.vue');
-const AnalystDashboard = () => import('../views/analyst-dashboard.vue');
-const LogisticsDashboard = () => import('../views/logistics-dashboard.vue');
-const NotFound = () => import('../views/not-found.vue');
-
 /**
  * Routes configuration
  * Includes role-based access control via meta.requiredRole
@@ -22,14 +13,14 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login,
+    component: () => import('../views/login.vue'),
     meta: { requiresAuth: false }
   },
   // Admin routes
   {
     path: '/admin',
     name: 'AdminDashboard',
-    component: AdminDashboard,
+    component: () => import('../views/admin-dashboard.vue'),
     meta: { 
       requiresAuth: true,
       requiredRole: 'admin'
@@ -77,7 +68,7 @@ const routes = [
   {
     path: '/manager',
     name: 'ManagerDashboard',
-    component: ManagerDashboard,
+    component: () => import('../views/manager-dashboard.vue'),
     meta: { 
       requiresAuth: true,
       requiredRole: 'manager'
@@ -125,7 +116,7 @@ const routes = [
   {
     path: '/analyst',
     name: 'AnalystDashboard',
-    component: AnalystDashboard,
+    component: () => import('../views/analyst-dashboard.vue'),
     meta: { 
       requiresAuth: true,
       requiredRole: 'analyst'
@@ -173,7 +164,7 @@ const routes = [
   {
     path: '/logistics',
     name: 'LogisticsDashboard',
-    component: LogisticsDashboard,
+    component: () => import('../views/logistics-dashboard.vue'),
     meta: { 
       requiresAuth: true,
       requiredRole: 'logistics'
@@ -220,7 +211,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: NotFound
+    component: () => import('../views/not-found.vue')
   }
 ];
 

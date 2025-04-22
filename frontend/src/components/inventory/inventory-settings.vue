@@ -40,7 +40,7 @@ const setRefreshInterval = (seconds) => {
     <div class="settings-content">
       <div class="setting-group">
         <label for="real-time-toggle">{{ t('inventory.real_time_updates') }}</label>
-        <div class="toggle-switch">
+        <div class="toggle-switch" @click="toggleRealTimeUpdates">
           <input 
             id="real-time-toggle"
             type="checkbox"
@@ -74,6 +74,10 @@ const setRefreshInterval = (seconds) => {
 </template>
 
 <style scoped>
+.settings-card {
+  margin-bottom: 1.5rem; /* Add margin to create space between settings card and cards below */
+}
+
 .settings-content {
   display: flex;
   flex-wrap: wrap;
@@ -112,7 +116,7 @@ const setRefreshInterval = (seconds) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--color-border);
   transition: .4s;
   border-radius: 24px;
 }
@@ -124,13 +128,13 @@ const setRefreshInterval = (seconds) => {
   width: 16px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--color-background);
   transition: .4s;
   border-radius: 50%;
 }
 
 input:checked + .toggle-slider {
-  background-color: #3b82f6;
+  background-color: var(--color-primary);
 }
 
 input:checked + .toggle-slider:before {
@@ -144,7 +148,7 @@ input:checked + .toggle-slider:before {
 
 .last-updated {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin-left: auto;
 }
 </style>

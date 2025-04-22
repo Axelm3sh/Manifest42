@@ -1,13 +1,19 @@
 <script setup>
-import {computed, reactive, ref} from 'vue';
+import {computed, onMounted, reactive, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router/dist/vue-router.esm-bundler.js';
 import {useAuthStore} from '../stores/auth';
 import {useI18n} from 'vue-i18n';
+import DotMatrixBackground from "@/components/DotMatrixBackground.vue";
+import ThemeToggle from "@/components/theme-toggle.vue";
 
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
+
+// Animation states
+const isPageLoaded = ref(false);
+const isLoginExpanding = ref(false);
 
 // Form state
 const credentials = reactive({
@@ -51,14 +57,53 @@ const validateForm = () => {
   return isValid;
 };
 
+// Initialize animations when component is mounted
+onMounted(() => {
+  // Trigger fade-in animation after a short delay
+  setTimeout(() => {
+    isPageLoaded.value = true;
+  }, 300);
+});
+
+// Reference to the DotMatrixBackground component
+const dotMatrixRef = ref(null);
+
+// Trigger ripple effect on the dot matrix background
+const triggerRipple = (x, y) => {
+  if (dotMatrixRef.value) {
+    // Create a custom event with the coordinates
+    const rippleEvent = new MouseEvent('click', {
+      clientX: x,
+      clientY: y,
+      bubbles: true,
+      cancelable: true,
+    });
+
+    // Get the background element and dispatch the event
+    const backgroundEl = dotMatrixRef.value.$el;
+    backgroundEl.dispatchEvent(rippleEvent);
+  }
+};
+
 // Handle form submission
-const handleSubmit = async () => {
+const handleSubmit = async (event) => {
   if (isSubmitting.value) return;
 
   // Validate form
   if (!validateForm()) {
     errorMessage.value = t('login.error_required_fields');
     return;
+  }
+
+  // Trigger ripple effect from the center of the login card
+  if (event) {
+    const loginCard = document.querySelector('.login-card');
+    if (loginCard) {
+      const rect = loginCard.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      triggerRipple(centerX, centerY);
+    }
   }
 
   isSubmitting.value = true;
@@ -68,16 +113,27 @@ const handleSubmit = async () => {
     const result = await authStore.login(credentials);
 
     if (result.success) {
-      // Redirect to appropriate dashboard based on role
-      const redirectPath = route.query.redirect || getDashboardByRole(authStore.role);
-      router.push(redirectPath);
+      // Trigger expanding animation before redirect
+      isLoginExpanding.value = true;
+
+      // Fade out the dot matrix background
+      if (dotMatrixRef.value) {
+        dotMatrixRef.value.fadeOut(400);
+      }
+
+      // Wait for animation to complete before redirecting
+      setTimeout(() => {
+        // Redirect to appropriate dashboard based on role
+        const redirectPath = route.query.redirect || getDashboardByRole(authStore.role);
+        router.push(redirectPath);
+      }, 600); // Match the CSS transition duration
     } else {
       errorMessage.value = result.error || t('login.error_invalid_credentials');
+      isSubmitting.value = false;
     }
   } catch (error) {
     errorMessage.value = error.message || t('login.error_unknown');
     console.error('Login error:', error);
-  } finally {
     isSubmitting.value = false;
   }
 };
@@ -99,15 +155,32 @@ const togglePasswordVisibility = () => {
 };
 
 // Quick login buttons for demo purposes
-const quickLogin = (role) => {
+const quickLogin = (role, event) => {
   credentials.username = role;
   credentials.password = 'password';
+
+  // Trigger ripple effect from the button's position
+  if (event && event.target) {
+    const rect = event.target.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    triggerRipple(centerX, centerY);
+  }
+
   handleSubmit();
 };
 </script>
 
 <template>
-  <div class="login-container">
+  <div class="login-container" :class="{ 'page-loaded': isPageLoaded, 'login-expanding': isLoginExpanding }">
+    <!-- Dot Matrix Background -->
+    <DotMatrixBackground ref="dotMatrixRef" :reducedMotion="false" />
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-container">
+      <ThemeToggle />
+    </div>
+
     <div class="login-card">
       <h1 class="login-title">{{ t('login.title') }}</h1>
       <p class="login-subtitle">{{ t('login.subtitle') }}</p>
@@ -115,7 +188,7 @@ const quickLogin = (role) => {
       <form @submit.prevent="handleSubmit" class="login-form" novalidate>
         <div class="form-group" :class="{ 'has-error': formErrors.username }">
           <label for="username">{{ t('login.username') }}</label>
-          <input 
+          <input
             id="username"
             v-model="credentials.username"
             type="text"
@@ -133,7 +206,7 @@ const quickLogin = (role) => {
         <div class="form-group" :class="{ 'has-error': formErrors.password }">
           <label for="password">{{ t('login.password') }}</label>
           <div class="password-input-container">
-            <input 
+            <input
               id="password"
               v-model="credentials.password"
               :type="showPassword ? 'text' : 'password'"
@@ -143,8 +216,8 @@ const quickLogin = (role) => {
               aria-required="true"
               @blur="validateForm"
             />
-            <button 
-              type="button" 
+            <button
+              type="button"
               class="password-toggle"
               @click="togglePasswordVisibility"
               :aria-label="showPassword ? t('login.hide_password') : t('login.show_password')"
@@ -161,8 +234,8 @@ const quickLogin = (role) => {
           {{ errorMessage }}
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           class="login-button"
           :disabled="isSubmitting || !isFormValid"
           aria-live="polite"
@@ -174,34 +247,34 @@ const quickLogin = (role) => {
       <div class="demo-section">
         <h2 class="demo-title">{{ t('login.demo_title') }}</h2>
         <div class="demo-buttons">
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="demo-button admin"
-            @click="quickLogin('admin')"
+            @click="(event) => quickLogin('admin', event)"
             :disabled="isSubmitting"
           >
             {{ t('login.admin_role') }}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="demo-button manager"
-            @click="quickLogin('manager')"
+            @click="(event) => quickLogin('manager', event)"
             :disabled="isSubmitting"
           >
             {{ t('login.manager_role') }}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="demo-button analyst"
-            @click="quickLogin('analyst')"
+            @click="(event) => quickLogin('analyst', event)"
             :disabled="isSubmitting"
           >
             {{ t('login.analyst_role') }}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="demo-button logistics"
-            @click="quickLogin('logistics')"
+            @click="(event) => quickLogin('logistics', event)"
             :disabled="isSubmitting"
           >
             {{ t('login.logistics_role') }}
@@ -213,53 +286,66 @@ const quickLogin = (role) => {
 </template>
 
 <style scoped>
-/* Variables for consistent theming */
-:root {
-  --color-primary: #4299e1;
-  --color-primary-dark: #3182ce;
-  --color-secondary: #718096;
-  --color-text: #1a202c;
-  --color-text-light: #4a5568;
-  --color-background: #f5f7fa;
-  --color-white: #ffffff;
-  --color-border: #e2e8f0;
-  --color-error: #c53030;
-  --color-error-bg: #fed7d7;
-  --color-disabled: #a0aec0;
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  --border-radius: 4px;
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 0.75rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 2.5rem;
-
-  --font-size-sm: 0.875rem;
-  --font-size-md: 1rem;
-  --font-size-lg: 1.75rem;
-}
+/* Using global CSS variables from style.css */
 
 /* Layout */
 .login-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: var(--spacing-xl);
   background-color: var(--color-background);
+  overflow: hidden;
+  /* Animation states */
+  opacity: 0;
+  transition: opacity var(--transition-normal) ease-in-out;
+}
+
+/* Page loaded animation */
+.login-container.page-loaded {
+  opacity: 1;
+}
+
+/* Login expanding animation */
+.login-container.login-expanding .login-card {
+  transform: scale(1.5);
+  opacity: 0;
 }
 
 .login-card {
+  position: relative;
   width: 100%;
   max-width: 480px;
   padding: var(--spacing-2xl);
-  background-color: var(--color-white);
+  background-color: var(--color-surface);
   border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
+  z-index: 1; /* Above the background */
+
+  /* Enhanced styling */
+  box-shadow: var(--shadow-lg), var(--shadow-glow-light);
+
+  /* Animation */
+  transform: scale(0.95);
+  opacity: 0;
+  transition:
+    transform var(--transition-normal) ease-out,
+    opacity var(--transition-normal) ease-in-out,
+    box-shadow var(--transition-normal) ease;
+}
+
+/* Apply animation when page is loaded */
+.page-loaded .login-card {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Theme compatibility */
+:root[data-theme="dark"] .login-card {
+  background-color: #2d3748; /* Dark background */
+  color: #f7fafc; /* Light text */
+  box-shadow: var(--shadow-lg), var(--shadow-glow-dark);
 }
 
 /* Typography */
@@ -355,16 +441,39 @@ const quickLogin = (role) => {
   border: none;
   border-radius: var(--border-radius);
   cursor: pointer;
-  transition: background-color 0.2s;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal);
 }
 
 .login-button:hover {
   background-color: var(--color-primary-dark);
+  box-shadow: 0 0 10px rgba(66, 153, 225, 0.5);
 }
 
 .login-button:disabled {
   background-color: var(--color-disabled);
   cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Button animation when login is expanding */
+.login-expanding .login-button {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(66, 153, 225, 0.8);
+}
+
+/* Theme compatibility for button */
+:root[data-theme="dark"] .login-button:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+:root[data-theme="dark"] .login-expanding .login-button {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 /* Demo section */
@@ -394,16 +503,35 @@ const quickLogin = (role) => {
   font-weight: 500;
   color: var(--color-white);
   cursor: pointer;
-  transition: opacity 0.2s;
+  position: relative;
+  z-index: 2;
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal);
 }
 
 .demo-button:hover {
   opacity: 0.9;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .demo-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Demo button animation when login is expanding */
+.login-expanding .demo-button {
+  transform: scale(1.05);
+  opacity: 0;
+  transition-delay: 0.1s;
+}
+
+/* Theme compatibility for demo buttons */
+:root[data-theme="dark"] .demo-button:hover {
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
 }
 
 /* Role-specific colors */
@@ -421,6 +549,14 @@ const quickLogin = (role) => {
 
 .demo-button.logistics {
   background-color: #dd6b20;
+}
+
+/* Theme Toggle Container */
+.theme-toggle-container {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: 10;
 }
 
 /* Responsive */

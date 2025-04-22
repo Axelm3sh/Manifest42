@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import {computed, ref} from 'vue';
+import {computed, ref, shallowRef} from 'vue';
 
 /**
  * Store for real-time inventory data
@@ -7,8 +7,8 @@ import {computed, ref} from 'vue';
  */
 export const useInventoryDataStore = defineStore('inventoryData', () => {
   // State
-  const inventoryItems = ref([]);
-  const warehouseData = ref([]);
+  const inventoryItems = shallowRef([]);
+  const warehouseData = shallowRef([]);
   const kpiData = ref({
     totalItems: 0,
     totalValue: 0,
