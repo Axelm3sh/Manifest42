@@ -1,7 +1,13 @@
 import {createApp} from 'vue'
+import PrimeVue from 'primevue/config'
 import {createPinia} from 'pinia'
 import router from './router/index.js'
-import './style.css'
+
+// Import order matters for CSS
+import './style.css' // TailwindCSS
+import '@primevue/themes/lara'
+import 'primeicons/primeicons.css'
+
 import App from './App.vue'
 import {i18n} from './i18n/index.js'
 import {initializeSecurity} from './utils/security'
@@ -18,6 +24,9 @@ const pinia = createPinia()
 app.use(pinia)
 
 // Use plugins
+app.use(PrimeVue,
+    {unstyled: true,
+    ripple: true})
 app.use(PhosphorVue)
 app.use(i18n)
 app.use(router)

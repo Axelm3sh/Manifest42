@@ -1,3 +1,6 @@
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
 :root {
   /* Base colors */
   --color-primary: #646cff;
