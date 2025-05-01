@@ -1,5 +1,8 @@
 <script setup>
-defineProps({
+import {computed} from 'vue';
+import Card from 'primevue/card';
+
+const props = defineProps({
   title: {
     type: String,
     default: ''
@@ -9,61 +12,48 @@ defineProps({
     default: false
   }
 });
+
+// Computed property for card classes
+const cardClasses = computed(() => ({
+  'bg-surface shadow-sm rounded-lg overflow-hidden flex flex-col transition-all': true,
+  'card-no-padding': props.noPadding
+}));
+
+// Pass-through customization for PrimeVue Card
+const cardPT = computed(() => ({
+  root: { 
+    class: cardClasses.value 
+  },
+  content: { 
+    class: props.noPadding ? 'p-0' : 'p-4' 
+  },
+  title: { 
+    class: 'text-lg font-semibold text-text-primary m-0' 
+  },
+  header: { 
+    class: 'p-4 border-b border-border flex justify-between items-center' 
+  },
+  footer: { 
+    class: 'p-4 border-t border-border' 
+  }
+}));
 </script>
 
 <template>
-  <div class="base-card" :class="{ 'no-padding': noPadding }">
-    <div v-if="title || $slots.header" class="card-header">
-      <h3 v-if="title" class="card-title">{{ title }}</h3>
+  <Card :pt="cardPT">
+    <template #header v-if="title || $slots.header">
+      <h3 v-if="title" class="text-lg font-semibold text-text-primary m-0">{{ title }}</h3>
       <slot name="header"></slot>
-    </div>
-    <div class="card-body">
+    </template>
+    <template #content>
       <slot></slot>
-    </div>
-    <div v-if="$slots.footer" class="card-footer">
+    </template>
+    <template #footer v-if="$slots.footer">
       <slot name="footer"></slot>
-    </div>
-  </div>
+    </template>
+  </Card>
 </template>
 
-<style scoped>
-.base-card {
-  background-color: var(--color-surface);
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: background-color var(--transition-normal), 
-              box-shadow var(--transition-normal);
-}
-
-.card-header {
-  padding: 1rem;
-  border-bottom: 1px solid var(--color-border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-title {
-  margin: 0;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-.card-body {
-  padding: 1rem;
-  flex: 1;
-}
-
-.no-padding .card-body {
-  padding: 0;
-}
-
-.card-footer {
-  padding: 1rem;
-  border-top: 1px solid var(--color-border);
-}
+<style>
+/* No scoped styles needed - using TailwindCSS and PrimeVue styling */
 </style>
