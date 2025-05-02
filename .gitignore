@@ -62,3 +62,4 @@ stats.html
 *.zip
 *.tgz
 Thumbs.db
+.vercel

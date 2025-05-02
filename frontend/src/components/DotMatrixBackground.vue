@@ -1,15 +1,16 @@
 <template>
   <div
-    ref="backgroundRef"
-    class="dot-matrix-background"
-    :class="{ 'dark-theme': isDarkTheme, 'focused': isFocused }"
-    @mousemove="handleMouseMove"
-    @click="handleClick"
-    @focus="isFocused = true"
-    @blur="isFocused = false"
-    tabindex="-1"
-    role="application"
-    aria-label="Interactive dot matrix background."
+      ref="backgroundRef"
+      class="dot-matrix-background"
+      :class="{ 'dark-theme': isDarkTheme, 'focused': isFocused }"
+      @mousemove="handleMouseMove"
+      @mouseleave="handleMouseLeave"
+      @click="handleClick"
+      @focus="isFocused = true"
+      @blur="isFocused = false"
+      tabindex="-1"
+      role="application"
+      aria-label="Interactive dot matrix background."
   >
     <canvas ref="canvasRef" class="dot-matrix-canvas"></canvas>
   </div>
@@ -67,15 +68,18 @@ const fadeOut = (duration = 500) => {
 };
 
 // Expose methods
-defineExpose({ fadeOut });
+defineExpose({fadeOut});
 
 // Refs
 const backgroundRef = ref(null);
 const canvasRef = ref(null);
-const mousePosition = ref({ x: 0, y: 0 });
+const mousePosition = ref({x: 0, y: 0});
 const animationFrameId = ref(null);
 const lastFrameTime = ref(0);
 const frameInterval = ref(1000 / 60); // Target 60fps by default
+const isHovering = ref(false);
+const mouseLeaveTime = ref(0);
+const fadeOutDuration = 1000; // Time in ms for glow effect to fade out
 
 // Ripple effect state
 const ripple = ref({
@@ -121,7 +125,7 @@ const MOBILE_WIDTH_THRESHOLD = 768;
 // Updates isMobile and density live on resize or orientation change
 const updateResponsiveSettings = () => {
   isMobile.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    || window.innerWidth <= MOBILE_WIDTH_THRESHOLD;
+      || window.innerWidth <= MOBILE_WIDTH_THRESHOLD;
   setupCanvas();
 };
 
@@ -145,8 +149,8 @@ onMounted(() => {
 
   // Adjust frame rate as-needed
   watch(isMobile, (nowMobile) => {
-    frameInterval.value = nowMobile ? 1000 / 48 : 1000 / 72;
-  }, { immediate: true });
+    frameInterval.value = nowMobile ? 1000 / 42 : 1000 / 72;
+  }, {immediate: true});
 
   // Start the animation
   lastFrameTime.value = performance.now();
@@ -177,11 +181,18 @@ const setupCanvas = () => {
 // Handle mouse movement
 const handleMouseMove = (event) => {
   if (!backgroundRef.value) return;
+  isHovering.value = true;
   const rect = backgroundRef.value.getBoundingClientRect();
   // Clamp mouse x/y within the background area bounds so dots respond even when mouse outside
   const x = Math.min(Math.max(event.clientX - rect.left, 0), rect.width);
   const y = Math.min(Math.max(event.clientY - rect.top, 0), rect.height);
-  mousePosition.value = { x, y };
+  mousePosition.value = {x, y};
+};
+
+// Handle mouse leave
+const handleMouseLeave = () => {
+  isHovering.value = false;
+  mouseLeaveTime.value = performance.now();
 };
 
 // Handle click for ripple effect
@@ -228,7 +239,7 @@ const animate = (timestamp) => {
 
   const canvas = canvasRef.value;
   const ctx = canvas.getContext('2d');
-  const { width, height } = canvas;
+  const {width, height} = canvas;
 
   // Clear canvas
   ctx.clearRect(0, 0, width, height);
@@ -280,8 +291,16 @@ const animate = (timestamp) => {
         if (distance < props.glowRadius) {
           // Increase size and opacity for dots near the mouse
           const factor = 1 - (distance / props.glowRadius);
-          size = baseSize + (maxSize - baseSize) * factor * props.glowIntensity;
-          opacity = 0.3 + 0.7 * factor * props.glowIntensity;
+
+          // Calculate fade out progress when not hovering
+          let fadeOutFactor = 1;
+          if (!isHovering.value) {
+            const timeSinceLeave = timestamp - mouseLeaveTime.value;
+            fadeOutFactor = Math.max(0, 1 - (timeSinceLeave / fadeOutDuration));
+          }
+
+          size = baseSize + (maxSize - baseSize) * factor * props.glowIntensity * fadeOutFactor;
+          opacity = 0.3 + 0.7 * factor * props.glowIntensity * fadeOutFactor;
         }
 
         // Apply ripple effect if active
@@ -307,8 +326,8 @@ const animate = (timestamp) => {
 
       // Set color based on theme - using green colors similar to login-subtitle
       const dotColor = isDarkTheme.value
-        ? `rgba(42, 128, 87, ${opacity})` // --color-secondary-dark in dark mode
-        : `rgba(66, 184, 131, ${opacity})`; // --color-secondary in light mode
+          ? `rgba(42, 128, 87, ${opacity})` // --color-secondary-dark in dark mode
+          : `rgba(66, 184, 131, ${opacity})`; // --color-secondary in light mode
 
       // Draw the dot
       ctx.beginPath();
@@ -329,7 +348,10 @@ const easeOutQuad = (t) => t * (2 - t);
 <style scoped>
 .dot-matrix-background {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100vw;
   height: 100vh;
   z-index: 0;

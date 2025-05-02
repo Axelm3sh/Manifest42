@@ -6,6 +6,9 @@ import {useAuthStore} from '../stores/auth';
 import {useInventoryStore} from '../stores/inventoryData';
 import {useNotificationsStore} from '../stores/notifications';
 import DashboardLayout from '../components/dashboard-layout.vue';
+import FormContainer from '../components/base/form-container.vue';
+import DataList from '../components/data-list.vue';
+import ModalDialog from '../components/base/modal-dialog.vue';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -291,6 +294,29 @@ const handleInventoryAction = (id, action) => {
   // Remove the alert from the list
   inventoryAlerts.value = inventoryAlerts.value.filter(alert => alert.id !== id);
 };
+
+// Modal dialog state
+const showNewShipmentModal = ref(false);
+const showInventoryActionModal = ref(false);
+const selectedInventoryAlert = ref(null);
+
+// Open inventory action modal
+const openInventoryActionModal = (alertData) => {
+  // Find the original alert object using the SKU from the transformed data
+  const originalAlert = inventoryAlerts.value.find(alert => alert.sku === alertData.SKU);
+  if (originalAlert) {
+    selectedInventoryAlert.value = originalAlert;
+    showInventoryActionModal.value = true;
+  }
+};
+
+// Handle inventory action from modal
+const confirmInventoryAction = (action) => {
+  if (selectedInventoryAlert.value) {
+    handleInventoryAction(selectedInventoryAlert.value.id, action);
+    showInventoryActionModal.value = false;
+  }
+};
 </script>
 
 <template>
@@ -321,8 +347,10 @@ const handleInventoryAction = (id, action) => {
 
         <!-- KPIs -->
         <div class="kpi-grid">
-          <div v-for="kpi in kpis" :key="kpi.id" class="kpi-card">
-            <h3 class="kpi-title">{{ kpi.title }}</h3>
+          <FormContainer v-for="kpi in kpis" :key="kpi.id" class="kpi-card">
+            <template #header>
+              <h3 class="kpi-title">{{ kpi.title }}</h3>
+            </template>
             <div class="kpi-value">{{ kpi.value }}</div>
             <div class="kpi-trend" :class="kpi.trend">
               {{ kpi.change }}
@@ -330,16 +358,15 @@ const handleInventoryAction = (id, action) => {
                 {{ kpi.trend === 'up' ? '↑' : kpi.trend === 'down' ? '↓' : '→' }}
               </span>
             </div>
-          </div>
+          </FormContainer>
         </div>
 
         <!-- Dashboard sections -->
         <div class="dashboard-sections">
           <!-- Quick actions -->
-          <div class="logistics-actions">
-            <h3 class="card-title">{{ t('logistics.quick_actions') }}</h3>
+          <FormContainer :title="t('logistics.quick_actions')" class="logistics-actions">
             <div class="actions-grid">
-              <router-link to="/logistics/shipments" class="action-button">
+              <router-link to="/logistics/shipments" class="action-button" @click.prevent="showNewShipmentModal = true">
                 {{ t('logistics.actions.create_shipment') }}
               </router-link>
               <router-link to="/logistics/deliveries" class="action-button">
@@ -352,100 +379,127 @@ const handleInventoryAction = (id, action) => {
                 {{ t('logistics.actions.generate_report') }}
               </router-link>
             </div>
-          </div>
+          </FormContainer>
 
           <!-- Recent shipments -->
-          <div class="overview-card">
-            <div class="card-header">
-              <h3 class="card-title">{{ t('logistics.recent_shipments') }}</h3>
-              <router-link to="/logistics/shipments" class="action-link">
+          <FormContainer :title="t('logistics.recent_shipments')" class="overview-card">
+            <template #header-actions>
+              <button @click="showNewShipmentModal = true" class="action-link">
                 {{ t('logistics.new_shipment') }}
+              </button>
+            </template>
+
+            <DataList 
+              :items="recentShipments.map(shipment => ({
+                ID: shipment.id,
+                Destination: shipment.destination,
+                Status: t(`logistics.status.${shipment.status}`),
+                Items: shipment.items,
+                Priority: t(`logistics.priority.${shipment.priority}`),
+                Delivery: shipment.status === 'delivered' 
+                  ? `${t('logistics.delivered')}: ${getTimeAgo(shipment.deliveredAt)}`
+                  : `${t('logistics.estimated_delivery')}: ${formatDate(shipment.estimatedDelivery)}`
+              }))"
+              @item-selected="navigateTo('/logistics/shipments')"
+            />
+
+            <template #footer v-if="recentShipments.length > 0">
+              <router-link to="/logistics/shipments" class="view-all-button">
+                {{ t('logistics.view_all_shipments') }}
               </router-link>
-            </div>
-
-            <div v-if="recentShipments.length === 0" class="empty-state">
-              {{ t('logistics.no_recent_shipments') }}
-            </div>
-
-            <div v-else class="shipments-list">
-              <div v-for="shipment in recentShipments.slice(0, 2)" :key="shipment.id" class="shipment-item">
-                <div class="shipment-header">
-                  <div class="shipment-id">{{ shipment.id }}</div>
-                  <div class="shipment-status" :class="getStatusClass(shipment.status)">
-                    {{ t(`logistics.status.${shipment.status}`) }}
-                  </div>
-                </div>
-
-                <div class="shipment-destination">{{ shipment.destination }}</div>
-
-                <div class="shipment-details">
-                  <div class="shipment-items">
-                    {{ t('logistics.items_count', { count: shipment.items }) }}
-                  </div>
-                  <div class="shipment-priority" :class="`priority-${shipment.priority}`">
-                    {{ t(`logistics.priority.${shipment.priority}`) }}
-                  </div>
-                </div>
-
-                <div class="shipment-delivery">
-                  <span v-if="shipment.status === 'delivered'">
-                    {{ t('logistics.delivered') }}: {{ getTimeAgo(shipment.deliveredAt) }}
-                  </span>
-                  <span v-else>
-                    {{ t('logistics.estimated_delivery') }}: {{ formatDate(shipment.estimatedDelivery) }}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <router-link v-if="recentShipments.length > 0" to="/logistics/shipments" class="view-all-button">
-              {{ t('logistics.view_all_shipments') }}
-            </router-link>
-          </div>
+            </template>
+          </FormContainer>
 
           <!-- Inventory alerts -->
-          <div class="overview-card">
-            <h3 class="card-title">{{ t('logistics.inventory_alerts') }}</h3>
+          <FormContainer :title="t('logistics.inventory_alerts')" class="overview-card">
+            <DataList 
+              :items="inventoryAlerts.map(alert => ({
+                Item: alert.item,
+                SKU: alert.sku,
+                Level: t(`logistics.alert_level.${alert.level}`),
+                Details: alert.details
+              }))"
+              @item-selected="openInventoryActionModal($event)"
+            />
 
-            <div v-if="inventoryAlerts.length === 0" class="empty-state">
-              {{ t('logistics.no_inventory_alerts') }}
-            </div>
-
-            <div v-else class="alerts-list">
-              <div v-for="alert in inventoryAlerts.slice(0, 2)" :key="alert.id" class="alert-item" :class="getAlertLevelClass(alert.level)">
-                <div class="alert-header">
-                  <div class="alert-title">{{ alert.item }}</div>
-                  <div class="alert-level">{{ t(`logistics.alert_level.${alert.level}`) }}</div>
-                </div>
-
-                <div class="alert-sku">{{ alert.sku }}</div>
-                <div class="alert-details">{{ alert.details }}</div>
-
-                <div class="alert-actions">
-                  <button 
-                    class="alert-action-button"
-                    @click="handleInventoryAction(alert.id, 'restock')"
-                  >
-                    {{ t('logistics.restock') }}
-                  </button>
-                  <button 
-                    class="alert-action-button"
-                    @click="handleInventoryAction(alert.id, 'adjust')"
-                  >
-                    {{ t('logistics.adjust_levels') }}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <router-link v-if="inventoryAlerts.length > 0" to="/logistics/inventory" class="view-all-button">
-              {{ t('logistics.view_all_alerts') }}
-            </router-link>
-          </div>
+            <template #footer v-if="inventoryAlerts.length > 0">
+              <router-link to="/logistics/inventory" class="view-all-button">
+                {{ t('logistics.view_all_alerts') }}
+              </router-link>
+            </template>
+          </FormContainer>
         </div>
       </div>
     </div>
   </DashboardLayout>
+
+  <!-- Modal Dialogs -->
+  <!-- New Shipment Modal -->
+  <ModalDialog 
+    v-model:visible="showNewShipmentModal"
+    :title="t('logistics.new_shipment')"
+    :modal="true"
+    :closable="true"
+    width="500px"
+  >
+    <div class="p-4">
+      <p>{{ t('logistics.new_shipment_description') }}</p>
+      <!-- In a real app, this would be a form with inputs for shipment details -->
+      <div class="mt-4">
+        <p>{{ t('logistics.shipment_form_placeholder') }}</p>
+      </div>
+    </div>
+    <template #footer>
+      <button 
+        class="px-4 py-2 bg-gray-200 text-gray-800 rounded mr-2"
+        @click="showNewShipmentModal = false"
+      >
+        {{ t('common.cancel') }}
+      </button>
+      <button 
+        class="px-4 py-2 bg-primary-500 text-white rounded"
+        @click="createNewShipment(); showNewShipmentModal = false"
+      >
+        {{ t('common.create') }}
+      </button>
+    </template>
+  </ModalDialog>
+
+  <!-- Inventory Action Modal -->
+  <ModalDialog 
+    v-model:visible="showInventoryActionModal"
+    :title="t('logistics.inventory_action')"
+    :modal="true"
+    :closable="true"
+    width="500px"
+  >
+    <div class="p-4" v-if="selectedInventoryAlert">
+      <h4 class="text-lg font-medium mb-2">{{ selectedInventoryAlert.item }}</h4>
+      <p class="text-sm text-gray-600 mb-2">{{ selectedInventoryAlert.sku }}</p>
+      <p class="mb-4">{{ selectedInventoryAlert.details }}</p>
+      <p>{{ t('logistics.inventory_action_description') }}</p>
+    </div>
+    <template #footer>
+      <button 
+        class="px-4 py-2 bg-gray-200 text-gray-800 rounded mr-2"
+        @click="showInventoryActionModal = false"
+      >
+        {{ t('common.cancel') }}
+      </button>
+      <button 
+        class="px-4 py-2 bg-yellow-500 text-white rounded mr-2"
+        @click="confirmInventoryAction('adjust')"
+      >
+        {{ t('logistics.adjust_levels') }}
+      </button>
+      <button 
+        class="px-4 py-2 bg-primary-500 text-white rounded"
+        @click="confirmInventoryAction('restock')"
+      >
+        {{ t('logistics.restock') }}
+      </button>
+    </template>
+  </ModalDialog>
 </template>
 
 <style scoped>
@@ -881,6 +935,10 @@ const handleInventoryAction = (id, action) => {
 @media (max-width: 768px) {
   .kpi-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .dashboard-sections {
+    grid-template-columns: 1fr;
   }
 
   .overview-grid {
