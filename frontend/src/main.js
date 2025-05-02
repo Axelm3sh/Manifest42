@@ -3,11 +3,10 @@ import PrimeVue from 'primevue/config'
 import {createPinia} from 'pinia'
 import router from './router/index.js'
 
-// Import order matters for CSS
-import './style.css' // TailwindCSS
+// Import order matters for CSS - PrimeVue styles should load before custom overrides
 import '@primevue/themes/lara'
 import 'primeicons/primeicons.css'
-
+import './style.css' // TailwindCSS (custom overrides)
 import App from './App.vue'
 import {i18n} from './i18n/index.js'
 import {initializeSecurity} from './utils/security'
