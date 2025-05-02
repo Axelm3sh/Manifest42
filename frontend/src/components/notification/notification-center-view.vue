@@ -18,6 +18,7 @@ const notificationsStore = useNotificationsStore();
 const activeTab = ref('all');
 const showPreferences = ref(false);
 const notificationPanel = ref(null);
+const bellRef = ref(null);
 
 // Computed properties
 const unreadCount = computed(() => notificationsStore.unreadCount);
@@ -46,6 +47,7 @@ const toggleNotificationCenter = (event) => {
     notificationsStore.toggleNotificationCenter();
   } else {
     notificationPanel.value.toggle(event);
+    notificationsStore.toggleNotificationCenter();
   }
 };
 
@@ -61,10 +63,12 @@ const dismissAllNotifications = () => {
 <template>
   <div class="relative">
     <!-- Notification Bell Icon -->
-    <NotificationBell 
-      :unread-count="unreadCount"
-      @toggle="toggleNotificationCenter($event)"
-    />
+    <div ref="bellRef">
+      <NotificationBell 
+        :unread-count="unreadCount"
+        @toggle="toggleNotificationCenter($event)"
+      />
+    </div>
 
     <!-- Notification Center Panel using OverlayPanel -->
     <OverlayPanel 
@@ -73,6 +77,7 @@ const dismissAllNotifications = () => {
       class="w-full max-w-md"
       :breakpoints="{'960px': '75vw', '640px': '90vw'}"
       :style="{ zIndex: 1000 }"
+      :target="bellRef"
     >
       <FormContainer class="shadow-none border-0">
         <template #header>

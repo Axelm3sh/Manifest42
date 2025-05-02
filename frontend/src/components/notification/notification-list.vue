@@ -1,13 +1,14 @@
 <script setup>
-import {computed, ref} from 'vue';
+import {computed} from 'vue';
 import {useI18n} from 'vue-i18n';
+import {useRouter} from 'vue-router';
 import FormContainer from '../base/form-container.vue';
 import Button from 'primevue/button';
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
-import ModalDialog from '../base/modal-dialog.vue';
 
 const { t } = useI18n();
+const router = useRouter();
 
 const props = defineProps({
   activeTab: {
@@ -30,11 +31,6 @@ const props = defineProps({
 
 const emit = defineEmits(['markAsRead', 'dismiss', 'executeAction', 'clearAll']);
 
-// Reactive state
-const showActionModal = ref(false);
-const selectedNotification = ref(null);
-const selectedAction = ref(null);
-
 // Computed properties
 const filteredNotifications = computed(() => {
   if (props.activeTab === 'all') {
@@ -56,21 +52,17 @@ const dismissNotification = (id, event) => {
   emit('dismiss', id, event);
 };
 
-const openActionModal = (notification, action) => {
-  selectedNotification.value = notification;
-  selectedAction.value = action;
-  showActionModal.value = true;
-};
-
-const confirmAction = () => {
-  if (selectedNotification.value && selectedAction.value) {
-    emit('executeAction', selectedNotification.value, selectedAction.value);
+const handleAction = (notification, action) => {
+  // If the action has a route, navigate to it
+  if (action.route) {
+    router.push(action.route);
+  } else {
+    // Otherwise execute the action directly
+    emit('executeAction', notification, action);
   }
-  showActionModal.value = false;
-};
 
-const cancelAction = () => {
-  showActionModal.value = false;
+  // Mark the notification as read when an action is taken
+  markAsRead(notification.id);
 };
 
 const clearAllNotifications = () => {
@@ -112,7 +104,7 @@ const formatDate = (dateString) => {
     <template v-if="filteredNotifications.length > 0">
       <template v-if="activeTab === 'all'">
         <!-- Group by date using Accordion -->
-        <Accordion class="mb-4">
+        <Accordion class="mb-4" :activeIndex="Object.keys(notificationsByDate).map((_, index) => index)">
           <AccordionTab v-for="(group, date) in notificationsByDate" :key="date" :header="date">
             <div v-for="notification in group" :key="notification.id" class="mb-2">
               <FormContainer 
@@ -137,7 +129,7 @@ const formatDate = (dateString) => {
                       <Button 
                         v-for="action in notification.actions" 
                         :key="action.id"
-                        @click.stop="openActionModal(notification, action)"
+                        @click.stop="handleAction(notification, action)"
                         :severity="action.primary ? 'primary' : 'secondary'"
                         size="small"
                         :label="action.label"
@@ -184,7 +176,7 @@ const formatDate = (dateString) => {
                   <Button 
                     v-for="action in notification.actions" 
                     :key="action.id"
-                    @click.stop="openActionModal(notification, action)"
+                    @click.stop="handleAction(notification, action)"
                     :severity="action.primary ? 'primary' : 'secondary'"
                     size="small"
                     :label="action.label"
@@ -218,22 +210,6 @@ const formatDate = (dateString) => {
       {{ t('notifications.no_notifications') }}
     </div>
 
-    <!-- Modal for notification actions -->
-    <ModalDialog 
-      v-model:visible="showActionModal"
-      :header="selectedAction?.label || 'Confirm Action'"
-      :modal="true"
-      :closable="true"
-      :dismissableMask="true"
-    >
-      <template #default>
-        <p class="mb-4">Are you sure you want to {{ selectedAction?.label.toLowerCase() }}?</p>
-      </template>
-      <template #footer>
-        <Button label="Cancel" @click="cancelAction" text class="mr-2" />
-        <Button label="Confirm" @click="confirmAction" severity="primary" />
-      </template>
-    </ModalDialog>
   </div>
 </template>
 
