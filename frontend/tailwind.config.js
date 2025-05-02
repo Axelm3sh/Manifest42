@@ -5,21 +5,33 @@ export default {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
     "./node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}"
   ],
+  darkMode: ['class', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
+        // Theme colors
         primary: {
           DEFAULT: 'var(--color-primary)',
           hover: 'var(--color-primary-hover)',
           light: 'var(--color-primary-light)',
           dark: 'var(--color-primary-dark)',
           muted: 'var(--color-primary-muted)',
+          content: 'var(--color-primary-content)',
         },
         secondary: {
           DEFAULT: 'var(--color-secondary)',
           hover: 'var(--color-secondary-hover)',
           light: 'var(--color-secondary-light)',
           dark: 'var(--color-secondary-dark)',
+          content: 'var(--color-secondary-content)',
+        },
+        accent: {
+          DEFAULT: 'var(--color-accent)',
+          content: 'var(--color-accent-content)',
+        },
+        neutral: {
+          DEFAULT: 'var(--color-neutral)',
+          content: 'var(--color-neutral-content)',
         },
         success: {
           DEFAULT: 'var(--color-success)',
@@ -27,6 +39,8 @@ export default {
           dark: 'var(--color-success-dark)',
           bg: 'var(--color-success-bg)',
           text: 'var(--color-success-text)',
+          content: 'var(--color-success-content)',
+          muted: 'var(--color-success-muted)',
         },
         warning: {
           DEFAULT: 'var(--color-warning)',
@@ -34,6 +48,8 @@ export default {
           dark: 'var(--color-warning-dark)',
           bg: 'var(--color-warning-bg)',
           text: 'var(--color-warning-text)',
+          content: 'var(--color-warning-content)',
+          muted: 'var(--color-warning-muted)',
         },
         danger: {
           DEFAULT: 'var(--color-danger)',
@@ -42,6 +58,27 @@ export default {
           bg: 'var(--color-danger-bg)',
           text: 'var(--color-danger-text)',
         },
+        error: {
+          DEFAULT: 'var(--color-error)',
+          light: 'var(--color-error-light)',
+          dark: 'var(--color-error-dark)',
+          bg: 'var(--color-error-bg)',
+          content: 'var(--color-error-content)',
+        },
+        info: {
+          DEFAULT: 'var(--color-info)',
+          light: 'var(--color-info-light)',
+          dark: 'var(--color-info-dark)',
+          content: 'var(--color-info-content)',
+        },
+        // Base colors
+        base: {
+          '100': 'var(--color-base-100)',
+          '200': 'var(--color-base-200)',
+          '300': 'var(--color-base-300)',
+          'content': 'var(--color-base-content)',
+        },
+        // UI element colors
         background: {
           DEFAULT: 'var(--color-background)',
           secondary: 'var(--color-background-secondary)',
