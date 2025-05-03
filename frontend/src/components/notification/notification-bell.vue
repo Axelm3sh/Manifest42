@@ -1,5 +1,4 @@
 <script setup>
-import {PhBell} from 'phosphor-vue';
 
 defineProps({
   unreadCount: {
@@ -22,7 +21,7 @@ const toggleNotificationCenter = () => {
     :class="{ 'has-unread': unreadCount > 0 }"
     aria-label="Toggle notification center"
   >
-    <PhBell weight="regular" />
+    <i class="pi pi-bell" aria-hidden="true"></i>
     <span v-if="unreadCount > 0" class="unread-badge">{{ unreadCount }}</span>
   </button>
 </template>

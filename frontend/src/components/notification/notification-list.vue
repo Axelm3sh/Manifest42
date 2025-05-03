@@ -2,7 +2,6 @@
 import {computed} from 'vue';
 import {useI18n} from 'vue-i18n';
 import BaseCard from '../base/base-card.vue';
-import {PhCheckCircle, PhInfo, PhWarning, PhX} from 'phosphor-vue';
 
 const { t } = useI18n();
 
@@ -57,12 +56,12 @@ const clearAllNotifications = () => {
 };
 
 // Helper methods
-const getNotificationTypeComponent = (type) => {
+const getNotificationTypeIcon = (type) => {
   const typeMap = {
-    info: PhInfo,
-    success: PhCheckCircle,
-    warning: PhWarning,
-    error: PhX
+    info: 'pi-info-circle',
+    success: 'pi-check-circle',
+    warning: 'pi-exclamation-triangle',
+    error: 'pi-times'
   };
 
   return typeMap[type] || typeMap.info;
@@ -111,7 +110,7 @@ const formatDate = (dateString) => {
           >
             <div class="notification-content">
               <div class="notification-icon">
-                <component :is="getNotificationTypeComponent(notification.type)" weight="regular" />
+                <i :class="['pi', getNotificationTypeIcon(notification.type)]" aria-hidden="true"></i>
               </div>
               <div class="notification-body">
                 <div class="notification-title">{{ notification.title }}</div>
@@ -135,7 +134,7 @@ const formatDate = (dateString) => {
                 class="dismiss-button"
                 aria-label="Dismiss notification"
               >
-                <PhX weight="regular" />
+                <i class="pi pi-times" aria-hidden="true"></i>
               </button>
             </div>
           </BaseCard>
@@ -157,7 +156,7 @@ const formatDate = (dateString) => {
         >
           <div class="notification-content">
             <div class="notification-icon">
-              <component :is="getNotificationTypeComponent(notification.type)" weight="regular" />
+              <i :class="['pi', getNotificationTypeIcon(notification.type)]" aria-hidden="true"></i>
             </div>
             <div class="notification-body">
               <div class="notification-title">{{ notification.title }}</div>
@@ -181,7 +180,7 @@ const formatDate = (dateString) => {
               class="dismiss-button"
               aria-label="Dismiss notification"
             >
-              <PhX weight="regular" />
+              <i class="pi pi-times" aria-hidden="true"></i>
             </button>
           </div>
         </BaseCard>
