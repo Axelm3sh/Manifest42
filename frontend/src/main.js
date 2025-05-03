@@ -5,7 +5,6 @@ import router from './router/index.js'
 
 // Import order matters for CSS
 import Lara from '@primeuix/themes/lara'
-//import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css' // PrimeIcons
 import 'primeflex/primeflex.css' // tiny flex/grid helper set
 import './style.css'
@@ -13,7 +12,6 @@ import './style.css'
 import App from './App.vue'
 import {i18n} from './i18n/index.js'
 import {initializeSecurity} from './utils/security'
-// import {PhosphorVue} from 'phosphor-vue'
 
 // Initialize security measures
 initializeSecurity()
