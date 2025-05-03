@@ -26,6 +26,3 @@ const getDashboardByRole = (role) =>
     ({ admin:'/admin', manager:'/manager', analyst:'/analyst', logistics:'/logistics' }[role] || '/login');
 </script>
 
-<style src="style.css">
-
-</style>
