@@ -196,8 +196,8 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  /*Here lies the graves display: flex and place-items: center,
+  these sons of... messed up everything*/
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--color-background);
@@ -239,13 +239,6 @@ button:focus-visible {
 
 .card {
   padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
 
 /* Add classes for theme-aware elements that need transitions */
