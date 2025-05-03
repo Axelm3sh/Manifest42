@@ -7,19 +7,6 @@ import {useI18n} from 'vue-i18n';
 import LanguageSwitcher from './language-switcher.vue';
 import ThemeToggle from './theme-toggle.vue';
 import NotificationCenterView from './notification/notification-center-view.vue';
-import {
-  PhChartBar,
-  PhChartLine,
-  PhCheck,
-  PhClipboardText,
-  PhGear,
-  PhMapPin,
-  PhMathOperations,
-  PhSignOut,
-  PhSquaresFour,
-  PhTruck,
-  PhUsers
-} from 'phosphor-vue';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -70,92 +57,93 @@ const handleLogout = async () => {
 
 // Navigation items based on user role
 const navigationItems = computed(() => {
+  const base = getDashboardRoute();
   const items = [
     {
       id: 'dashboard',
       label: t('navigation.dashboard'),
-      icon: PhSquaresFour,
-      route: getDashboardRoute(),
+      icon: 'pi-th-large',            // was PhSquaresFour
+      route: base,
     },
     {
       id: 'inventory',
       label: t('navigation.inventory'),
-      icon: PhClipboardText,
-      route: `${getDashboardRoute()}/inventory`,
-    },
+      icon: 'pi-clipboard',           // was PhClipboardText
+      route: `${base}/inventory`,
+    }
   ];
 
-  // Role-specific navigation items
   if (authStore.isAdmin) {
     items.push(
-      {
-        id: 'users',
-        label: t('navigation.users'),
-        icon: PhUsers,
-        route: '/admin/users',
-      },
-      {
-        id: 'settings',
-        label: t('navigation.settings'),
-        icon: PhGear,
-        route: '/admin/settings',
-      }
+        {
+          id: 'users',
+          label: t('navigation.users'),
+          icon: 'pi-users',            // was PhUsers
+          route: '/admin/users',
+        },
+        {
+          id: 'settings',
+          label: t('navigation.settings'),
+          icon: 'pi-cog',              // was PhGear
+          route: '/admin/settings',
+        }
     );
   }
 
   if (authStore.isManager) {
     items.push(
-      {
-        id: 'reports',
-        label: t('navigation.reports'),
-        icon: PhChartBar,
-        route: '/manager/reports',
-      },
-      {
-        id: 'approvals',
-        label: t('navigation.approvals'),
-        icon: PhCheck,
-        route: '/manager/approvals',
-      }
+        {
+          id: 'reports',
+          label: t('navigation.reports'),
+          icon: 'pi-chart-bar',        // was PhChartBar
+          route: '/manager/reports',
+        },
+        {
+          id: 'approvals',
+          label: t('navigation.approvals'),
+          icon: 'pi-check',            // was PhCheck
+          route: '/manager/approvals',
+        }
     );
   }
 
   if (authStore.isAnalyst) {
     items.push(
-      {
-        id: 'analytics',
-        label: t('navigation.analytics'),
-        icon: PhChartLine,
-        route: '/analyst/analytics',
-      },
-      {
-        id: 'simulations',
-        label: t('navigation.simulations'),
-        icon: PhMathOperations,
-        route: '/analyst/simulations',
-      }
+        {
+          id: 'analytics',
+          label: t('navigation.analytics'),
+          icon: 'pi-chart-line',       // was PhChartLine
+          route: '/analyst/analytics',
+        },
+        {
+          id: 'simulations',
+          label: t('navigation.simulations'),
+          icon: 'pi-calculator',       // instead of PhMathOperations
+          route: '/analyst/simulations',
+        }
     );
   }
 
   if (authStore.isLogistics) {
     items.push(
-      {
-        id: 'shipping',
-        label: t('navigation.shipping'),
-        icon: PhTruck,
-        route: '/logistics/shipping',
-      },
-      {
-        id: 'tracking',
-        label: t('navigation.tracking'),
-        icon: PhMapPin,
-        route: '/logistics/tracking',
-      }
+        {
+          id: 'shipping',
+          label: t('navigation.shipping'),
+          icon: 'pi-truck',            // was PhTruck
+          route: '/logistics/shipping',
+        },
+        {
+          id: 'tracking',
+          label: t('navigation.tracking'),
+          icon: 'pi-map-marker',       // instead of PhMapPin
+          route: '/logistics/tracking',
+        }
     );
   }
 
   return items;
 });
+
 
 // Get dashboard route based on user role
 const getDashboardRoute = () => {
@@ -175,14 +163,21 @@ const getDashboardRoute = () => {
   <div class="dashboard-layout" :class="{ 'sidebar-collapsed': !isSidebarOpen }">
     <!-- Sidebar -->
     <aside class="sidebar" :class="{ 'collapsed': !isSidebarOpen }">
+      <!--Sidebar header -->
       <div class="sidebar-header">
         <h2 class="app-logo">{{ t('app.name') }}</h2>
-        <button 
-          class="sidebar-toggle" 
-          @click="toggleSidebar"
-          :aria-label="isSidebarOpen ? t('navigation.collapse_sidebar') : t('navigation.expand_sidebar')"
+
+        <!-- collapse / expand button -->
+        <button
+            class="sidebar-toggle"
+            @click="toggleSidebar"
+            :aria-label="
+            isSidebarOpen
+              ? t('navigation.collapse_sidebar')
+              : t('navigation.expand_sidebar')
+          "
         >
-          <PhCaretLeft class="toggle-icon" :class="{ 'rotated': !isSidebarOpen }" weight="regular" />
+          <i class="pi pi-chevron-left nav-icon toggle-icon":class="{ rotated: !isSidebarOpen }"></i>
         </button>
       </div>
 
@@ -204,7 +199,7 @@ const getDashboardRoute = () => {
               :class="{ 'active': activeItem === item.id }"
               :title="!isSidebarOpen ? item.label : undefined"
             >
-              <component :is="item.icon" class="nav-icon" weight="regular" />
+              <i :class="['pi', item.icon, 'nav-icon']"></i>
               <span class="nav-label" v-if="isSidebarOpen">{{ item.label }}</span>
             </router-link>
           </li>
@@ -213,8 +208,8 @@ const getDashboardRoute = () => {
 
       <div class="sidebar-footer">
         <button class="logout-button" @click="handleLogout">
-          <PhSignOut class="nav-icon" weight="regular" />
-          <span class="nav-label" v-if="isSidebarOpen">{{ t('navigation.logout') }}</span>
+          <i class="pi pi-sign-out nav-icon"></i>
+          <span v-if="isSidebarOpen" class="nav-label">{{ t('navigation.logout') }}</span>
         </button>
       </div>
     </aside>
@@ -472,16 +467,25 @@ const getDashboardRoute = () => {
               border-color var(--transition-normal),
               color var(--transition-normal);
 }
-
-/* Phosphor Icon styles */
-.nav-icon {
+/* icon size shared across sidebar */
+.nav-icon,
+.toggle-icon {
   width: 24px;
   height: 24px;
-  margin-right: 0.75rem;
-  color: currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;          /* PrimeIcons glyph size */
+  margin-right: var(--spacing-sm);
 }
 
+/* no margin when collapsed */
 .sidebar-collapsed .nav-icon {
   margin-right: 0;
 }
+
+/* keep the rotation effect */
+.toggle-icon { transition: transform var(--transition-normal); }
+.toggle-icon.rotated { transform: rotate(180deg); }
+
 </style>
