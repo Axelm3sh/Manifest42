@@ -155,8 +155,6 @@ const getDashboardRoute = () => {
     default: return '/analyst';
   }
 };
-
-// No longer need getIconClass function as we're using Phosphor Icon components directly
 </script>
 
 <template>
@@ -194,8 +192,8 @@ const getDashboardRoute = () => {
       <nav class="sidebar-nav">
         <ul>
           <li v-for="item in navigationItems" :key="item.id">
-            <router-link 
-              :to="item.route" 
+            <router-link
+              :to="item.route"
               :class="{ 'active': activeItem === item.id }"
               :title="!isSidebarOpen ? item.label : undefined"
             >
@@ -256,8 +254,8 @@ const getDashboardRoute = () => {
   color: var(--color-text-primary);
   display: flex;
   flex-direction: column;
-  transition: width var(--transition-normal), 
-              background-color var(--transition-normal), 
+  transition: width var(--transition-normal),
+              background-color var(--transition-normal),
               color var(--transition-normal);
 }
 
@@ -387,6 +385,7 @@ const getDashboardRoute = () => {
   margin-right: var(--spacing-sm);
 }
 
+/* no margin when collapsed */
 .sidebar-collapsed .nav-icon {
   margin-right: 0;
 }
@@ -430,7 +429,7 @@ const getDashboardRoute = () => {
   background-color: var(--color-surface);
   box-shadow: var(--shadow-sm);
   z-index: 10;
-  transition: background-color var(--transition-normal), 
+  transition: background-color var(--transition-normal),
               box-shadow var(--transition-normal);
 }
 
@@ -463,7 +462,7 @@ const getDashboardRoute = () => {
   text-align: center;
   font-size: var(--font-size-sm);
   color: var(--color-text-tertiary);
-  transition: background-color var(--transition-normal), 
+  transition: background-color var(--transition-normal),
               border-color var(--transition-normal),
               color var(--transition-normal);
 }
@@ -477,11 +476,6 @@ const getDashboardRoute = () => {
   justify-content: center;
   font-size: 1.25rem;          /* PrimeIcons glyph size */
   margin-right: var(--spacing-sm);
-}
-
-/* no margin when collapsed */
-.sidebar-collapsed .nav-icon {
-  margin-right: 0;
 }
 
 /* keep the rotation effect */
