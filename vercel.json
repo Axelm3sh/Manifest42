@@ -16,6 +16,7 @@
   "outputDirectory": "frontend/dist",
   "routes": [
     { "src": "/api/(.*)", "dest": "/frontend/api/$1.js" },
+    { "handle": "filesystem" },
     { "src": "/(.*)",    "dest": "/frontend/dist/index.html" }
   ],
   "env": {
