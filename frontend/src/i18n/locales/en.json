@@ -29,7 +29,11 @@
     "login": "Login",
     "register": "Register",
     "submit": "Submit",
-    "reset": "Reset"
+    "reset": "Reset",
+    "actions": "Actions",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
   },
   "data_list": {
     "filter": "Filter",
@@ -182,5 +186,19 @@
       "overstock": "Overstock",
       "optimize": "Optimize"
     }
+  },
+  "settings": {
+    "title": "System Settings",
+    "description": "Configure global parameters for the application. These controls are only available to administrators.",
+    "global_settings": "Global Settings",
+    "key": "Setting Key",
+    "value": "Setting Value",
+    "updated_at": "Last Updated",
+    "add_new": "Add New Setting",
+    "confirm_delete": "Are you sure you want to delete setting '{key}'?",
+    "add_setting": "Add Setting"
+  },
+  "validation": {
+    "required": "This field is required."
   }
 }
