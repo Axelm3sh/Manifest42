@@ -3,14 +3,15 @@ import PrimeVue from 'primevue/config'
 import {createPinia} from 'pinia'
 import router from './router/index.js'
 
-// Import order matters for CSS - PrimeVue styles should load before custom overrides
-import '@primevue/themes/lara'
-import 'primeicons/primeicons.css'
-import './style.css' // TailwindCSS (custom overrides)
+// Import order matters for CSS
+import './base.css' // fonts, spacing, etc.
+import Lara from '@primevue/themes/lara' // PrimeVue theme
+import './overrides.css' // color tokens
+import 'primeicons/primeicons.css' // PrimeIcons
+import 'primeflex/primeflex.css' // tiny flex/grid helper set
 import App from './App.vue'
 import {i18n} from './i18n/index.js'
 import {initializeSecurity} from './utils/security'
-import {PhosphorVue} from 'phosphor-vue'
 
 // Initialize security measures
 initializeSecurity()
@@ -24,9 +25,17 @@ app.use(pinia)
 
 // Use plugins
 app.use(PrimeVue,
-    {unstyled: true,
+    {
+        theme: {
+            preset: Lara,
+            options: {
+                prefix: 'p',
+                darkModeSelector: `[data-theme="dark"]`,
+                cssLayer: false
+            }
+        },
     ripple: true})
-app.use(PhosphorVue)
+// app.use(PhosphorVue)
 app.use(i18n)
 app.use(router)
 

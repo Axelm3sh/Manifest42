@@ -1,59 +1,74 @@
-<script setup>
-import {computed} from 'vue';
+<!-- src/components/base/base-card.vue -->
+<script setup lang="ts">
 import Card from 'primevue/card';
 
-const props = defineProps({
+defineOptions({
+  components: {Card}
+})
+
+defineProps({
+  /** Optional title rendered in the header slot */
   title: {
     type: String,
     default: ''
   },
+  /** Remove default padding inside the body/content area */
   noPadding: {
     type: Boolean,
     default: false
   }
 });
-
-// Computed property for card classes
-const cardClasses = computed(() => ({
-  'bg-surface shadow-sm rounded-lg overflow-hidden flex flex-col transition-all': true,
-  'card-no-padding': props.noPadding
-}));
-
-// Pass-through customization for PrimeVue Card
-const cardPT = computed(() => ({
-  root: { 
-    class: cardClasses.value 
-  },
-  content: { 
-    class: props.noPadding ? 'p-0' : 'p-4' 
-  },
-  title: { 
-    class: 'text-lg font-semibold text-text-primary m-0' 
-  },
-  header: { 
-    class: 'p-4 border-b border-border flex justify-between items-center' 
-  },
-  footer: { 
-    class: 'p-4 border-t border-border' 
-  }
-}));
 </script>
 
 <template>
-  <Card :pt="cardPT">
-    <template #header v-if="title || $slots.header">
-      <h3 v-if="title" class="text-lg font-semibold text-text-primary m-0">{{ title }}</h3>
-      <slot name="header"></slot>
+  <Card :class="[{ 'p-p-0': noPadding }, 'base-card']">
+    <!-- HEADER  ------------------------------------------->
+    <template #header>
+      <div v-if="title || $slots.header"
+           class="card-header p-d-flex p-jc-between p-ai-center">
+        <h3 v-if="title" class="card-title">{{ title }}</h3>
+        <slot name="header" />
+      </div>
     </template>
+
+    <!-- CONTENT (default slot) ---------------------------->
     <template #content>
-      <slot></slot>
+      <div :class="['card-body', { 'p-p-0': noPadding }]">
+        <slot />
+      </div>
     </template>
+
+    <!-- FOOTER  ------------------------------------------->
     <template #footer v-if="$slots.footer">
-      <slot name="footer"></slot>
+      <div class="card-footer">
+        <slot name="footer" />
+      </div>
     </template>
   </Card>
 </template>
 
-<style>
-/* No scoped styles needed - using TailwindCSS and PrimeVue styling */
+<style scoped>
+.card-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-surface);
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.card-body { padding: 1rem; }
+
+.card-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+/* Make hover / focus shadows optional if you still want them */
+.base-card:hover {
+  box-shadow: var(--card-shadow);
+}
 </style>

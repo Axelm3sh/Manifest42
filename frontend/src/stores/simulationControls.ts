@@ -1,13 +1,70 @@
 import {defineStore} from 'pinia';
 import {computed, ref, shallowRef} from 'vue';
 
+// Define types for the store
+interface SimulationParameters {
+  demandVariability: number;
+  leadTime: number;
+  reorderPoint: number;
+  orderQuantity: number;
+  initialStock: number;
+  simulationDuration: number;
+  seasonalityEnabled: boolean;
+  externalFactorsEnabled: boolean;
+}
+
+interface DailyData {
+  day: number;
+  demand: number;
+  stockLevel: number;
+  orderPlaced: boolean;
+  orderQuantity: number;
+  stockout: boolean;
+  stockoutDuration: number;
+}
+
+interface SimulationResults {
+  dailyData: DailyData[];
+  averageStockLevel: number;
+  totalDemand: number;
+  totalOrders: number;
+  stockoutDays: number;
+  serviceLevel: number;
+  inventoryTurnover: number;
+  averageOrderCycle: number;
+}
+
+interface SimulationHistoryItem {
+  id: string;
+  timestamp: string;
+  parameters: SimulationParameters;
+  summary: {
+    averageStockLevel: number;
+    totalDemand: number;
+    stockoutDays: number;
+    serviceLevel: number;
+  };
+}
+
+interface SavedScenario {
+  name: string;
+  parameters: SimulationParameters;
+  results: SimulationResults | null;
+}
+
+interface PendingOrder {
+  quantity: number;
+  orderDay: number;
+  arrivalDay: number;
+}
+
 /**
  * Store for simulation controls and data
  * Manages simulation parameters, outcomes, and history
  */
 export const useSimulationControlsStore = defineStore('simulationControls', () => {
   // State
-  const simulationParameters = ref({
+  const simulationParameters = ref<SimulationParameters>({
     demandVariability: 0.5, // 0 to 1, where 1 is high variability
     leadTime: 7, // days
     reorderPoint: 20, // units
@@ -18,11 +75,11 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
     externalFactorsEnabled: true
   });
 
-  const simulationResults = ref(null);
-  const simulationHistory = shallowRef([]);
+  const simulationResults = ref<SimulationResults | null>(null);
+  const simulationHistory = shallowRef<SimulationHistoryItem[]>([]);
   const isRunning = ref(false);
   const currentScenario = ref('default');
-  const savedScenarios = ref({
+  const savedScenarios = ref<Record<string, SavedScenario>>({
     default: {
       name: 'Default Scenario',
       parameters: { ...simulationParameters.value },
@@ -30,8 +87,8 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
     }
   });
   const comparisonMode = ref(false);
-  const comparisonScenarios = ref([]);
-  const error = ref(null);
+  const comparisonScenarios = ref<string[]>([]);
+  const error = ref<string | null>(null);
 
   // Getters
   const stockLevelsOverTime = computed(() => {
@@ -92,11 +149,11 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
   });
 
   // Actions
-  function updateParameters(params) {
+  function updateParameters(params: Partial<SimulationParameters>): void {
     simulationParameters.value = { ...simulationParameters.value, ...params };
   }
 
-  function runSimulation() {
+  function runSimulation(): void {
     isRunning.value = true;
     error.value = null;
 
@@ -129,13 +186,13 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
       }
 
       isRunning.value = false;
-    } catch (err) {
+    } catch (err: any) {
       error.value = err.message || 'Failed to run simulation';
       isRunning.value = false;
     }
   }
 
-  function saveScenario(name) {
+  function saveScenario(name: string): string {
     const id = name.toLowerCase().replace(/\s+/g, '-');
 
     savedScenarios.value[id] = {
@@ -149,7 +206,7 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
     return id;
   }
 
-  function loadScenario(id) {
+  function loadScenario(id: string): void {
     if (savedScenarios.value[id]) {
       simulationParameters.value = { ...savedScenarios.value[id].parameters };
       simulationResults.value = savedScenarios.value[id].results;
@@ -157,7 +214,7 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
     }
   }
 
-  function deleteScenario(id) {
+  function deleteScenario(id: string): void {
     if (id !== 'default' && savedScenarios.value[id]) {
       const { [id]: removed, ...rest } = savedScenarios.value;
       savedScenarios.value = rest;
@@ -173,7 +230,7 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
     }
   }
 
-  function toggleComparisonMode() {
+  function toggleComparisonMode(): void {
     comparisonMode.value = !comparisonMode.value;
 
     if (comparisonMode.value && !comparisonScenarios.value.includes(currentScenario.value)) {
@@ -181,27 +238,27 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
     }
   }
 
-  function addToComparison(id) {
+  function addToComparison(id: string): void {
     if (savedScenarios.value[id] && !comparisonScenarios.value.includes(id)) {
       comparisonScenarios.value.push(id);
     }
   }
 
-  function removeFromComparison(id) {
+  function removeFromComparison(id: string): void {
     comparisonScenarios.value = comparisonScenarios.value.filter(s => s !== id);
   }
 
-  function clearComparison() {
+  function clearComparison(): void {
     comparisonScenarios.value = [];
     comparisonMode.value = false;
   }
 
-  function resetToDefaults() {
+  function resetToDefaults(): void {
     loadScenario('default');
   }
 
   // Helper function to generate simulation results
-  function generateSimulationResults(params) {
+  function generateSimulationResults(params: SimulationParameters): SimulationResults {
     const {
       demandVariability,
       leadTime,
@@ -216,13 +273,13 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
     // Initialize simulation data
     let stockLevel = initialStock;
     let day = 1;
-    let pendingOrders = [];
-    let dailyData = [];
+    let pendingOrders: PendingOrder[] = [];
+    let dailyData: DailyData[] = [];
     let totalDemand = 0;
     let totalOrders = 0;
     let stockoutDays = 0;
     let cumulativeStockLevel = 0;
-    let orderCycles = [];
+    let orderCycles: number[] = [];
     let lastOrderDay = 0;
 
     // Run simulation for the specified duration

@@ -74,6 +74,18 @@
       "backup_system": "Copia de Seguridad"
     }
   },
+  "notifications": {
+    "title": "Notificaciones",
+    "mark_all_read": "Marcar todo como leído",
+    "preferences": "Preferencias",
+    "all": "Todo",
+    "info": "Información",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "error": "Error",
+    "dismiss": "Descartar notificación",
+    "clear_all": "Borrar todo"
+  },
   "ai_insights": {
     "title": "Insights de IA",
     "model_settings": "Configuración del Modelo",

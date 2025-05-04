@@ -36,15 +36,6 @@ const routes = [
         }
       },
       {
-        path: 'notifications',
-        name: 'AdminNotifications',
-        component: () => import('../views/notifications-view.vue'),
-        meta: { 
-          requiresAuth: true,
-          requiredRole: 'admin'
-        }
-      },
-      {
         path: 'users',
         name: 'AdminUsers',
         component: () => import('../views/users-view.vue'),
@@ -78,15 +69,6 @@ const routes = [
         path: 'inventory',
         name: 'ManagerInventory',
         component: () => import('../views/inventory-view.vue'),
-        meta: { 
-          requiresAuth: true,
-          requiredRole: 'manager'
-        }
-      },
-      {
-        path: 'notifications',
-        name: 'ManagerNotifications',
-        component: () => import('../views/notifications-view.vue'),
         meta: { 
           requiresAuth: true,
           requiredRole: 'manager'
@@ -132,15 +114,6 @@ const routes = [
         }
       },
       {
-        path: 'notifications',
-        name: 'AnalystNotifications',
-        component: () => import('../views/notifications-view.vue'),
-        meta: { 
-          requiresAuth: true,
-          requiredRole: 'analyst'
-        }
-      },
-      {
         path: 'analytics',
         name: 'AnalystAnalytics',
         component: () => import('../views/analytics-view.vue'),
@@ -174,15 +147,6 @@ const routes = [
         path: 'inventory',
         name: 'LogisticsInventory',
         component: () => import('../views/inventory-view.vue'),
-        meta: { 
-          requiresAuth: true,
-          requiredRole: 'logistics'
-        }
-      },
-      {
-        path: 'notifications',
-        name: 'LogisticsNotifications',
-        component: () => import('../views/notifications-view.vue'),
         meta: { 
           requiresAuth: true,
           requiredRole: 'logistics'

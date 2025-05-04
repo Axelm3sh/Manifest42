@@ -2,7 +2,6 @@
 import {useI18n} from 'vue-i18n';
 import {useFormatters} from '../../composables/useFormatters';
 import BaseCard from '../base/base-card.vue';
-import {PhArrowsClockwise, PhCurrencyCircleDollar, PhPackage, PhWarning, PhX} from 'phosphor-vue';
 
 const { t } = useI18n();
 const { formatNumber, formatCurrency } = useFormatters();
@@ -33,7 +32,7 @@ const props = defineProps({
         <div class="loading-spinner"></div>
       </div>
       <div v-else class="kpi-content">
-        <div class="kpi-icon total-items-icon"><PhPackage weight="regular" /></div>
+        <div class="kpi-icon total-items-icon"><i class="pi pi-box nav-icon"></i></div>
         <div class="kpi-data">
           <div class="kpi-value">{{ formatNumber(kpiData.totalItems) }}</div>
           <div class="kpi-label">{{ t('inventory.total_items') }}</div>
@@ -46,7 +45,7 @@ const props = defineProps({
         <div class="loading-spinner"></div>
       </div>
       <div v-else class="kpi-content">
-        <div class="kpi-icon total-value-icon"><PhCurrencyCircleDollar weight="regular" /></div>
+        <div class="kpi-icon total-value-icon"><i class="pi pi-dollar nav-icon"></i></div>
         <div class="kpi-data">
           <div class="kpi-value">{{ formatCurrency(kpiData.totalValue) }}</div>
           <div class="kpi-label">{{ t('inventory.total_value') }}</div>
@@ -59,7 +58,7 @@ const props = defineProps({
         <div class="loading-spinner"></div>
       </div>
       <div v-else class="kpi-content">
-        <div class="kpi-icon low-stock-icon"><PhWarning weight="regular" /></div>
+        <div class="kpi-icon low-stock-icon"><i class="pi pi-exclamation-triangle nav-icon"></i></div>
         <div class="kpi-data">
           <div class="kpi-value">{{ kpiData.lowStockItems }}</div>
           <div class="kpi-label">{{ t('inventory.low_stock_items') }}</div>
@@ -72,7 +71,7 @@ const props = defineProps({
         <div class="loading-spinner"></div>
       </div>
       <div v-else class="kpi-content">
-        <div class="kpi-icon out-of-stock-icon"><PhX weight="regular" /></div>
+        <div class="kpi-icon out-of-stock-icon"><i class="pi pi-times nav-icon"></i></div>
         <div class="kpi-data">
           <div class="kpi-value">{{ kpiData.outOfStockItems }}</div>
           <div class="kpi-label">{{ t('inventory.out_of_stock_items') }}</div>
@@ -85,7 +84,7 @@ const props = defineProps({
         <div class="loading-spinner"></div>
       </div>
       <div v-else class="kpi-content">
-        <div class="kpi-icon turnover-icon"><PhArrowsClockwise weight="regular" /></div>
+        <div class="kpi-icon turnover-icon"><i class="pi pi-refresh nav-icon"></i></div>
         <div class="kpi-data">
           <div class="kpi-value">{{ kpiData.inventoryTurnover }}</div>
           <div class="kpi-label">{{ t('inventory.inventory_turnover') }}</div>

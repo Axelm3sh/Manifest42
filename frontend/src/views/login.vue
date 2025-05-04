@@ -189,14 +189,14 @@ const quickLogin = (role, event) => {
         <div class="form-group" :class="{ 'has-error': formErrors.username }">
           <label for="username">{{ t('login.username') }}</label>
           <input
-            id="username"
-            v-model="credentials.username"
-            type="text"
-            :placeholder="t('login.username_placeholder')"
-            autocomplete="username"
-            :aria-invalid="!!formErrors.username"
-            aria-required="true"
-            @blur="validateForm"
+              id="username"
+              v-model="credentials.username"
+              type="text"
+              :placeholder="t('login.username_placeholder')"
+              autocomplete="username"
+              :aria-invalid="!!formErrors.username"
+              aria-required="true"
+              @blur="validateForm"
           />
           <div v-if="formErrors.username" class="field-error" role="alert">
             {{ formErrors.username }}
@@ -207,20 +207,20 @@ const quickLogin = (role, event) => {
           <label for="password">{{ t('login.password') }}</label>
           <div class="password-input-container">
             <input
-              id="password"
-              v-model="credentials.password"
-              :type="showPassword ? 'text' : 'password'"
-              :placeholder="t('login.password_placeholder')"
-              autocomplete="current-password"
-              :aria-invalid="!!formErrors.password"
-              aria-required="true"
-              @blur="validateForm"
+                id="password"
+                v-model="credentials.password"
+                :type="showPassword ? 'text' : 'password'"
+                :placeholder="t('login.password_placeholder')"
+                autocomplete="current-password"
+                :aria-invalid="!!formErrors.password"
+                aria-required="true"
+                @blur="validateForm"
             />
             <button
-              type="button"
-              class="password-toggle"
-              @click="togglePasswordVisibility"
-              :aria-label="showPassword ? t('login.hide_password') : t('login.show_password')"
+                type="button"
+                class="password-toggle"
+                @click="togglePasswordVisibility"
+                :aria-label="showPassword ? t('login.hide_password') : t('login.show_password')"
             >
               {{ showPassword ? t('login.hide') : t('login.show') }}
             </button>
@@ -235,10 +235,10 @@ const quickLogin = (role, event) => {
         </div>
 
         <button
-          type="submit"
-          class="login-button"
-          :disabled="isSubmitting || !isFormValid"
-          aria-live="polite"
+            type="submit"
+            class="login-button"
+            :disabled="isSubmitting || !isFormValid"
+            aria-live="polite"
         >
           {{ isSubmitting ? t('login.logging_in') : t('login.login') }}
         </button>
@@ -248,34 +248,34 @@ const quickLogin = (role, event) => {
         <h2 class="demo-title">{{ t('login.demo_title') }}</h2>
         <div class="demo-buttons">
           <button
-            type="button"
-            class="demo-button admin"
-            @click="(event) => quickLogin('admin', event)"
-            :disabled="isSubmitting"
+              type="button"
+              class="demo-button admin"
+              @click="(event) => quickLogin('admin', event)"
+              :disabled="isSubmitting"
           >
             {{ t('login.admin_role') }}
           </button>
           <button
-            type="button"
-            class="demo-button manager"
-            @click="(event) => quickLogin('manager', event)"
-            :disabled="isSubmitting"
+              type="button"
+              class="demo-button manager"
+              @click="(event) => quickLogin('manager', event)"
+              :disabled="isSubmitting"
           >
             {{ t('login.manager_role') }}
           </button>
           <button
-            type="button"
-            class="demo-button analyst"
-            @click="(event) => quickLogin('analyst', event)"
-            :disabled="isSubmitting"
+              type="button"
+              class="demo-button analyst"
+              @click="(event) => quickLogin('analyst', event)"
+              :disabled="isSubmitting"
           >
             {{ t('login.analyst_role') }}
           </button>
           <button
-            type="button"
-            class="demo-button logistics"
-            @click="(event) => quickLogin('logistics', event)"
-            :disabled="isSubmitting"
+              type="button"
+              class="demo-button logistics"
+              @click="(event) => quickLogin('logistics', event)"
+              :disabled="isSubmitting"
           >
             {{ t('login.logistics_role') }}
           </button>
@@ -286,7 +286,7 @@ const quickLogin = (role, event) => {
 </template>
 
 <style scoped>
-/* Using global CSS variables from style.css */
+/* Using global CSS variables */
 
 /* Layout */
 .login-container {
@@ -295,7 +295,7 @@ const quickLogin = (role, event) => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: var(--spacing-xl);
+  padding: 0;
   background-color: var(--color-background);
   overflow: hidden;
   /* Animation states */
