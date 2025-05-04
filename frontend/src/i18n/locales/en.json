@@ -74,6 +74,18 @@
       "backup_system": "Backup System"
     }
   },
+  "notifications": {
+    "title":            "Notifications",
+    "mark_all_read":    "Mark all as read",
+    "preferences":      "Preferences",
+    "all":              "All",
+    "info":             "Info",
+    "success":          "Success",
+    "warning":          "Warning",
+    "error":            "Error",
+    "dismiss":          "Dismiss notification",
+    "clear_all":        "Clear all"
+  },
   "ai_insights": {
     "title": "AI Insights",
     "model_settings": "Model Settings",
