@@ -286,7 +286,7 @@ const quickLogin = (role, event) => {
 </template>
 
 <style scoped>
-/* Using global CSS variables from style.css */
+/* Using global CSS variables */
 
 /* Layout */
 .login-container {

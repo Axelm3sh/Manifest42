@@ -4,8 +4,9 @@ import {createPinia} from 'pinia'
 import router from './router/index.js'
 
 // Import order matters for CSS
-import './style.css'
-import Lara from '@primevue/themes/lara'
+import './base.css' // fonts, spacing, etc.
+import Lara from '@primevue/themes/lara' // PrimeVue theme
+import './overrides.css' // color tokens
 import 'primeicons/primeicons.css' // PrimeIcons
 import 'primeflex/primeflex.css' // tiny flex/grid helper set
 import App from './App.vue'
@@ -29,7 +30,7 @@ app.use(PrimeVue,
             preset: Lara,
             options: {
                 prefix: 'p',
-                darkModeSelector: '.dark',
+                darkModeSelector: `[data-theme="dark"]`,
                 cssLayer: false
             }
         },
