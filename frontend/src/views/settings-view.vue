@@ -13,8 +13,6 @@ import ConfirmDialog from 'primevue/confirmdialog';
 import Message from 'primevue/message';
 import ProgressSpinner from 'primevue/progressspinner';
 
-/* Type-only import to avoid runtime fetch */
-
 const {t} = useI18n();
 const confirm = useConfirm();
 
