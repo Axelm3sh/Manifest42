@@ -2,10 +2,6 @@
 import {computed, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import BaseCard from './base/base-card.vue';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
 
 const { t } = useI18n();
 
@@ -42,33 +38,64 @@ const emit = defineEmits({
 
 // Reactive state using refs
 const filterText = ref(props.filterKey);
-const filters = ref({});
-const sortField = ref(props.initialSortKey);
+const sortKey = ref(props.initialSortKey);
 const sortOrder = ref(1); // 1 for ascending, -1 for descending
-const globalFilterFields = ref([]);
 
 // Watch for changes in filter text and emit events
 watch(filterText, (newValue) => {
   emit('filter-changed', newValue);
-  filters.value.global = { value: newValue, matchMode: 'contains' };
 });
 
-// Initialize global filter fields based on first item
-watch(() => props.items, (newItems) => {
-  if (newItems.length > 0) {
-    globalFilterFields.value = Object.keys(newItems[0]);
+// Computed property for filtered and sorted items
+const filteredAndSortedItems = computed(() => {
+  // First filter the items
+  const filtered = props.items.filter((item) => {
+    if (!filterText.value) return true;
+
+    // Check if any property contains the filter text
+    return Object.values(item).some((value) => 
+      String(value).toLowerCase().includes(filterText.value.toLowerCase())
+    );
+  });
+
+  // Then sort the filtered items
+  if (sortKey.value) {
+    return [...filtered].sort((a, b) => {
+      const aValue = a[sortKey.value];
+      const bValue = b[sortKey.value];
+
+      // Handle different types of values
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortOrder.value * aValue.localeCompare(bValue);
+      } else {
+        return sortOrder.value * (aValue > bValue ? 1 : aValue < bValue ? -1 : 0);
+      }
+    });
   }
-}, { immediate: true });
+
+  return filtered;
+});
+
+// Method to toggle sort order
+const toggleSort = (key) => {
+  if (sortKey.value === key) {
+    // If already sorting by this key, toggle the order
+    sortOrder.value = -sortOrder.value;
+  } else {
+    // Otherwise, sort by this key in ascending order
+    sortKey.value = key;
+    sortOrder.value = 1;
+  }
+};
 
 // Method to handle item selection
-const onRowSelect = (event) => {
-  emit('item-selected', event.data);
+const selectItem = (item) => {
+  emit('item-selected', item);
 };
 
 // Method to clear the filter
 const clearFilter = () => {
   filterText.value = '';
-  filters.value = {};
 };
 
 // Computed property for column headers
@@ -79,120 +106,10 @@ const columnHeaders = computed(() => {
   return Object.keys(props.items[0]);
 });
 
-// Computed property for DataTable styling
-const dataTablePT = computed(() => ({
-  root: { class: 'data-list-table' },
-  header: { class: 'data-list-header' },
-  table: { class: 'w-full border-collapse text-sm' },
-  thead: { class: '' },
-  headerRow: { class: '' },
-  headerCell: { 
-    class: 'text-left p-3 border-b-2 border-gray-200 font-semibold' 
-  },
-  tbody: { class: '' },
-  row: { 
-    class: 'cursor-pointer transition-colors hover:bg-gray-100' 
-  },
-  roweven: { class: 'bg-gray-50' },
-  rowodd: { class: '' },
-  column: { class: 'p-3 border-b border-gray-200' },
-  emptyMessage: { 
-    class: 'text-center p-8 text-gray-500 italic' 
-  }
-}));
-
-// Computed property for filtered items count
-const filteredItemsCount = computed(() => {
-  if (!filterText.value) return props.items.length;
-
-  return props.items.filter(item => 
-    Object.values(item).some(value => 
-      String(value).toLowerCase().includes(filterText.value.toLowerCase())
-    )
-  ).length;
-});
-
-// Export methods
-const exportCSV = () => {
-  if (props.items.length === 0) return;
-
-  // Get headers from the first item
-  const headers = Object.keys(props.items[0]);
-
-  // Create CSV content
-  let csvContent = headers.join(',') + '\n';
-
-  // Add data rows
-  props.items.forEach(item => {
-    const row = headers.map(header => {
-      // Handle values that might contain commas or quotes
-      const value = item[header] !== null && item[header] !== undefined ? item[header] : '';
-      const valueStr = String(value);
-      return valueStr.includes(',') || valueStr.includes('"') 
-        ? `"${valueStr.replace(/"/g, '""')}"` 
-        : valueStr;
-    });
-    csvContent += row.join(',') + '\n';
-  });
-
-  // Create and download the file
-  downloadFile(csvContent, 'data-export.csv', 'text/csv');
-};
-
-const exportExcel = () => {
-  if (props.items.length === 0) return;
-
-  // Get headers from the first item
-  const headers = Object.keys(props.items[0]);
-
-  // Create Excel XML content
-  let excelContent = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>';
-  excelContent += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" ';
-  excelContent += 'xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">';
-  excelContent += '<Worksheet ss:Name="Sheet1"><Table>';
-
-  // Add header row
-  excelContent += '<Row>';
-  headers.forEach(header => {
-    excelContent += `<Cell><Data ss:Type="String">${header}</Data></Cell>`;
-  });
-  excelContent += '</Row>';
-
-  // Add data rows
-  props.items.forEach(item => {
-    excelContent += '<Row>';
-    headers.forEach(header => {
-      const value = item[header] !== null && item[header] !== undefined ? item[header] : '';
-      const valueStr = String(value).replace(/&/g, '&amp;')
-                                   .replace(/</g, '&lt;')
-                                   .replace(/>/g, '&gt;');
-      excelContent += `<Cell><Data ss:Type="String">${valueStr}</Data></Cell>`;
-    });
-    excelContent += '</Row>';
-  });
-
-  excelContent += '</Table></Worksheet></Workbook>';
-
-  // Create and download the file
-  downloadFile(excelContent, 'data-export.xls', 'application/vnd.ms-excel');
-};
-
-// Helper function to download files
-const downloadFile = (content, fileName, mimeType) => {
-  const blob = new Blob([content], { type: mimeType });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-
-  // Clean up
-  setTimeout(() => {
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  }, 100);
+// Computed property for sort indicator
+const getSortIndicator = (key) => {
+  if (sortKey.value !== key) return '';
+  return sortOrder.value === 1 ? '↑' : '↓';
 };
 </script>
 
@@ -200,78 +117,68 @@ const downloadFile = (content, fileName, mimeType) => {
   <BaseCard class="data-list-card">
     <template #header>
       <div class="data-list-header">
-        <div class="filter-export-container">
-          <div class="filter-container">
-            <label :for="'filter-input'" class="filter-label">{{ t('data_list.filter') }}:</label>
-            <div class="filter-input-container">
-              <InputText
-                :id="'filter-input'"
-                v-model="filterText"
-                class="filter-input"
-                :placeholder="t('data_list.filter_placeholder')"
-              />
-              <button 
-                v-if="filterText" 
-                @click="clearFilter" 
-                class="clear-filter-button"
-                :aria-label="t('data_list.clear_filter')"
-              >
-                ×
-              </button>
-            </div>
-          </div>
-          <div class="export-container">
-            <Button 
-              icon="pi pi-file" 
-              class="export-button p-button-outlined p-button-sm" 
-              @click="exportCSV" 
-              :disabled="items.length === 0"
-              :aria-label="t('data_list.export_csv')"
-              :title="t('data_list.export_csv')"
+        <div class="filter-container">
+          <label :for="'filter-input'" class="filter-label">{{ t('data_list.filter') }}:</label>
+          <div class="filter-input-container">
+            <input
+              :id="'filter-input'"
+              v-model="filterText"
+              type="text"
+              class="filter-input"
+              :placeholder="t('data_list.filter_placeholder')"
+            />
+            <button 
+              v-if="filterText" 
+              @click="clearFilter" 
+              class="clear-filter-button"
+              :aria-label="t('data_list.clear_filter')"
             >
-              CSV
-            </Button>
-            <Button 
-              icon="pi pi-file-excel" 
-              class="export-button p-button-outlined p-button-sm" 
-              @click="exportExcel" 
-              :disabled="items.length === 0"
-              :aria-label="t('data_list.export_excel')"
-              :title="t('data_list.export_excel')"
-            >
-              Excel
-            </Button>
+              ×
+            </button>
           </div>
         </div>
         <div class="results-count">
-          {{ t('data_list.showing_results', { count: filteredItemsCount, total: items.length }) }}
+          {{ t('data_list.showing_results', { count: filteredAndSortedItems.length, total: items.length }) }}
         </div>
       </div>
     </template>
 
     <div class="data-list-container">
-      <DataTable
-        :value="items"
-        :filters="filters"
-        :global-filter-fields="globalFilterFields"
-        :sortable="sortable"
-        :sort-field="sortField"
-        :sort-order="sortOrder"
-        :pt="dataTablePT"
-        @row-click="onRowSelect"
-        :empty-message="t('data_list.no_results')"
-        class="p-datatable-sm"
-        responsive-layout="scroll"
-        striped-rows
-      >
-        <Column 
-          v-for="header in columnHeaders" 
-          :key="header"
-          :field="header"
-          :header="header"
-          :sortable="sortable"
-        />
-      </DataTable>
+      <table class="data-list-table">
+        <thead>
+          <tr>
+            <th 
+              v-for="header in columnHeaders" 
+              :key="header"
+              :class="{ sortable: sortable, active: sortKey === header }"
+              @click="sortable ? toggleSort(header) : null"
+            >
+              {{ header }}
+              <span v-if="sortable && sortKey === header" class="sort-indicator">
+                {{ getSortIndicator(header) }}
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr 
+            v-for="(item, index) in filteredAndSortedItems" 
+            :key="index"
+            @click="selectItem(item)"
+            class="data-list-row"
+            :class="{ 'data-list-row-even': index % 2 === 0 }"
+          >
+            <td v-for="header in columnHeaders" :key="header">
+              {{ item[header] }}
+            </td>
+          </tr>
+          <tr v-if="filteredAndSortedItems.length === 0" class="no-results-row">
+            <td :colspan="columnHeaders.length" class="no-results-cell">
+              {{ t('data_list.no_results') }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </BaseCard>
 </template>
@@ -289,30 +196,10 @@ const downloadFile = (content, fileName, mimeType) => {
   gap: 1rem;
 }
 
-.filter-export-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-}
-
 .filter-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.export-container {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.export-button {
-  min-width: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
 }
 
 .filter-label {
@@ -361,107 +248,62 @@ const downloadFile = (content, fileName, mimeType) => {
   overflow-x: auto;
 }
 
-/* PrimeVue DataTable customizations */
-:deep(.p-datatable) {
+.data-list-table {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 0.875rem;
 }
 
-:deep(.p-datatable .p-datatable-header) {
-  background: transparent;
-  border: none;
-  padding: 0;
-}
-
-:deep(.p-datatable .p-datatable-thead > tr > th) {
-  background: transparent;
-  color: inherit;
-  border-width: 0 0 2px 0;
-  border-color: #e5e7eb;
+.data-list-table th {
+  text-align: left;
   padding: 0.75rem;
+  border-bottom: 2px solid #e5e7eb;
   font-weight: 600;
 }
 
-:deep(.p-datatable .p-datatable-thead > tr > th.p-sortable-column:hover) {
+.data-list-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.data-list-table th.sortable:hover {
   background-color: #f3f4f6;
 }
 
-:deep(.p-datatable .p-datatable-thead > tr > th.p-highlight) {
+.data-list-table th.active {
   color: #4f46e5;
 }
 
-:deep(.p-datatable .p-datatable-tbody > tr) {
+.sort-indicator {
+  margin-left: 0.25rem;
+}
+
+.data-list-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.data-list-row {
+  cursor: pointer;
   transition: background-color 0.2s;
 }
 
-:deep(.p-datatable .p-datatable-tbody > tr:hover) {
+.data-list-row:hover {
   background-color: #f3f4f6;
 }
 
-:deep(.p-datatable .p-datatable-tbody > tr > td) {
-  border-width: 0 0 1px 0;
-  border-color: #e5e7eb;
-  padding: 0.75rem;
-}
-
-:deep(.p-datatable .p-datatable-tbody > tr:nth-child(even)) {
+.data-list-row-even {
   background-color: #f9fafb;
 }
 
-:deep(.p-datatable .p-datatable-tbody > tr.p-datatable-emptymessage > td) {
+.no-results-row {
+  cursor: default;
+}
+
+.no-results-cell {
   text-align: center;
   padding: 2rem;
   color: #6b7280;
   font-style: italic;
-}
-
-/* Responsive design enhancements for mobile views */
-@media (max-width: 640px) {
-  .data-list-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .filter-export-container {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .filter-container {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-  }
-
-  .filter-input-container {
-    width: 100%;
-  }
-
-  .filter-input {
-    width: 100%;
-  }
-
-  .export-container {
-    margin-top: 0.5rem;
-  }
-
-  .results-count {
-    margin-top: 0.5rem;
-    align-self: flex-end;
-  }
-
-  ::deep(.p-datatable-wrapper) {
-    overflow-x: auto;
-  }
-
-  ::deep(.p-datatable .p-datatable-thead > tr > th),
-  ::deep(.p-datatable .p-datatable-tbody > tr > td) {
-    padding: 0.5rem;
-    font-size: 0.75rem;
-  }
-
-  .export-button {
-    min-width: 60px;
-    font-size: 0.75rem;
-  }
 }
 </style>

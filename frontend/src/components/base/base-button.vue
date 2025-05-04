@@ -1,6 +1,5 @@
 <script setup>
 import {computed} from 'vue';
-import Button from 'primevue/button';
 
 const props = defineProps({
   variant: {
@@ -31,55 +30,117 @@ const handleClick = (event) => {
   }
 };
 
-// Map our variant to PrimeVue severity
-const severity = computed(() => {
-  const variantMap = {
-    'default': null,
-    'primary': 'primary',
-    'danger': 'danger',
-    'success': 'success',
-    'warning': 'warning'
-  };
-  return variantMap[props.variant];
-});
-
-// Map our size to PrimeVue size
-const buttonSize = computed(() => {
-  const sizeMap = {
-    'small': 'small',
-    'medium': null, // Default size
-    'large': 'large'
-  };
-  return sizeMap[props.size];
-});
-
-// Tailwind classes for the button
 const buttonClasses = computed(() => {
   return {
+    'base-button': true,
+    [`variant-${props.variant}`]: true,
+    [`size-${props.size}`]: true,
+    'disabled': props.disabled,
     'active': props.active
   };
 });
 </script>
 
 <template>
-  <Button 
-    :severity="severity"
-    :size="buttonSize"
+  <button 
+    :class="buttonClasses" 
     :disabled="disabled"
-    :class="[
-      'transition-colors duration-200',
-      props.active ? 'ring-2 ring-primary-light' : '',
-      props.variant === 'default' ? 'bg-surface border-border text-text hover:bg-surface-hover' : ''
-    ]"
     @click="handleClick"
-    :pt="{
-      root: { class: 'font-medium' }
-    }"
   >
     <slot></slot>
-  </Button>
+  </button>
 </template>
 
-<style>
-/* No scoped styles needed - using TailwindCSS and PrimeVue styling */
+<style scoped>
+.base-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.base-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Variants */
+.variant-default {
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+}
+
+.variant-default:hover:not(.disabled) {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.variant-default.active {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.variant-primary {
+  background-color: #3b82f6;
+  border: 1px solid #2563eb;
+  color: white;
+}
+
+.variant-primary:hover:not(.disabled) {
+  background-color: #2563eb;
+}
+
+.variant-primary.active {
+  background-color: #1d4ed8;
+}
+
+.variant-danger {
+  background-color: #ef4444;
+  border: 1px solid #dc2626;
+  color: white;
+}
+
+.variant-danger:hover:not(.disabled) {
+  background-color: #dc2626;
+}
+
+.variant-success {
+  background-color: #10b981;
+  border: 1px solid #059669;
+  color: white;
+}
+
+.variant-success:hover:not(.disabled) {
+  background-color: #059669;
+}
+
+.variant-warning {
+  background-color: #f59e0b;
+  border: 1px solid #d97706;
+  color: white;
+}
+
+.variant-warning:hover:not(.disabled) {
+  background-color: #d97706;
+}
+
+/* Sizes */
+.size-small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.size-medium {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.size-large {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
 </style>
