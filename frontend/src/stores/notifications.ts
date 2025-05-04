@@ -1,6 +1,6 @@
 // src/stores/notifications.ts
 import {defineStore} from 'pinia';
-import {computed, ref, shallowRef} from 'vue';
+import {computed, ref} from 'vue';
 import type {
   ISODateString,
   Notification,
@@ -16,7 +16,7 @@ import {useAuthStore} from "./auth";
  */
 export const useNotificationsStore = defineStore('notifications', () => {
   // State
-  const notifications       = shallowRef<Notification[]>([]);
+  const notifications       = ref<Notification[]>([]);
   const preferences         = ref<NotificationPreferences>({
     inApp: true,
     email: false,
