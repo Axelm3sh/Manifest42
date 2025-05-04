@@ -6,10 +6,7 @@ import type {RoleId, User, UserId} from '../../shared/data-models';
  * ------------------------------------------------------------------ */
 const BASE_PERMISSIONS = ['view_dashboard', 'view_inventory'] as const;
 
-const PERMISSIONS_BY_ROLE: Record<
-  RoleId | 'admin' | 'manager' | 'analyst' | 'logistics',
-  readonly string[]
-> = {
+const PERMISSIONS_BY_ROLE = {
   admin: [
     ...BASE_PERMISSIONS,
     'manage_users',
@@ -54,6 +51,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null as User | null,
     token: (localStorage.getItem('auth_token') ?? null) as string | null,
+    expiresAt: (localStorage.getItem('token_expires') ?? null) as string | null,
     isAuthenticated: false,
     role: null as RoleId | null,
     permissions: [] as string[],
@@ -100,14 +98,14 @@ export const useAuthStore = defineStore('auth', {
                                          'analyst') as RoleId;
 
         /* lookup permissions */
-        const perms = PERMISSIONS_BY_ROLE[derivedRole] ?? BASE_PERMISSIONS;
+        const perms = (PERMISSIONS_BY_ROLE as Record<RoleId, readonly string[]>)[derivedRole] ?? BASE_PERMISSIONS;
 
         /* build User domain model */
         this.user = {
           userId: makeUserId(),
           userName: credentials.username,
           profilePictureUrl: undefined,
-          passwordHash: 'mock',            // NEVER store plain text in prod!
+          passwordHash: '',            // Not stored in prod
           roleId: derivedRole,
           settings: {
             notificationPreferences: {
@@ -128,11 +126,16 @@ export const useAuthStore = defineStore('auth', {
 
         /* update session flags */
         this.token           = `mock-jwt-${Date.now()}`;
+        // Set token expiry to 24 hours from now
+        const expiryDate = new Date();
+        expiryDate.setHours(expiryDate.getHours() + 24);
+        this.expiresAt       = expiryDate.toISOString();
         this.isAuthenticated = true;
         this.role            = derivedRole;
         this.permissions     = [...perms];
 
         localStorage.setItem('auth_token', this.token);
+        localStorage.setItem('token_expires', this.expiresAt);
         localStorage.setItem('user_role', derivedRole);
 
         return { success: true };
@@ -148,22 +151,42 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       this.user = null;
       this.token = null;
+      this.expiresAt = null;
       this.isAuthenticated = false;
       this.role = null;
       this.permissions = [];
 
       localStorage.removeItem('auth_token');
+      localStorage.removeItem('token_expires');
       localStorage.removeItem('user_role');
     },
 
     /* ------------------------ SESSION RESTORE -------------------- */
     async checkSession() {
       const token = localStorage.getItem('auth_token');
+      const expiresAt = localStorage.getItem('token_expires');
       const savedRole = localStorage.getItem('user_role') as RoleId | null;
 
       if (!token) {
         this.logout();
         return false;
+      }
+
+      // Check if token has expired
+      if (expiresAt) {
+        const expiryDate = new Date(expiresAt);
+        if (expiryDate < new Date()) {
+          // Token has expired
+          this.logout();
+          return false;
+        }
+        this.expiresAt = expiresAt;
+      } else {
+        // If no expiry is set, create one for backward compatibility
+        const expiryDate = new Date();
+        expiryDate.setHours(expiryDate.getHours() + 24);
+        this.expiresAt = expiryDate.toISOString();
+        localStorage.setItem('token_expires', this.expiresAt);
       }
 
       /* For a real app: validate the JWT with the backend here */
@@ -177,7 +200,7 @@ export const useAuthStore = defineStore('auth', {
         userId: makeUserId(1),
         userName: 'user',
         profilePictureUrl: undefined,
-        passwordHash: 'mock',
+        passwordHash: '',
         roleId: role,
         settings: {
           notificationPreferences: {
