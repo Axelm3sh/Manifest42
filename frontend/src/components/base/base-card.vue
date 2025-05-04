@@ -1,9 +1,18 @@
-<script setup>
+<!-- src/components/base/base-card.vue -->
+<script setup lang="ts">
+import Card from 'primevue/card';
+
+defineOptions({
+  components: {Card}
+})
+
 defineProps({
+  /** Optional title rendered in the header slot */
   title: {
     type: String,
     default: ''
   },
+  /** Remove default padding inside the body/content area */
   noPadding: {
     type: Boolean,
     default: false
@@ -12,58 +21,54 @@ defineProps({
 </script>
 
 <template>
-  <div class="base-card" :class="{ 'no-padding': noPadding }">
-    <div v-if="title || $slots.header" class="card-header">
-      <h3 v-if="title" class="card-title">{{ title }}</h3>
-      <slot name="header"></slot>
-    </div>
-    <div class="card-body">
-      <slot></slot>
-    </div>
-    <div v-if="$slots.footer" class="card-footer">
-      <slot name="footer"></slot>
-    </div>
-  </div>
+  <Card :class="[{ 'p-p-0': noPadding }, 'base-card']">
+    <!-- HEADER  ------------------------------------------->
+    <template #header>
+      <div v-if="title || $slots.header"
+           class="card-header p-d-flex p-jc-between p-ai-center">
+        <h3 v-if="title" class="card-title">{{ title }}</h3>
+        <slot name="header" />
+      </div>
+    </template>
+
+    <!-- CONTENT (default slot) ---------------------------->
+    <template #content>
+      <div :class="['card-body', { 'p-p-0': noPadding }]">
+        <slot />
+      </div>
+    </template>
+
+    <!-- FOOTER  ------------------------------------------->
+    <template #footer v-if="$slots.footer">
+      <div class="card-footer">
+        <slot name="footer" />
+      </div>
+    </template>
+  </Card>
 </template>
 
 <style scoped>
-.base-card {
-  background-color: var(--color-surface);
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: background-color var(--transition-normal), 
-              box-shadow var(--transition-normal);
-}
-
 .card-header {
   padding: 1rem;
-  border-bottom: 1px solid var(--color-border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  border-bottom: 1px solid var(--color-surface);
 }
 
 .card-title {
   margin: 0;
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--text-color);
 }
 
-.card-body {
-  padding: 1rem;
-  flex: 1;
-}
-
-.no-padding .card-body {
-  padding: 0;
-}
+.card-body { padding: 1rem; }
 
 .card-footer {
   padding: 1rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--surface-border);
+}
+
+/* Make hover / focus shadows optional if you still want them */
+.base-card:hover {
+  box-shadow: var(--card-shadow);
 }
 </style>
