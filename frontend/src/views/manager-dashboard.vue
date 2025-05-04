@@ -293,9 +293,6 @@ const handleApproval = (id, action) => {
               <router-link to="/manager/reports" class="action-button">
                 {{ t('manager.actions.view_reports') }}
               </router-link>
-              <router-link to="/manager/notifications" class="action-button">
-                {{ t('manager.actions.view_notifications') }}
-              </router-link>
             </div>
           </div>
 

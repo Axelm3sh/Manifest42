@@ -25,7 +25,6 @@ const getActiveItem = () => {
   const path = route.path;
   if (path === '/admin') return 'dashboard';
   if (path === '/admin/inventory') return 'inventory';
-  if (path === '/admin/notifications') return 'notifications';
   if (path === '/admin/users') return 'users';
   if (path === '/admin/settings') return 'settings';
   return 'dashboard';
@@ -271,9 +270,6 @@ const getTimeAgo = (dateString) => {
               </router-link>
               <router-link to="/admin/inventory" class="action-button">
                 {{ t('admin.actions.manage_inventory') }}
-              </router-link>
-              <router-link to="/admin/notifications" class="action-button">
-                {{ t('admin.actions.view_notifications') }}
               </router-link>
             </div>
           </div>
