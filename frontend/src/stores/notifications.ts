@@ -1,7 +1,13 @@
 // src/stores/notifications.ts
 import {defineStore} from 'pinia';
 import {computed, ref, shallowRef} from 'vue';
-import type {ISODateString, Notification, NotificationId, NotificationPreferences} from "../../shared/data-models";
+import type {
+  ISODateString,
+  Notification,
+  NotificationAction,
+  NotificationId,
+  NotificationPreferences
+} from "../../shared/data-models";
 import {useAuthStore} from "./auth";
 
 /**
@@ -101,19 +107,26 @@ export const useNotificationsStore = defineStore('notifications', () => {
   //Helper function for mocking
   function createNotification(
       partial: Omit<Notification, 'id' | 'isRead' | 'userId'>
-          & { createdAt?: ISODateString }
+          & { createdAt?: ISODateString; actions?: NotificationAction[] }
   ): Notification {
     const auth = useAuthStore();
     const id  = (`notification-${Date.now()}-${Math.random()*1000}`) as NotificationId;
     const now = (partial.createdAt ?? new Date().toISOString()) as ISODateString;
 
 
-    return { userId: auth.userId,...partial, id, createdAt: now, isRead: false };
+    return {
+      userId:    auth.userId!,   // guaranteed by auth store after login
+      id,
+      createdAt: now,
+      isRead:    false,
+      ...partial                  // title, message, type, category, actions, etc.
+    };
   }
 
   // Actions
   function addNotification(
-      partial: Omit<Notification, 'id'|'isRead'|'userId'> & { createdAt?: ISODateString }
+      partial: Omit<Notification, 'id' | 'isRead' | 'userId'>
+          & { createdAt?: ISODateString; actions?: NotificationAction[] }
   ): NotificationId {
     // Build a fully-typed Notification
     const note = createNotification(partial);
@@ -295,7 +308,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
       addNotification({
         ...notification,
         createdAt: timestamp.toISOString() as ISODateString
-      });
+      } as Omit<Notification, 'id' | 'isRead' | 'userId'> & { createdAt: ISODateString });
     });
   }
 
