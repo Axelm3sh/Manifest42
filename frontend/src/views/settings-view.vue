@@ -276,7 +276,7 @@ const deleteSetting = (setting) => {
 .card-title {
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: 0.5rem;
   font-size: 1.25rem;
   font-weight: 600;
 }
@@ -290,9 +290,5 @@ const deleteSetting = (setting) => {
 .add-setting-container {
   margin-top: 1rem;
   text-align: right;
-}
-
-.settings-table :deep(.p-cell-editing) {
-  padding: 0 !important;
 }
 </style>
