@@ -6,7 +6,7 @@ import {useNotificationsStore} from '../stores/notifications';
 import {useI18n} from 'vue-i18n';
 import LanguageSwitcher from './language-switcher.vue';
 import ThemeToggle from './theme-toggle.vue';
-import NotificationCenterView from './notification/notification-center-view.vue';
+import NotificationCenter from './notification/notification-center.vue';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -221,7 +221,7 @@ const getDashboardRoute = () => {
         <div class="header-actions">
           <ThemeToggle />
           <LanguageSwitcher />
-          <NotificationCenterView />
+          <NotificationCenter />
         </div>
       </header>
 

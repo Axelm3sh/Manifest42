@@ -29,7 +29,7 @@ app.use(PrimeVue,
             preset: Lara,
             options: {
                 prefix: 'p',
-                darkModeSelector: 'system',
+                darkModeSelector: '.dark',
                 cssLayer: false
             }
         },
