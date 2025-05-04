@@ -72,6 +72,18 @@ export interface NotificationPreferences {
     inApp: boolean;                                   // Show in-app
     email?: boolean;                                  // Send email
     frequency: 'Immediate' | 'Hourly' | 'Daily';       // Email cadence
+    showInventoryAlerts: boolean;
+    showAiInsights: boolean;
+    showSystemNotifications: boolean;
+    enableSoundAlerts: boolean;
+    enableDesktopNotifications: boolean;
+    autoHideAfter: number;           // minutes, 0 = never
+}
+
+export interface NotificationAction {
+    id: string;
+    label: string;
+    primary?: boolean;
 }
 
 /** User-targeted alerts (e.g., restock approvals). */
@@ -79,7 +91,9 @@ export interface Notification {
     id: NotificationId;         // Notification ID
     userId: UserId;             // Recipient
     message: string;            // Content text
-    type: 'Info' | 'Warning' | 'Error';
+    type: 'info' | 'success' | 'warning' | 'error';
+    category: 'inventory' | 'ai' | 'system';
+    action?: NotificationAction[];
     createdAt: ISODateString;   // ISO timestamp
     isRead: boolean;
 }
