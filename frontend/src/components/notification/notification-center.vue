@@ -3,10 +3,7 @@ import {computed, ref, Transition, watch} from 'vue'
 import {useI18n} from 'vue-i18n'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
-import Tabs from 'primevue/tabs'
-import TabList from 'primevue/tablist'
-import Tab from 'primevue/tab'
-import TabPanels from 'primevue/tabpanels'
+import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 import Badge from 'primevue/badge'
 import Divider from 'primevue/divider'
@@ -25,13 +22,11 @@ const showPrefs = ref(false)
 /*  tabs                                              */
 /* -------------------------------------------------- */
 const tabKeys = ['all', 'info', 'success', 'warning', 'error'] as const
-type TabKey = typeof tabKeys[number]
+const activeIndex = ref(0)    // TabView uses a numeric index
 
-const activeTab = ref<TabKey>('all')            // ← single source of truth
-
-/* whenever the dialog opens, force the selection back to “all” */
-watch(open, visible => {
-  if (visible) activeTab.value = 'all'
+/* reset to "All" whenever opened */
+watch(open, v => {
+  if (v) activeIndex.value = 0
 })
 
 const unread = computed(() => store.unreadCount)
@@ -66,13 +61,13 @@ const typeMeta = {
   </Button>
 
   <Dialog
-    v-model:visible="open"
-    append-to="self"
-    :header="t('notifications.title')"
-    modal
-    dismissableMask
-    class="w-full sm:w-25rem md:w-30rem"
-    content-style="min-height: 18rem"
+      v-model:visible="open"
+      append-to="self"
+      :header="t('notifications.title')"
+      modal
+      dismissableMask
+      class="w-full sm:w-25rem md:w-30rem"
+      content-style="min-height: 18rem"
   >
     <div class="flex items-center gap-2 mb-2">
       <Button
@@ -101,103 +96,90 @@ const typeMeta = {
     </Transition>
 
     <!-- tabs -->
-    <Tabs v-model="activeTab" scrollable>
-      <TabList>
-        <Tab
-          v-for="key in tabKeys"
+    <TabView
+        v-model:activeIndex="activeIndex"
+        scrollable
+    >
+      <TabPanel
+          v-for="(key, i) in tabKeys"
           :key="key"
-          :value="key"
-        >
-          {{ t(`notifications.${key}`, key) }}
-        </Tab>
-      </TabList>
-
-      <TabPanels>
-        <TabPanel
-          v-for="key in tabKeys"
-          :key="key"
-          :value="key"
-        >
-          <div
+          :header="t(`notifications.${key}`, key)"
+      >
+        <div
             class="max-h-60vh overflow-y-auto px-1"
             style="min-height: 10rem"
-          >
-            <!-- list for this tab -->
-            <template
+        >
+          <!-- list for this tab -->
+          <template
               v-for="(note, i) in (
                 key === 'all'
                   ? store.sortedNotifications
                   : (store.notificationsByType[key] || [])
               )"
               :key="note.id"
-            >
-              <div
-                  class="p-2 mb-2 border-round surface-card shadow-1 cursor-pointer transition-transform hover:-translate-y-1"
-                  :class="{
+          >
+            <div
+                class="p-2 mb-2 border-round surface-card shadow-1 cursor-pointer transition-transform hover:-translate-y-1"
+                :class="{
                   'surface-hover': !note.isRead,
                   'opacity-50':  note.isRead
                 }"
-                  @click="store.markAsRead(note.id)"
-              >
-                <div class="flex gap-3">
-                  <i
-                      :class="[
+                @click="store.markAsRead(note.id)"
+            >
+              <div class="flex gap-3">
+                <i
+                    :class="[
                       'pi',
                       typeMeta[note.type].icon,
                       typeMeta[note.type].color,
                       'text-xl flex-shrink-0'
                     ]"
-                  />
-                  <div class="flex-auto">
-                    <p class="font-medium m-0">{{ note.message }}</p>
-                    <small class="text-color-secondary">
-                      {{ formatTime(note.createdAt) }}
-                    </small>
+                />
+                <div class="flex-auto">
+                  <p class="font-medium m-0">{{ note.message }}</p>
+                  <small class="text-color-secondary">
+                    {{ formatTime(note.createdAt) }}
+                  </small>
 
-                    <div
-                        v-if="note.actions?.length"
-                        class="mt-2 flex gap-2 flex-wrap"
-                        @click.stop
-                    >
-                      <Button
-                          v-for="act in note.actions"
-                          :key="act.id"
-                          :label="act.label"
-                          :severity="act.primary ? 'primary' : 'secondary'"
-                          size="small"
-                          outlined
-                          @click.stop="
+                  <div
+                      v-if="note.actions?.length"
+                      class="mt-2 flex gap-2 flex-wrap"
+                      @click.stop
+                  >
+                    <Button
+                        v-for="act in note.actions"
+                        :key="act.id"
+                        :label="act.label"
+                        :severity="act.primary ? 'primary' : 'secondary'"
+                        size="small"
+                        outlined
+                        @click.stop="
                           act.id === 'dismiss'
                             ? store.dismissNotification(note.id)
                             : store.executeAction(note, act)
                         "
-                      />
-                    </div>
+                    />
                   </div>
                 </div>
               </div>
+            </div>
 
-              <Divider
+            <Divider
                 v-if="key === 'all' && i < store.sortedNotifications.length - 1"
                 class="m-0"
-              />
-            </template>
+            />
+          </template>
 
-            <!-- empty state -->
-            <p
-              v-if="
-                (key === 'all'
-                  ? store.sortedNotifications.length === 0
-                  : (store.notificationsByType[key] || []).length === 0)
-              "
+          <!-- empty state -->
+          <p
+              v-if="(key === 'all' ? store.sortedNotifications : store.notificationsByType[key]).length === 0"
               class="text-center text-color-secondary py-4"
-            >
-              {{ t('notifications.no_notifications') }}
-            </p>
-          </div>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
+          >
+            {{ t('notifications.no_notifications') }}
+          </p>
+        </div>
+      </TabPanel>
+    </TabView>
 
     <template #footer>
       <Button
