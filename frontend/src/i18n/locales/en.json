@@ -31,6 +31,25 @@
     "submit": "Submit",
     "reset": "Reset"
   },
+  "data_list": {
+    "filter": "Filter",
+    "filter_placeholder": "Enter search term...",
+    "clear_filter": "Clear filter",
+    "showing_results": "Showing {count} of {total} results",
+    "no_results": "No results found"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "inventory": "Inventory",
+    "users": "Users",
+    "settings": "Settings",
+    "reports": "Reports",
+    "approvals": "Approvals",
+    "analytics": "Analytics",
+    "simulations": "Simulations",
+    "shipping": "Shipping",
+    "tracking": "Tracking"
+  },
   "time": {
     "just_now": "Just now",
     "minutes_ago": "{count} minute(s) ago",
@@ -84,7 +103,30 @@
     "warning":          "Warning",
     "error":            "Error",
     "dismiss":          "Dismiss notification",
-    "clear_all":        "Clear all"
+    "clear_all":        "Clear all",
+    "no_notifications": "No notifications",
+    "never":            "Never",
+    "minute":           "minute",
+    "minutes":          "minutes",
+    "hour":             "hour",
+    "notification_preferences": "Notification Preferences",
+    "show_inventory_alerts": "Show inventory alerts",
+    "show_ai_insights": "Show AI insights",
+    "show_system_notifications": "Show system notifications",
+    "enable_sound_alerts": "Enable sound alerts",
+    "enable_desktop_notifications": "Enable desktop notifications",
+    "auto_hide_after":  "Auto-hide after",
+    "save":             "Save",
+    "cancel":           "Cancel"
+  },
+  "theme": {
+    "switch_to_light": "Switch to light theme",
+    "switch_to_dark": "Switch to dark theme",
+    "light_mode": "Light Mode",
+    "dark_mode": "Dark Mode"
+  },
+  "accessibility": {
+    "dot_matrix_background": "Interactive dot matrix background."
   },
   "ai_insights": {
     "title": "AI Insights",
