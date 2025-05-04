@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia';
+import type {User} from '../../shared/data-models';
 
 /**
  * Authentication store for managing user authentication and roles
