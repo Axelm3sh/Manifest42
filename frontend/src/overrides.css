@@ -72,6 +72,10 @@
   --color-shadow: rgba(0, 0, 0, 0.1);
   --color-shadow-dark: rgba(0, 0, 0, 0.2);
 
+  /* PrimeVue surface - design-token mapping (light mode) */
+  --surface-card:  var(--color-surface);
+  --surface-hover: var(--color-surface-hover);
+
   /* Default theme settings */
   color-scheme: light dark;
   color: var(--color-text-primary);
@@ -125,6 +129,10 @@
   --color-shadow-dark: rgba(0, 0, 0, 0.5);
   --shadow-glow-light: 0 0 15px rgba(100, 108, 255, 0.3);
   --shadow-glow-dark: 0 0 15px rgba(100, 108, 255, 0.5);
+
+  /* remap surfaces for dark mode */
+  --surface-card:  var(--color-background-secondary);
+  --surface-hover: var(--color-background-tertiary);
 }
 
 /* Color-specific styles */
@@ -133,26 +141,4 @@ a {
 }
 a:hover {
   color: var(--color-primary-hover);
-}
-
-body {
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-}
-
-h1 {
-  color: var(--color-text-primary);
-}
-
-button {
-  background-color: var(--color-surface);
-  color: var(--color-text-primary);
-}
-button:hover {
-  border-color: var(--color-primary);
-  background-color: var(--color-surface-hover);
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
