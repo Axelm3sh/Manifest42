@@ -105,7 +105,10 @@ const typeMeta = {
             <!-- card -->
             <div
                 class="p-2 mb-2 border-round surface-card shadow-1 cursor-pointer transition-transform hover:-translate-y-1"
-                :class="{ 'surface-hover' : !note.isRead }"
+                :class="{
+                  'surface-hover': !note.isRead,    // keep your hover style on unread
+                  'opacity-50':   note.isRead       // dim it once it's read
+                }"
                 @click="store.markAsRead(note.id)"
             >
               <div class="flex gap-3">
@@ -114,7 +117,7 @@ const typeMeta = {
                   <p class="font-medium m-0">{{ note.message }}</p>
                   <small class="text-color-secondary">{{ formatTime(note.createdAt) }}</small>
 
-                  <div v-if="note.actions?.length" class="mt-2 flex gap-2 flex-wrap">
+                  <div v-if="note.actions?.length" class="mt-2 flex gap-2 flex-wrap" @click.stop>
                     <Button
                         v-for="act in note.actions"
                         :key="act.id"
@@ -122,7 +125,7 @@ const typeMeta = {
                         :severity="act.primary ? 'primary' : 'secondary'"
                         size="small"
                         outlined
-                        @click.stop="store.executeAction(note, act)"
+                        @click="store.executeAction(note, act)"
                     />
                   </div>
                 </div>
