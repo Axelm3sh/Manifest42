@@ -1,9 +1,14 @@
 <script setup>
 import {computed} from 'vue';
 import {useI18n} from 'vue-i18n';
-import BaseCard from '../base/base-card.vue';
+import BaseCard from "@/components/base/base-card.vue";
+import Button from 'primevue/button';
 
 const { t } = useI18n();
+
+defineOptions({
+  components: { BaseCard, Button }
+});
 
 const props = defineProps({
   activeTab: {
@@ -29,7 +34,7 @@ const emit = defineEmits(['markAsRead', 'dismiss', 'executeAction', 'clearAll'])
 // Computed properties
 const filteredNotifications = computed(() => {
   if (props.activeTab === 'all') {
-    return props.notifications;
+    return props.notifications || [];
   } else {
     return props.notificationsByType[props.activeTab] || [];
   }
@@ -40,11 +45,8 @@ const markAsRead = (id) => {
   emit('markAsRead', id);
 };
 
-const dismissNotification = (id, event) => {
-  if (event) {
-    event.stopPropagation();
-  }
-  emit('dismiss', id, event);
+const dismissNotification = (id) => {
+  emit('dismiss', id);
 };
 
 const executeAction = (notification, action) => {
@@ -118,24 +120,26 @@ const formatDate = (dateString) => {
                 <div class="notification-time">{{ formatDate(notification.timestamp) }}</div>
 
                 <div v-if="notification.actions && notification.actions.length > 0" class="notification-actions">
-                  <button 
-                    v-for="action in notification.actions" 
+                  <Button
+                    v-for="action in notification.actions"
                     :key="action.id"
+                    size="small"
+                    :label="action.label"
+                    :severity="action.primary ? 'primary' : 'secondary'"
                     @click.stop="executeAction(notification, action)"
-                    class="action-button"
-                    :class="{ 'primary': action.primary }"
-                  >
-                    {{ action.label }}
-                  </button>
+                    outlined
+                  />
                 </div>
               </div>
-              <button 
-                @click.stop="dismissNotification(notification.id, $event)" 
-                class="dismiss-button"
-                aria-label="Dismiss notification"
-              >
-                <i class="pi pi-times" aria-hidden="true"></i>
-              </button>
+              <Button
+                icon="pi pi-times"
+                rounded
+                text
+                size="small"
+                class="p-button-plain dismiss-button"
+                :aria-label="t('notifications.dismiss')"
+                @click.stop="dismissNotification(notification.id)"
+              />
             </div>
           </BaseCard>
         </div>
@@ -164,24 +168,26 @@ const formatDate = (dateString) => {
               <div class="notification-time">{{ formatDate(notification.timestamp) }}</div>
 
               <div v-if="notification.actions && notification.actions.length > 0" class="notification-actions">
-                <button 
-                  v-for="action in notification.actions" 
+                <Button
+                  v-for="action in notification.actions"
                   :key="action.id"
+                  size="small"
+                  :label="action.label"
+                  :severity="action.primary ? 'primary' : 'secondary'"
                   @click.stop="executeAction(notification, action)"
-                  class="action-button"
-                  :class="{ 'primary': action.primary }"
-                >
-                  {{ action.label }}
-                </button>
+                  outlined
+                />
               </div>
             </div>
-            <button 
-              @click.stop="dismissNotification(notification.id, $event)" 
-              class="dismiss-button"
-              aria-label="Dismiss notification"
-            >
-              <i class="pi pi-times" aria-hidden="true"></i>
-            </button>
+            <Button
+              icon="pi pi-times"
+              rounded
+              text
+              size="small"
+              class="p-button-plain dismiss-button"
+              :aria-label="t('notifications.dismiss')"
+              @click.stop="dismissNotification(notification.id)"
+            />
           </div>
         </BaseCard>
       </template>
@@ -200,166 +206,90 @@ const formatDate = (dateString) => {
 </template>
 
 <style scoped>
+/* scoped */
 .notification-list {
   flex: 1;
   overflow-y: auto;
-  padding: 0.5rem;
+  padding: .5rem;
 }
 
-.notification-group {
-  margin-bottom: 1rem;
-}
+.notification-group { margin-bottom: 1rem; }
 
-.date-header {
-  font-size: 0.75rem;
+.date-header {                 /* PrimeVue doesn't have a header chip */
+  font-size: .75rem;
   font-weight: 600;
-  color: #6b7280;
-  padding: 0.5rem;
-  background-color: #f9fafb;
-  border-radius: 0.25rem;
-  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  padding: .5rem;
+  background: var(--surface-b);
+  border-radius: var(--border-radius);
+  margin-bottom: .5rem;
 }
 
-.notification-item {
-  margin-bottom: 0.5rem;
+/* Replace these selectors */
+.base-card.notification-item {
   cursor: pointer;
   transition: transform 0.2s;
-  border-left: 4px solid #9ca3af;
+  border-left: 4px solid var(--surface-border);
 }
-
-.notification-item:hover {
+.base-card.notification-item:hover {
   transform: translateY(-2px);
 }
-
-.notification-item.unread {
-  background-color: #eff6ff;
+.base-card.unread {
+  background: var(--blue-50);
+}
+.base-card.notification-info {
+  border-left-color: var(--primary-color);
+}
+.base-card.notification-success {
+  border-left-color: var(--green-400);
+}
+.base-card.notification-warning {
+  border-left-color: var(--yellow-400);
+}
+.base-card.notification-error {
+  border-left-color: var(--red-400);
 }
 
-.notification-info {
-  border-left-color: #3b82f6;
+/* Keep this */
+.dismiss-button:hover .pi {
+  color: var(--text-color-secondary);
 }
 
-.notification-success {
-  border-left-color: #10b981;
-}
-
-.notification-warning {
-  border-left-color: #f59e0b;
-}
-
-.notification-error {
-  border-left-color: #ef4444;
-}
-
+/* Add these missing layout rules */
 .notification-content {
   display: flex;
-  padding: 0.75rem;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem; /* overridable by noPadding prop */
 }
-
 .notification-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.5rem;
-  height: 1.5rem;
-  font-size: 1rem;
-  margin-right: 0.75rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding-top: 0.15rem; /* vertical alignment nudge */
 }
-
 .notification-body {
-  flex: 1;
+  flex: 1; /* allow wrapping nicely */
 }
-
 .notification-title {
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
-
 .notification-message {
   font-size: 0.875rem;
-  color: #4b5563;
-  margin-bottom: 0.25rem;
+  color: var(--text-secondary);
 }
-
 .notification-time {
   font-size: 0.75rem;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
 }
-
 .notification-actions {
+  margin-top: 0.5rem;
   display: flex;
   gap: 0.5rem;
 }
-
-.action-button {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  background-color: #f3f4f6;
-  border: 1px solid #d1d5db;
-  color: #4b5563;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.action-button:hover {
-  background-color: #e5e7eb;
-  color: #1f2937;
-}
-
-.action-button.primary {
-  background-color: #3b82f6;
-  border: 1px solid #2563eb;
-  color: white;
-}
-
-.action-button.primary:hover {
-  background-color: #2563eb;
-}
-
-.dismiss-button {
-  background: none;
-  border: none;
-  color: #6b7280;
-  font-size: 1.25rem;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  margin-left: 0.5rem;
-  transition: color 0.2s;
-}
-
-.dismiss-button:hover {
-  color: #4b5563;
-}
-
 .clear-all-container {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
-}
-
-.clear-all-button {
-  background: none;
-  border: none;
-  color: #6b7280;
-  font-size: 0.875rem;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.clear-all-button:hover {
-  background-color: #f3f4f6;
-  color: #4b5563;
-}
-
-.no-notifications {
-  text-align: center;
-  padding: 2rem;
-  color: #6b7280;
-  font-style: italic;
+  margin-top: 0.75rem;
 }
 </style>
