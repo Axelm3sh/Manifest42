@@ -1,127 +1,150 @@
 import {defineStore} from 'pinia';
-import type {User} from '../../shared/data-models';
+import type {RoleId, User, UserId} from '../../shared/data-models';
 
-/**
- * Authentication store for managing user authentication and roles
- * Supports role-based access control for Admin, Manager, Analyst, and Logistics roles
- */
+/* ------------------------------------------------------------------ *
+ *  Data-driven permission catalogue
+ * ------------------------------------------------------------------ */
+const BASE_PERMISSIONS = ['view_dashboard', 'view_inventory'] as const;
+
+const PERMISSIONS_BY_ROLE: Record<
+  RoleId | 'admin' | 'manager' | 'analyst' | 'logistics',
+  readonly string[]
+> = {
+  admin: [
+    ...BASE_PERMISSIONS,
+    'manage_users',
+    'manage_roles',
+    'manage_settings',
+    'view_all_reports',
+    'edit_inventory',
+    'approve_changes',
+    'manage_ai_settings'
+  ],
+  manager: [
+    ...BASE_PERMISSIONS,
+    'view_reports',
+    'edit_inventory',
+    'approve_changes',
+    'adjust_ai_parameters'
+  ],
+  analyst: [
+    ...BASE_PERMISSIONS,
+    'view_reports',
+    'create_reports',
+    'view_analytics',
+    'run_simulations'
+  ],
+  logistics: [
+    ...BASE_PERMISSIONS,
+    'update_inventory',
+    'view_shipping',
+    'create_shipping_orders',
+    'view_logistics_reports'
+  ]
+} as const;
+
+/* Utility to create a branded UserId */
+const makeUserId = (seed: number = Date.now()): UserId =>
+  (`user-${seed}` as UserId);
+
 export const useAuthStore = defineStore('auth', {
+  /* ---------------------------------------------------------------- *
+   *  STATE
+   * ---------------------------------------------------------------- */
   state: () => ({
-    user: null,
-    token: localStorage.getItem('auth_token') || null,
+    user: null as User | null,
+    token: (localStorage.getItem('auth_token') ?? null) as string | null,
     isAuthenticated: false,
-    role: null, // 'admin', 'manager', 'analyst', 'logistics'
-    permissions: [],
-    loginError: null,
-    isLoading: false,
+    role: null as RoleId | null,
+    permissions: [] as string[],
+    loginError: null as string | null,
+    isLoading: false
   }),
 
+  /* ---------------------------------------------------------------- *
+   *  GETTERS
+   * ---------------------------------------------------------------- */
   getters: {
-    /**
-     * Check if user is authenticated
-     * @returns {boolean} Authentication status
-     */
-    isLoggedIn: (state) => state.isAuthenticated && !!state.token,
+    isLoggedIn: state => state.isAuthenticated && Boolean(state.token),
+    userRole:   state => state.role,
+    userId:     state => state.user?.userId ?? null as UserId | null,
 
-    /**
-     * Get current user role
-     * @returns {string|null} User role
-     */
-    userRole: (state) => state.role,
+    isAdmin:     state => state.role === 'admin',
+    isManager:   state => state.role === 'manager',
+    isAnalyst:   state => state.role === 'analyst',
+    isLogistics: state => state.role === 'logistics',
 
-    /**
-     * Check if user has admin role
-     * @returns {boolean} Is admin
-     */
-    isAdmin: (state) => state.role === 'admin',
-
-    /**
-     * Check if user has manager role
-     * @returns {boolean} Is manager
-     */
-    isManager: (state) => state.role === 'manager',
-
-    /**
-     * Check if user has analyst role
-     * @returns {boolean} Is analyst
-     */
-    isAnalyst: (state) => state.role === 'analyst',
-
-    /**
-     * Check if user has logistics role
-     * @returns {boolean} Is logistics
-     */
-    isLogistics: (state) => state.role === 'logistics',
-
-    /**
-     * Check if user has specific permission
-     * @param {string} permission Permission to check
-     * @returns {boolean} Has permission
-     */
-    hasPermission: (state) => (permission) => state.permissions.includes(permission),
+    hasPermission: state => (perm: string) =>
+      state.permissions.includes(perm)
   },
 
+  /* ---------------------------------------------------------------- *
+   *  ACTIONS
+   * ---------------------------------------------------------------- */
   actions: {
-    /**
-     * Login user with credentials
-     * @param {Object} credentials User credentials
-     * @param {string} credentials.username Username
-     * @param {string} credentials.password Password
-     */
-    async login(credentials) {
+    /* --------------------------- LOGIN ---------------------------- */
+    async login(credentials: { username: string; password: string }) {
       this.isLoading = true;
       this.loginError = null;
 
       try {
-        // In a real app, this would be an API call
-        // For demo purposes, we'll simulate a successful login
-        await new Promise(resolve => setTimeout(resolve, 800));
+        /* simulate network latency */
+        await new Promise(res => setTimeout(res, 800));
 
-        // Mock user data based on username
-        const username = credentials.username.toLowerCase();
-        let role = 'analyst'; // default role
+        /* derive role from username convention */
+        const uname = credentials.username.toLowerCase();
+        const derivedRole: RoleId =
+          (uname.includes('admin')     ? 'admin' :
+           uname.includes('manager')   ? 'manager' :
+           uname.includes('logistics') ? 'logistics' :
+                                         'analyst') as RoleId;
 
-        if (username.includes('admin')) {
-          role = 'admin';
-        } else if (username.includes('manager')) {
-          role = 'manager';
-        } else if (username.includes('logistics')) {
-          role = 'logistics';
-        }
+        /* lookup permissions */
+        const perms = PERMISSIONS_BY_ROLE[derivedRole] ?? BASE_PERMISSIONS;
 
-        // Set permissions based on role
-        const permissions = this.getPermissionsForRole(role);
-
-        // Set user data
+        /* build User domain model */
         this.user = {
-          id: Math.floor(Math.random() * 1000),
-          username: credentials.username,
-          name: `${credentials.username.charAt(0).toUpperCase()}${credentials.username.slice(1)}`,
-          email: `${credentials.username}@example.com`,
-          role,
+          userId: makeUserId(),
+          userName: credentials.username,
+          profilePictureUrl: undefined,
+          passwordHash: 'mock',            // NEVER store plain text in prod!
+          roleId: derivedRole,
+          settings: {
+            notificationPreferences: {
+              inApp: true,
+              email: false,
+              frequency: 'Immediate',
+              showInventoryAlerts: true,
+              showAiInsights: true,
+              showSystemNotifications: true,
+              enableSoundAlerts: false,
+              enableDesktopNotifications: false,
+              autoHideAfter: 5
+            },
+            inventoryRefreshIntervalSec: 60,
+            themePreference: 'system'
+          }
         };
 
-        this.token = `mock-jwt-token-${Date.now()}`;
+        /* update session flags */
+        this.token           = `mock-jwt-${Date.now()}`;
         this.isAuthenticated = true;
-        this.role = role;
-        this.permissions = permissions;
+        this.role            = derivedRole;
+        this.permissions     = [...perms];
 
-        // Store token and role in localStorage
         localStorage.setItem('auth_token', this.token);
-        localStorage.setItem('user_role', role);
+        localStorage.setItem('user_role', derivedRole);
 
         return { success: true };
-      } catch (error) {
-        this.loginError = error.message || 'Login failed';
+      } catch (err: any) {
+        this.loginError = err?.message ?? 'Login failed';
         return { success: false, error: this.loginError };
       } finally {
         this.isLoading = false;
       }
     },
 
-    /**
-     * Logout current user
-     */
+    /* --------------------------- LOGOUT --------------------------- */
     logout() {
       this.user = null;
       this.token = null;
@@ -129,96 +152,58 @@ export const useAuthStore = defineStore('auth', {
       this.role = null;
       this.permissions = [];
 
-      // Remove token and role from localStorage
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user_role');
     },
 
-    /**
-     * Get permissions for a specific role
-     * @param {string} role User role
-     * @returns {Array} List of permissions
-     */
-    getPermissionsForRole(role) {
-      const basePermissions = ['view_dashboard', 'view_inventory'];
-
-      switch (role) {
-        case 'admin':
-          return [
-            ...basePermissions,
-            'manage_users',
-            'manage_roles',
-            'manage_settings',
-            'view_all_reports',
-            'edit_inventory',
-            'approve_changes',
-            'manage_ai_settings',
-          ];
-        case 'manager':
-          return [
-            ...basePermissions,
-            'view_reports',
-            'edit_inventory',
-            'approve_changes',
-            'adjust_ai_parameters',
-          ];
-        case 'analyst':
-          return [
-            ...basePermissions,
-            'view_reports',
-            'create_reports',
-            'view_analytics',
-            'run_simulations',
-          ];
-        case 'logistics':
-          return [
-            ...basePermissions,
-            'update_inventory',
-            'view_shipping',
-            'create_shipping_orders',
-            'view_logistics_reports',
-          ];
-        default:
-          return basePermissions;
-      }
-    },
-
-    /**
-     * Check if current session is valid and restore user if possible
-     */
+    /* ------------------------ SESSION RESTORE -------------------- */
     async checkSession() {
       const token = localStorage.getItem('auth_token');
-      const savedRole = localStorage.getItem('user_role');
+      const savedRole = localStorage.getItem('user_role') as RoleId | null;
 
       if (!token) {
         this.logout();
         return false;
       }
 
-      // In a real app, validate token with API
-      // For demo, we'll assume token is valid if it exists
+      /* For a real app: validate the JWT with the backend here */
       this.isAuthenticated = true;
       this.token = token;
 
-      // Use saved role or default to analyst
-      const role = savedRole || 'analyst';
+      const role = savedRole ?? ('analyst' as RoleId);
 
-      // Mock user data
+      /* lightweight placeholder user */
       this.user = {
-        id: 1,
-        username: 'user',
-        name: 'User',
-        email: 'user@example.com',
-        role: role,
+        userId: makeUserId(1),
+        userName: 'user',
+        profilePictureUrl: undefined,
+        passwordHash: 'mock',
+        roleId: role,
+        settings: {
+          notificationPreferences: {
+            inApp: true,
+            email: false,
+            frequency: 'Immediate',
+            showInventoryAlerts: true,
+            showAiInsights: true,
+            showSystemNotifications: true,
+            enableSoundAlerts: false,
+            enableDesktopNotifications: false,
+            autoHideAfter: 5
+          },
+          inventoryRefreshIntervalSec: 60,
+          themePreference: 'system'
+        }
       };
 
-      this.role = this.user.role;
-      this.permissions = this.getPermissionsForRole(this.role);
-
+      this.role = role;
+      this.permissions = PERMISSIONS_BY_ROLE[role] ?? BASE_PERMISSIONS;
       return true;
-    },
-  },
+    }
+  }
 });
 
-// Export an alias for backward compatibility
+/* ----------------------------------------------------------------------------
+ *  Alias kept for backward compatibility
+ * ------------------------------------------------------------------------- */
 export const useAuthenticationStore = useAuthStore;
