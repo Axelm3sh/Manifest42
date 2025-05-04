@@ -1,5 +1,8 @@
+// src/stores/notifications.ts
 import {defineStore} from 'pinia';
 import {computed, ref, shallowRef} from 'vue';
+import type {ISODateString, Notification, NotificationId, NotificationPreferences} from "../../shared/data-models";
+import {useAuthStore} from "./auth";
 
 /**
  * Store for notification system
@@ -7,8 +10,11 @@ import {computed, ref, shallowRef} from 'vue';
  */
 export const useNotificationsStore = defineStore('notifications', () => {
   // State
-  const notifications = shallowRef([]);
-  const preferences = ref({
+  const notifications       = shallowRef<Notification[]>([]);
+  const preferences         = ref<NotificationPreferences>({
+    inApp: true,
+    email: false,
+    frequency: 'Immediate',
     showInventoryAlerts: true,
     showAiInsights: true,
     showSystemNotifications: true,
@@ -22,7 +28,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
   // Getters
   const sortedNotifications = computed(() => {
     return [...notifications.value].sort((a, b) => 
-      new Date(b.timestamp) - new Date(a.timestamp)
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   });
 
@@ -47,7 +53,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
     const yesterday = new Date(Date.now() - 86400000).toDateString();
 
     filteredNotifications.value.forEach(notification => {
-      const date = new Date(notification.timestamp);
+      const date = new Date(notification.createdAt);
       const dateString = date.toDateString();
 
       let groupName;
@@ -92,40 +98,48 @@ export const useNotificationsStore = defineStore('notifications', () => {
     return types;
   });
 
+  //Helper function for mocking
+  function createNotification(
+      partial: Omit<Notification, 'id' | 'isRead' | 'userId'>
+          & { createdAt?: ISODateString }
+  ): Notification {
+    const auth = useAuthStore();
+    const id  = (`notification-${Date.now()}-${Math.random()*1000}`) as NotificationId;
+    const now = (partial.createdAt ?? new Date().toISOString()) as ISODateString;
+
+
+    return { userId: auth.userId,...partial, id, createdAt: now, isRead: false };
+  }
+
   // Actions
-  function addNotification(notification) {
-    const id = `notification-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    const timestamp = new Date().toISOString();
-    const isRead = false;
+  function addNotification(
+      partial: Omit<Notification, 'id'|'isRead'|'userId'> & { createdAt?: ISODateString }
+  ): NotificationId {
+    // Build a fully-typed Notification
+    const note = createNotification(partial);
 
-    const newNotification = {
-      id,
-      timestamp,
-      isRead,
-      ...notification
-    };
-
-    notifications.value.unshift(newNotification);
+    // Prepend to the list
+    notifications.value.unshift(note);
     unreadCount.value++;
 
-    // Auto-hide logic
+    // Auto-hide if desired
     if (preferences.value.autoHideAfter > 0) {
       setTimeout(() => {
-        dismissNotification(id);
+        dismissNotification(note.id);
       }, preferences.value.autoHideAfter * 60 * 1000);
     }
 
     // Desktop notification
     if (preferences.value.enableDesktopNotifications) {
-      showDesktopNotification(newNotification);
+      showDesktopNotification(note);
     }
 
     // Sound alert
     if (preferences.value.enableSoundAlerts) {
-      playNotificationSound(newNotification.type);
+      playNotificationSound(note.type);
     }
 
-    return id;
+    return note.id;
   }
 
   function dismissNotification(id) {
@@ -280,7 +294,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
 
       addNotification({
         ...notification,
-        timestamp: timestamp.toISOString()
+        createdAt: timestamp.toISOString() as ISODateString
       });
     });
   }
