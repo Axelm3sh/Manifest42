@@ -200,5 +200,30 @@
   },
   "validation": {
     "required": "This field is required."
+  },
+  "users": {
+    "title": "Users Management",
+    "description": "Manage user accounts, roles, and notification preferences",
+    "manage_users": "Manage Users",
+    "username": "Username",
+    "role": "Role",
+    "theme": "Theme",
+    "notifications": "Notifications",
+    "notification_preferences": "Notification Preferences",
+    "in_app": "In-App Notifications",
+    "email": "Email Notifications",
+    "frequency": "Notification Frequency",
+    "inventory_alerts": "Inventory Alerts",
+    "ai_insights": "AI Insights",
+    "system_notifications": "System Notifications",
+    "sound_alerts": "Sound Alerts",
+    "desktop_notifications": "Desktop Notifications",
+    "auto_hide": "Auto-hide After",
+    "edit_user": "Edit User",
+    "add_user": "Add User",
+    "add_user_button": "Add User",
+    "select_role": "Select Role",
+    "delete_confirmation": "Delete user \"{username}\"?",
+    "minutes": "minutes"
   }
 }

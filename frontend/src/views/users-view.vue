@@ -172,7 +172,7 @@ function openNewUserDialog() {
 }
 
 function confirmDelete(user: User) {
-  if (confirm(`Delete user "${user.userName}"?`)) {
+  if (confirm(t('users.delete_confirmation', { username: user.userName }))) {
     users.value = users.value.filter(u => u.userId !== user.userId);
   }
 }
@@ -239,7 +239,7 @@ function confirmDelete(user: User) {
                   :options="roles" 
                   optionLabel="roleName" 
                   optionValue="roleId" 
-                  placeholder="Select Role"
+                  :placeholder="$t('users.select_role')"
                   class="p-column-filter"
                 />
               </template>
@@ -292,7 +292,7 @@ function confirmDelete(user: User) {
           <div class="add-user-container">
             <Button 
               icon="pi pi-plus" 
-              label="Add User" 
+              :label="$t('users.add_user_button')" 
               @click="openNewUserDialog"
               class="p-button-primary"
             />
@@ -377,7 +377,7 @@ function confirmDelete(user: User) {
           </div>
           <div class="detail-row">
             <div class="detail-label">{{ $t('users.auto_hide') }}:</div>
-            <div class="detail-value">{{ selectedUser.settings.notificationPreferences.autoHideAfter }} minutes</div>
+            <div class="detail-value">{{ selectedUser.settings.notificationPreferences.autoHideAfter }} {{ $t('users.minutes') }}</div>
           </div>
         </div>
       </div>
@@ -456,8 +456,8 @@ function confirmDelete(user: User) {
         </div>
       </div>
       <template #footer>
-        <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="closeEditUserDialog" />
-        <Button label="Save" icon="pi pi-check" class="p-button-primary" @click="saveUser" />
+        <Button :label="$t('common.cancel')" icon="pi pi-times" class="p-button-text" @click="closeEditUserDialog" />
+        <Button :label="$t('common.save')" icon="pi pi-check" class="p-button-primary" @click="saveUser" />
       </template>
     </Dialog>
 
