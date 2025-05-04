@@ -4,6 +4,10 @@
     <p>{{ $t('users.description') }}</p>
     
     <!-- Placeholder content -->
+    <!-- In general we want to build an info view of all users of the application.
+We should use PrimeVue4 to scaffold a user list and management system. It should be data driven using our models related to `Users`.
+Only admins can see this view -->
+
     <div class="placeholder-content">
       <p>{{ $t('common.placeholder_content') }}</p>
     </div>

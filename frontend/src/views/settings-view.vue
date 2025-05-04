@@ -4,6 +4,10 @@
     <p>{{ $t('settings.description') }}</p>
     
     <!-- Placeholder content -->
+    <!-- In general we want to build an info view of all possible admin settings of the application.
+    We should use PrimeVue4 to scaffold a combination list that toggles features in the app.
+    It should be data driven using our models related to "settings" ona  global.-->
+
     <div class="placeholder-content">
       <p>{{ $t('common.placeholder_content') }}</p>
     </div>
