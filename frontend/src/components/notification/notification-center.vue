@@ -1,34 +1,39 @@
 <script setup lang="ts">
-import {computed, ref, watch} from 'vue'
+// new imports:
+import {computed, ref, Transition, watch} from 'vue'
 import {useI18n} from 'vue-i18n'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
-import Tabs from 'primevue/tabs';
-import TabPanel from 'primevue/tabpanel';
+import Tabs from 'primevue/tabs'
+import TabPanel from 'primevue/tabpanel'
 import Badge from 'primevue/badge'
 import Divider from 'primevue/divider'
 import {useNotificationsStore} from '@/stores/notifications'
+import NotificationPreferences from "@/components/notification/notification-preferences.vue";
 
 /* -------------------------------------------------- */
 /*  local state                                       */
 /* -------------------------------------------------- */
-const {t} = useI18n()
+const { t } = useI18n()
 const store = useNotificationsStore()
 
 /* dialog visibility */
 const open = ref(false)
 
+// NEW: preferences panel visibility
+const showPrefs = ref(false)
+
 /* tab handling ----------------------------------------------------------- */
 const tabKeys = ['all', 'info', 'success', 'warning', 'error'] as const
-const tab = ref<typeof tabKeys[number]>('all')   // currently selected key
-const activeIndex = ref(tabKeys.indexOf(tab.value))      // TabView’s numeric index
+const tab = ref<typeof tabKeys[number]>('all')
+const activeIndex = ref(tabKeys.indexOf(tab.value))
 
 watch(activeIndex, idx => {
   tab.value = tabKeys[idx]
-})          // keep tab in sync
+})
 watch(tab, key => {
   activeIndex.value = tabKeys.indexOf(key)
-})  // keep index in sync
+})
 
 const unread = computed(() => store.unreadCount)
 
@@ -36,14 +41,17 @@ const unread = computed(() => store.unreadCount)
 /*  helpers                                           */
 /* -------------------------------------------------- */
 function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
+  return new Date(iso).toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  })
 }
 
 const typeMeta = {
-  info: {icon: 'pi-info-circle', color: 'text-primary'},
-  success: {icon: 'pi-check-circle', color: 'text-green-500'},
-  warning: {icon: 'pi-exclamation-triangle', color: 'text-yellow-500'},
-  error: {icon: 'pi-times-circle', color: 'text-red-400'}
+  info: { icon: 'pi-info-circle', color: 'text-primary' },
+  success: { icon: 'pi-check-circle', color: 'text-green-500' },
+  warning: { icon: 'pi-exclamation-triangle', color: 'text-yellow-500' },
+  error: { icon: 'pi-times-circle', color: 'text-red-400' }
 } as const
 </script>
 
@@ -66,29 +74,40 @@ const typeMeta = {
 
   <!-- notification dialog -->
   <Dialog
-      v-model:visible="open"
-      append-to="self"
-      :header="t('notifications.title')"
-      modal
-      dismissableMask
-      class="w-full sm:w-25rem md:w-30rem"
+    v-model:visible="open"
+    append-to="self"
+    :header="t('notifications.title')"
+    modal
+    dismissableMask
+    class="w-full sm:w-25rem md:w-30rem"
   >
-    <!-- header actions -->
     <div class="flex items-center gap-2 mb-2">
       <Button
-          v-if="unread"
-          @click="store.markAllAsRead"
-          size="small"
-          label="Mark all as read"
-          text
+        v-if="unread"
+        @click="store.markAllAsRead"
+        size="small"
+        :label="t('notifications.mark_all_read')"
+        text
       />
+      <!-- now toggles showPrefs -->
       <Button
-          @click="store.updatePreferences({})"
-          size="small"
-          :label="t('notifications.preferences')"
-          text
+        @click="showPrefs = !showPrefs"
+        size="small"
+        :label="t('notifications.preferences')"
+        text
       />
     </div>
+
+    <!-- Preferences panel -->
+    <Transition name="fade">
+      <NotificationPreferences
+        v-if="showPrefs"
+        :model-value="showPrefs"
+        @update:model-value="showPrefs = $event"
+        v-model:preferences="store.preferences"
+        @save="store.updatePreferences"
+      />
+    </Transition>
 
     <!-- tab view -->
     <Tabs v-model:activeIndex="activeIndex" scrollable>
@@ -149,7 +168,7 @@ const typeMeta = {
 
     <template #footer>
       <Button
-          label="Clear all"
+          :label="t('notifications.clear_all')"
           severity="danger"
           size="small"
           text
