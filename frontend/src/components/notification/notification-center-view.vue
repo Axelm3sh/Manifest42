@@ -72,7 +72,7 @@ const dismissAllNotifications = () => {
           <button 
             @click="toggleNotificationCenter" 
             class="close-button"
-            aria-label="Close notification center"
+            :aria-label="t('notifications.close_center')"
           >
             ×
           </button>
