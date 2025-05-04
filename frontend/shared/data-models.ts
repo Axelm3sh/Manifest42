@@ -93,7 +93,7 @@ export interface Notification {
     message: string;            // Content text
     type: 'info' | 'success' | 'warning' | 'error';
     category: 'inventory' | 'ai' | 'system';
-    action?: NotificationAction[];
+    actions?: NotificationAction[];
     createdAt: ISODateString;   // ISO timestamp
     isRead: boolean;
 }
