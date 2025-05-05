@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {computed, onMounted, reactive, ref} from 'vue';
+import {useConfirm} from 'primevue/useconfirm';
 import {useI18n} from 'vue-i18n';
 import Card from 'primevue/card';
 import DataTable from 'primevue/datatable';
@@ -19,6 +20,7 @@ import Avatar from 'primevue/avatar';
 import type {UserSettings} from '@/shared/data-models';
 
 const { t } = useI18n();
+const confirm = useConfirm();
 
 interface User {
   userId: string;
@@ -67,7 +69,7 @@ const editingUser = reactive<User>({
     themePreference: 'system'
   }
 });
-const submitted = ref(false);
+const submitted = ref(false)
 
 const mockUsers: User[] = [
   {
@@ -108,6 +110,46 @@ const mockUsers: User[] = [
       },
       inventoryRefreshIntervalSec: 60,
       themePreference: 'light'
+    }
+  },
+  {
+    userId: '3',
+    userName: 'charlie',
+    roleId: 'guest',
+    settings: {
+      notificationPreferences: {
+        inApp: true,
+        email: false,
+        frequency: 'weekly',
+        showInventoryAlerts: true,
+        showAiInsights: false,
+        showSystemNotifications: true,
+        enableSoundAlerts: false,
+        enableDesktopNotifications: true,
+        autoHideAfter: 3
+      },
+      inventoryRefreshIntervalSec: 120,
+      themePreference: 'system'
+    }
+  },
+  {
+    userId: '4',
+    userName: 'diana',
+    roleId: 'user',
+    settings: {
+      notificationPreferences: {
+        inApp: true,
+        email: true,
+        frequency: 'daily',
+        showInventoryAlerts: true,
+        showAiInsights: true,
+        showSystemNotifications: false,
+        enableSoundAlerts: true,
+        enableDesktopNotifications: false,
+        autoHideAfter: 4
+      },
+      inventoryRefreshIntervalSec: 45,
+      themePreference: 'dark'
     }
   }
 ];
@@ -173,9 +215,18 @@ function openNewUserDialog() {
 }
 
 function confirmDelete(user: User) {
-  if (confirm(t('users.delete_confirmation', { username: user.userName }))) {
-    users.value = users.value.filter(u => u.userId !== user.userId);
-  }
+  confirm.require({
+    message: t('users.delete_confirmation', {username: user.userName}),
+    header: t('common.confirm'),
+    icon: 'pi pi-exclamation-triangle',
+    acceptClass: 'p-button-danger',
+    rejectClass: 'p-button-secondary',
+    accept: () => {
+      users.value = users.value.filter(u => u.userId !== user.userId);
+    },
+    reject: () => {
+    }
+  });
 }
 
 function cancelEdit() {
