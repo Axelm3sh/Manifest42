@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from 'vue';
+import {computed, onMounted, reactive, ref} from 'vue';
 import {useI18n} from 'vue-i18n';
 import Card from 'primevue/card';
 import DataTable from 'primevue/datatable';
@@ -13,6 +13,7 @@ import Dialog from 'primevue/dialog';
 import Message from 'primevue/message';
 import ProgressSpinner from 'primevue/progressspinner';
 import Divider from 'primevue/divider';
+import Avatar from 'primevue/avatar';
 
 // Type-only imports to fix circular or runtime issues
 import type {UserSettings} from '@/shared/data-models';
@@ -183,6 +184,25 @@ function cancelEdit() {
   // Object.assign(editingUser, { …initial values… });
 }
 
+const notificationTags = computed(() => {
+  if (!selectedUser.value) return [];
+  const p = selectedUser.value.settings.notificationPreferences;
+  const tags: Array<{ label: string; icon: string; severity: string }> = [];
+
+  const add = (cond: boolean, label: string, icon: string, severity: string) => {
+    if (cond) tags.push({ label, icon: `pi pi-${icon}`, severity });
+  };
+
+  add(p.inApp,                   'In-App',             'bell',         'secondary');
+  add(p.email,                   'Email',              'envelope',     'secondary');
+  add(p.enableSoundAlerts,       'Sound',              'volume-up',    'secondary');
+  add(p.enableDesktopNotifications, 'Desktop',         'desktop',      'secondary');
+  add(p.showInventoryAlerts,     'Inventory Alerts',   'box',          'secondary');
+  add(p.showAiInsights,          'AI Insights',        'chart-line',   'secondary');
+  add(p.showSystemNotifications, 'System',             'cog',          'secondary');
+
+  return tags;
+});
 </script>
 
 <template>
@@ -310,84 +330,66 @@ function cancelEdit() {
 
     <!-- User Details Dialog -->
     <Dialog
-      v-model:visible="userDetailsDialog"
-      :header="selectedUser ? selectedUser.userName : ''"
-      :modal="true"
-      :closable="true"
-      :style="{ width: '500px' }"
+        v-model:visible="userDetailsDialog"
+        :header="$t('users.user_details')"
+        :modal="true"
+        :closable="true"
+        :style="{ width: '480px' }"
     >
-      <div v-if="selectedUser" class="user-details">
-        <div class="detail-row">
-          <div class="detail-label">{{ $t('users.username') }}:</div>
-          <div class="detail-value">{{ selectedUser.userName }}</div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">{{ $t('users.role') }}:</div>
-          <div class="detail-value">
-            <Tag :value="getRoleName(selectedUser.roleId)" :severity="getRoleSeverity(selectedUser.roleId)" />
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">{{ $t('users.theme') }}:</div>
-          <div class="detail-value">{{ formatTheme(selectedUser.settings.themePreference) }}</div>
+      <template v-if="selectedUser">
+        <div class="user-summary flex align-items-center justify-content-center mb-3">
+          <Avatar
+              :label="selectedUser.userName.charAt(0).toUpperCase()"
+              shape="circle"
+              size="large"
+              class="mr-2"
+          />
+          <h2 class="m-0 mr-2">{{ selectedUser.userName }}</h2>
+          <Tag
+              :value="getRoleName(selectedUser.roleId)"
+              :severity="getRoleSeverity(selectedUser.roleId)"
+          />
         </div>
 
-        <Divider />
+        <Divider class="mb-3"/>
 
-        <h3>{{ $t('users.notification_preferences') }}</h3>
-        <div class="notification-prefs">
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.in_app') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.inApp ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.email') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.email ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.frequency') }}:</div>
-            <div class="detail-value">{{ selectedUser.settings.notificationPreferences.frequency }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.inventory_alerts') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.showInventoryAlerts ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.ai_insights') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.showAiInsights ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.system_notifications') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.showSystemNotifications ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.sound_alerts') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.enableSoundAlerts ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.desktop_notifications') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.enableDesktopNotifications ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.auto_hide') }}:</div>
-            <div class="detail-value">{{ selectedUser.settings.notificationPreferences.autoHideAfter }} {{ $t('users.minutes') }}</div>
-          </div>
+        <div class="simple-details">
+          <p>
+            <i class="pi pi-palette mr-1"/>
+            {{ $t('users.theme') }}:
+            <strong>{{ formatTheme(selectedUser.settings.themePreference) }}</strong>
+          </p>
+          <p>
+            <i class="pi pi-refresh mr-1"/>
+            {{ $t('users.inventory_refresh') }}:
+            <strong>{{ selectedUser.settings.inventoryRefreshIntervalSec }} s</strong>
+          </p>
         </div>
-      </div>
+
+        <Divider class="mb-2"/>
+
+        <h3 class="text-secondary mb-2">{{ $t('users.notifications') }}</h3>
+
+        <div v-if="notificationTags.length" class="notification-tags">
+          <Tag
+              v-for="tag in notificationTags"
+              :key="tag.label"
+              :icon="tag.icon"
+              :value="tag.label"
+              :severity="tag.severity"
+              rounded
+              class="mr-2 mb-2"
+          />
+        </div>
+        <Message
+            v-else
+            severity="info"
+            :closable="false"
+            class="mt-2"
+        >
+          {{ $t('users.no_notifications_enabled') }}
+        </Message>
+      </template>
     </Dialog>
 
     <!-- Edit / Create User dialog -->
@@ -496,5 +498,17 @@ function cancelEdit() {
 /* Extra breathing room between rows if needed */
 .edit-form .field {
   margin-bottom: 0.75rem;
+}
+
+.user-summary h2 {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+.simple-details p {
+  margin: 0 0 0.5rem;
+}
+.notification-tags {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
