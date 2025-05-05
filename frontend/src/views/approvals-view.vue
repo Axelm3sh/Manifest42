@@ -8,8 +8,9 @@ import Tag from 'primevue/tag'
 import ConfirmDialog from 'primevue/confirmdialog'
 import {useConfirm} from 'primevue/useconfirm'
 import {useApprovalsStore} from '@/stores/approvals'
+import {Timeline} from "primevue";
 
-const { t } = useI18n()
+const {t} = useI18n()
 const store = useApprovalsStore()
 const confirm = useConfirm()
 
@@ -20,24 +21,24 @@ function statusTag(raw: string) {
   const s = raw.toLowerCase()
   switch (s) {
     case 'approved':
-      return { severity: 'success', label: t('approvals.approved') }
+      return {severity: 'success', label: t('approvals.approved')}
     case 'rejected':
-      return { severity: 'danger', label: t('approvals.rejected') }
+      return {severity: 'danger', label: t('approvals.rejected')}
     default:
-      return { severity: 'warning', label: t(`approvals.${s}`) }
+      return {severity: 'warning', label: t(`approvals.${s}`)}
   }
 }
 
 function urgencyTag(urgency?: string) {
   switch (urgency) {
     case 'high':
-      return { severity: 'danger', label: t('approvals.urgency_high') }
+      return {severity: 'danger', label: t('approvals.urgency_high')}
     case 'medium':
-      return { severity: 'warning', label: t('approvals.urgency_medium') }
+      return {severity: 'warning', label: t('approvals.urgency_medium')}
     case 'low':
-      return { severity: 'info', label: t('approvals.urgency_low') }
+      return {severity: 'info', label: t('approvals.urgency_low')}
     default:
-      return { severity: 'secondary', label: '-' }
+      return {severity: 'secondary', label: '-'}
   }
 }
 </script>
@@ -124,25 +125,40 @@ function urgencyTag(urgency?: string) {
     <Column field="status" :header="t('approvals.status')" style="width:8rem">
       <template #body="{ data }">
         <Tag
-          :severity="statusTag(data.status).severity"
-          :value="statusTag(data.status).label"
+            :severity="statusTag(data.status).severity"
+            :value="statusTag(data.status).label"
         />
       </template>
     </Column>
+    <!-- …inside the HISTORY DataTable … -->
     <Column field="approvals" :header="t('approvals.decisions')" style="width:15rem">
       <template #body="{ data }">
-        <ul class="p-0 m-0" style="list-style:none;">
-          <li v-for="decision in data.approvals" :key="decision.id">
-            <Tag
-              :severity="statusTag(decision.status).severity"
-              :value="statusTag(decision.status).label"
-            />
-            <span class="ml-1">
-              {{ decision.role }}
-              {{ decision.decisionAt ? '(' + new Date(decision.decisionAt).toLocaleTimeString() + ')' : '' }}
+        <Timeline :value="data.approvals" class="p-0">
+          <template #content="{ item: d }">
+            <div class="d-flex align-items-center">
+              <Tag
+                  :severity="statusTag(d.status).severity"
+                  :value="statusTag(d.status).label"
+              />
+              <span class="ml-1">{{ d.role }}</span>
+              <span v-if="d.decisionAt" class="ml-1 text-500 text-xs">
+                {{ new Date(d.decisionAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }}
+              </span>
+            </div>
+          </template>
+          <template #opposite></template>
+          <template #marker="{ item: d, index }">
+            <span :class="`p-timeline-event-marker-${statusTag(d.status).severity}`">
+              <i class="pi pi-clock"></i>
             </span>
-          </li>
-        </ul>
+            <Tag
+                v-if="index === 0"
+                :value="t('approvals.latest')"
+                severity="info"
+                class="ml-2 p-tag-sm"
+            />
+          </template>
+        </Timeline>
       </template>
     </Column>
   </DataTable>

@@ -3,10 +3,49 @@ import {computed, ref} from 'vue'
 import {Approval, ApprovalId, InventoryItemId, ISODateString, RestockRequestId, UserId} from '@/../shared/data-models'
 import {useNotificationsStore} from '@/stores/notifications'
 
+/* ────────────────────────────────────────────────────────────
+ * Constant pools / helpers
+ * ────────────────────────────────────────────────────────── */
+
+const _urgencies = ['low', 'medium', 'high'] as const
+const _roles = ['Supervisor', 'Lead', 'QA', 'Manager'] as const
+const _warehouses = ['WH-EAST', 'WH-WEST', 'WH-NORTH', 'WH-SOUTH'] as const
+
+// Fake names, items & reasons (kept global so generators can use them)
+const _requesters = [
+    'Alice', 'Bob', 'Carlos', 'Dana', 'Eva', 'Frank', 'Giulia', 'Hiro',
+    'Isabelle', 'Jakub', 'Liam', 'Mona', 'Nina', 'Omar', 'Priya', 'Quentin',
+    'Rosa', 'Sam', 'Tina', 'Ulrich', "Patrick Star"
+]
+
+const _items = [
+    'Laptops', 'Smartphones', 'Keyboards', 'Mice', 'Monitors', 'Desk Chairs',
+    'USB Hubs', 'Docking Stations', '3D Printers', 'Coffee Machines',
+    'Label Makers', 'Flash Drives', 'Servers', 'Network Switches',
+    'External HDDs', 'Projectors', 'Office Plants', 'Standing Desks',
+    'Conference Phones', 'Tablets', 'Printers', 'VR Headsets', "Magic Conch Shells"
+]
+
+const _reasons = [
+    'Restocking after heavy sales', 'Replacement for broken units',
+    'New team ramp-up', 'Pilot project needs', 'Refresh cycle',
+    'Urgent customer delivery', 'Quarterly upgrade', 'Lost in transit',
+    'Warranty exchange', 'Special event setup', 'Seasonal increase',
+    'Mismatched inventory', 'Returned goods replacement', "Dog ate my homework"
+]
+
+function randomOf<T extends readonly unknown[]>(arr: T): T[number] {
+    return arr[Math.floor(Math.random() * arr.length)]
+}
+
+/* ────────────────────────────────────────────────────────────
+ * Types
+ * ────────────────────────────────────────────────────────── */
+
 /**
  * UI-oriented restock request model.
- * Extends the backend RestockRequest shape and keeps a few extra fields
- * used only by the frontend (reason, urgency).
+ * Extends the backend RestockRequest shape and keeps a few extra
+ * fields used only by the frontend (reason, urgency, etc.).
  */
 export interface ApprovalRequest {
     id: RestockRequestId
@@ -15,38 +54,55 @@ export interface ApprovalRequest {
     requestedBy: UserId
     createdAt: ISODateString
     status: 'Pending' | 'Approved' | 'Rejected'
-    approvals: Approval[] // approver decisions
-    // Front-end only helpers
+    approvals: Approval[]
+    // Front-end-only helpers
     reason?: string
-    urgency?: 'low' | 'medium' | 'high'
+    urgency?: (typeof _urgencies)[number]
+    warehouseId?: (typeof _warehouses)[number]
 }
 
-const _urgencies = ['low', 'medium', 'high'] as const
+/* ────────────────────────────────────────────────────────────
+ * Fake-data factories
+ * ────────────────────────────────────────────────────────── */
 
-function makeFakeApproval(): Approval {
+function makeFakeApproval(restockId: RestockRequestId): Approval {
     return {
         id: `APP-${crypto.randomUUID()}` as ApprovalId,
-        restockRequestId: 'fake' as RestockRequestId,
-        approverId: 'user-1' as UserId,
-        role: 'Manager',
+        restockRequestId: restockId,
+        approverId: `user-${Math.ceil(Math.random() * 300)}` as UserId,
+        role: randomOf(_roles),
         status: Math.random() > 0.5 ? 'Approved' : 'Rejected',
-        decisionAt: new Date().toISOString() as ISODateString
+        decisionAt: new Date(Date.now() - Math.random() * 3_600_000).toISOString() as ISODateString
     }
 }
 
 function makeFakeRequest(seq = 0): ApprovalRequest {
+    const id = `RR-${Date.now()}-${seq}` as RestockRequestId
+    const item = `INV-${Math.floor(Math.random() * 5000)}` as InventoryItemId
+
+    // 0-2 prior approvals
+    const approvalsSeed = Array.from(
+        {length: Math.floor(Math.random() * 3)},
+        () => makeFakeApproval(id)
+    )
+
     return {
-        id: (`RR-${Date.now()}-${seq}`) as RestockRequestId,
-        itemId: (`INV-${Math.floor(Math.random() * 5000)}`) as InventoryItemId,
+        id,
+        itemId: item,
         quantityRequested: 1 + Math.floor(Math.random() * 100),
-        requestedBy: 'user-123' as UserId,
+        requestedBy: randomOf(_requesters).toLowerCase() as UserId,
         createdAt: new Date().toISOString() as ISODateString,
         status: 'Pending',
-        approvals: [makeFakeApproval()],
-        reason: Math.random() > 0.4 ? 'Restocking sample data' : undefined,
-        urgency: _urgencies[Math.floor(Math.random() * _urgencies.length)]
+        approvals: approvalsSeed,
+        reason: randomOf(_reasons),
+        urgency: randomOf(_urgencies),
+        warehouseId: randomOf(_warehouses)
     }
 }
+
+/* ────────────────────────────────────────────────────────────
+ * Pinia store
+ * ────────────────────────────────────────────────────────── */
 
 export const useApprovalsStore = defineStore('approvals', () => {
     const pending = ref<ApprovalRequest[]>([])
@@ -54,25 +110,8 @@ export const useApprovalsStore = defineStore('approvals', () => {
 
     const pendingCount = computed(() => pending.value.length)
 
-    // FUN MOCK DATA
-    const _requesters = [
-        'Alice', 'Bob', 'Carlos', 'Dana', 'Eva', 'Frank', 'Giulia', 'Hiro',
-        'Isabelle', 'Jakub', 'Liam', 'Mona', 'Nina', 'Omar', 'Priya', 'Quentin', 'Rosa', 'Sam', 'Tina', 'Ulrich'
-    ]
-    const _items = [
-        'Laptops', 'Smartphones', 'Keyboards', 'Mice', 'Monitors', 'Desk Chairs',
-        'USB Hubs', 'Docking Stations', '3D Printers', 'Coffee Machines', 'Label Makers',
-        'Flash Drives', 'Servers', 'Network Switches', 'External HDDs', 'Projectors',
-        'Office Plants', 'Standing Desks', 'Conference Phones', 'Tablets', 'Printers', 'VR Headsets'
-    ]
-    const _reasons = [
-        'Restocking after heavy sales', 'Replacement for broken units', 'New team ramp-up',
-        'Pilot project needs', 'Refresh cycle', 'Urgent customer delivery',
-        'Quarterly upgrade', 'Lost in transit', 'Warranty exchange', 'Special event setup',
-        'Seasonal increase', 'Mismatched inventory', 'Returned goods replacement'
-    ]
-
-    function _move(id: string, newStatus: 'approved' | 'rejected') {
+    // ------------------------------ mutations ------------------------------
+    function _move(id: string, newStatus: 'Approved' | 'Rejected') {
         const idx = pending.value.findIndex(r => r.id === id)
         if (idx === -1) return
 
@@ -80,8 +119,8 @@ export const useApprovalsStore = defineStore('approvals', () => {
 
         const managerDecision: Approval = {
             id: `APP-${crypto.randomUUID()}` as ApprovalId,
-            restockRequestId: old.id as RestockRequestId,
-            approverId: 'user-1' as UserId,      // or pull from auth store
+            restockRequestId: old.id,
+            approverId: 'user-1' as UserId,  // TODO: pull from auth store
             role: 'Manager',
             status: newStatus,
             decisionAt: new Date().toISOString() as ISODateString
@@ -90,7 +129,7 @@ export const useApprovalsStore = defineStore('approvals', () => {
         const req: ApprovalRequest = {
             ...old,
             status: newStatus,
-            approvals: [...old.approvals, managerDecision]
+            approvals: [managerDecision, ...old.approvals] // prepend newest first
         }
 
         pending.value.splice(idx, 1)
@@ -98,47 +137,55 @@ export const useApprovalsStore = defineStore('approvals', () => {
     }
 
     function approve(id: string) {
-        _move(id, 'approved')
+        _move(id, 'Approved')
     }
 
     function reject(id: string) {
-        _move(id, 'rejected')
+        _move(id, 'Rejected')
     }
+
+    // ------------------------------ mock feed ------------------------------
 
     function startMockFeed() {
         const notif = useNotificationsStore()
-        let baseDelay = 30000 // initial value: 30s
-        const minDelay = 2000 // 2s fastest
-        const maxDelay = 60000 // 60s slowest
-        let currentDelay = baseDelay
+        const minDelay = 2000  // 2 s fastest
+        const maxDelay = 60000  // 60 s slowest
+        let current = 30000  // initial: 30 s
 
         function scheduleNext() {
             setTimeout(() => {
                 const req = makeFakeRequest()
                 pending.value.unshift(req)
+
                 notif.addNotification({
-                    message: `New approval request for ${req.item} (${req.urgency?.toUpperCase()})`,
+                    message: `New approval request ${req.id} (${req.urgency?.toUpperCase()})`,
                     type: req.urgency === 'high' ? 'warning' : 'info',
                     category: 'inventory'
                 })
 
-                // Adjust delay: Speed up (halve delay) if queue empty, else slow to max/min
-                if (pending.value.length === 0) {
-                    currentDelay = Math.max(minDelay, Math.floor(currentDelay * 0.5))
-                } else {
-                    currentDelay = Math.min(maxDelay, Math.floor(currentDelay * 1.15)) // Slight increase
-                }
+                // Dynamically adjust delay
+                current = pending.value.length === 0
+                    ? Math.max(minDelay, Math.floor(current * 0.5))   // speed up
+                    : Math.min(maxDelay, Math.floor(current * 1.15))  // slow down
+
                 scheduleNext()
-            }, currentDelay)
+            }, current)
         }
 
         scheduleNext()
     }
 
-    // Seed some mock data for dev
+    // init UI so doesn't look empty
     for (let i = 0; i < 7; i++) {
         pending.value.push(makeFakeRequest(i))
     }
 
-    return {pending, history, pendingCount, approve, reject, startMockFeed}
+    return {
+        pending,
+        history,
+        pendingCount,
+        approve,
+        reject,
+        startMockFeed
+    }
 })
