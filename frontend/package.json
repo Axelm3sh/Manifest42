@@ -45,7 +45,7 @@
     "@vercel/node": "^5.1.15",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/test-utils": "^2.4.4",
-    "concurrently": "^8.2.2",
+    "concurrently": "^9.1.2",
     "cypress": "^13.6.4",
     "jsdom": "^24.0.0",
     "node-fetch": "^3.3.2",
