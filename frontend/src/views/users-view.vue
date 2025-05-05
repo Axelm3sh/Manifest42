@@ -176,6 +176,13 @@ function confirmDelete(user: User) {
     users.value = users.value.filter(u => u.userId !== user.userId);
   }
 }
+
+function cancelEdit() {
+  editUserDialog.value = false;
+  // (optional) reset the temporary object if you wish
+  // Object.assign(editingUser, { …initial values… });
+}
+
 </script>
 
 <template>
@@ -200,10 +207,10 @@ function confirmDelete(user: User) {
           <Message v-else-if="error" severity="error">{{ error }}</Message>
 
           <!-- Users DataTable -->
-          <DataTable 
+          <DataTable
             v-else
-            :value="users" 
-            :paginator="true" 
+            :value="users"
+            :paginator="true"
             :rows="10"
             :rowHover="true"
             responsiveLayout="scroll"
@@ -233,12 +240,12 @@ function confirmDelete(user: User) {
                 <Tag :value="getRoleName(data.roleId)" :severity="getRoleSeverity(data.roleId)" />
               </template>
               <template #filter="{ filterModel, filterCallback }">
-                <Dropdown 
-                  v-model="filterModel.value" 
+                <Dropdown
+                  v-model="filterModel.value"
                   @change="filterCallback()"
-                  :options="roles" 
-                  optionLabel="roleName" 
-                  optionValue="roleId" 
+                  :options="roles"
+                  optionLabel="roleName"
+                  optionValue="roleId"
                   :placeholder="$t('users.select_role')"
                   class="p-column-filter"
                 />
@@ -266,21 +273,21 @@ function confirmDelete(user: User) {
             <!-- Actions column -->
             <Column :header="$t('common.actions')" :headerStyle="{ width: '10rem' }" bodyStyle="text-align:center">
               <template #body="{ data }">
-                <Button 
-                  icon="pi pi-pencil" 
-                  class="p-button-rounded p-button-text p-button-sm" 
+                <Button
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-text p-button-sm"
                   @click="editUser(data)"
                   :aria-label="$t('common.edit')"
                 />
-                <Button 
-                  icon="pi pi-eye" 
-                  class="p-button-rounded p-button-text p-button-info p-button-sm" 
+                <Button
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-text p-button-info p-button-sm"
                   @click="viewUserDetails(data)"
                   :aria-label="$t('common.view')"
                 />
-                <Button 
-                  icon="pi pi-trash" 
-                  class="p-button-rounded p-button-text p-button-danger p-button-sm" 
+                <Button
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-text p-button-danger p-button-sm"
                   @click="confirmDelete(data)"
                   :aria-label="$t('common.delete')"
                 />
@@ -290,9 +297,9 @@ function confirmDelete(user: User) {
 
           <!-- Add new user button -->
           <div class="add-user-container">
-            <Button 
-              icon="pi pi-plus" 
-              :label="$t('users.add_user_button')" 
+            <Button
+              icon="pi pi-plus"
+              :label="$t('users.add_user_button')"
               @click="openNewUserDialog"
               class="p-button-primary"
             />
@@ -302,9 +309,9 @@ function confirmDelete(user: User) {
     </div>
 
     <!-- User Details Dialog -->
-    <Dialog 
-      v-model:visible="userDetailsDialog" 
-      :header="selectedUser ? selectedUser.userName : ''" 
+    <Dialog
+      v-model:visible="userDetailsDialog"
+      :header="selectedUser ? selectedUser.userName : ''"
       :modal="true"
       :closable="true"
       :style="{ width: '500px' }"
@@ -383,81 +390,52 @@ function confirmDelete(user: User) {
       </div>
     </Dialog>
 
-    <!-- Edit User Dialog -->
-    <Dialog 
-      v-model:visible="editUserDialog" 
-      :header="editingUser.userId ? $t('users.edit_user') : $t('users.add_user')" 
-      :modal="true"
-      :closable="true"
-      :style="{ width: '500px' }"
+    <!-- Edit / Create User dialog -->
+    <Dialog
+      v-model:visible="editUserDialog"
+      :header="editingUser.userId ? $t('users.edit_user') : $t('users.new_user')"
+      :style="{ width: '600px' }"
+      modal
     >
-      <div class="p-fluid">
-        <div class="field">
-          <label for="userName">{{ $t('users.username') }}</label>
-          <InputText id="userName" v-model="editingUser.userName" :class="{'p-invalid': submitted && !editingUser.userName}" />
-          <small v-if="submitted && !editingUser.userName" class="p-error">{{ $t('validation.required') }}</small>
+      <div class="edit-form">
+        <div class="field flex align-items-center gap-2">
+          <label for="username" class="font-medium w-7rem">
+            {{ $t('users.username') }}:
+          </label>
+          <InputText id="username" v-model="editingUser.userName" class="flex-auto" />
         </div>
 
-        <div class="field">
-          <label for="roleId">{{ $t('users.role') }}</label>
-          <Dropdown 
-            id="roleId" 
-            v-model="editingUser.roleId" 
-            :options="roles" 
-            optionLabel="roleName" 
-            optionValue="roleId" 
-            :class="{'p-invalid': submitted && !editingUser.roleId}"
-          />
-          <small v-if="submitted && !editingUser.roleId" class="p-error">{{ $t('validation.required') }}</small>
-        </div>
-
-        <div class="field">
-          <label for="themePreference">{{ $t('users.theme') }}</label>
-          <Dropdown 
-            id="themePreference" 
-            v-model="editingUser.settings.themePreference" 
-            :options="themeOptions" 
-            optionLabel="label" 
-            optionValue="value" 
+        <div class="field flex align-items-center gap-2">
+          <label for="role" class="font-medium w-7rem">
+            {{ $t('users.role') }}:
+          </label>
+          <Dropdown
+            id="role"
+            v-model="editingUser.roleId"
+            :options="roles"
+            optionLabel="roleName"
+            optionValue="roleId"
+            class="flex-auto"
           />
         </div>
 
-        <Divider />
-
-        <h3>{{ $t('users.notification_preferences') }}</h3>
-
-        <div class="field-checkbox">
-          <Checkbox 
-            id="inApp" 
-            v-model="editingUser.settings.notificationPreferences.inApp" 
-            :binary="true" 
-          />
-          <label for="inApp">{{ $t('users.in_app') }}</label>
-        </div>
-
-        <div class="field-checkbox">
-          <Checkbox 
-            id="email" 
-            v-model="editingUser.settings.notificationPreferences.email" 
-            :binary="true" 
-          />
-          <label for="email">{{ $t('users.email') }}</label>
-        </div>
-
-        <div class="field">
-          <label for="frequency">{{ $t('users.frequency') }}</label>
-          <Dropdown 
-            id="frequency" 
-            v-model="editingUser.settings.notificationPreferences.frequency" 
-            :options="frequencyOptions" 
-            optionLabel="label" 
-            optionValue="value" 
-          />
-        </div>
+        <!-- Any additional rows follow the same
+             “field flex … gap-2” pattern -->
       </div>
+
+      <!-- ── footer ─────────────────────────────────────── -->
       <template #footer>
-        <Button :label="$t('common.cancel')" icon="pi pi-times" class="p-button-text" @click="closeEditUserDialog" />
-        <Button :label="$t('common.save')" icon="pi pi-check" class="p-button-primary" @click="saveUser" />
+        <Button
+          :label="$t('common.cancel')"
+          class="p-button-secondary"
+          @click="cancelEdit"
+        />
+        <Button
+          :label="$t('common.save')"
+          icon="pi pi-check"
+          class="p-button-primary"
+          @click="submitUser"
+        />
       </template>
     </Dialog>
 
@@ -515,4 +493,8 @@ function confirmDelete(user: User) {
 
 /* No need for complex dialog or DataTable styling, Lara already covers paddings, modal look, etc. */
 
+/* Extra breathing room between rows if needed */
+.edit-form .field {
+  margin-bottom: 0.75rem;
+}
 </style>
