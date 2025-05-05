@@ -64,11 +64,6 @@ defineProps({
 
 .card-footer {
   padding: 1rem;
-  border-top: 1px solid var(--surface-border);
-}
-
-/* Make hover / focus shadows optional if you still want them */
-.base-card:hover {
-  box-shadow: var(--card-shadow);
+  border-top: 1px solid var(--color-border);
 }
 </style>

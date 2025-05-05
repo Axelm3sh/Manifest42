@@ -97,7 +97,8 @@ const props = defineProps({
 <style scoped>
 .kpi-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  justify-content: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -112,13 +113,14 @@ const props = defineProps({
   gap: 1rem;
 }
 
-.kpi-icon {
+/*.kpi-icon {
   font-size: 2rem;
-}
+}*/
 
 .kpi-data {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .kpi-value {
