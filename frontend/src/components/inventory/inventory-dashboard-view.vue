@@ -11,7 +11,7 @@ import InventoryOverview from './inventory-overview.vue';
 import InventoryItemsTable from './inventory-items-table.vue';
 import InventoryWarehouses from './inventory-warehouses.vue';
 import InventoryStockAlerts from './inventory-stock-alerts.vue';
-//Currently not in use, might have ported over to the router-based view
+
 const { t } = useI18n();
 const { formatDateTime } = useFormatters();
 const inventoryDataStore = useInventoryDataStore();
@@ -19,7 +19,7 @@ const inventoryDataStore = useInventoryDataStore();
 // Reactive state
 const activeTab = ref('overview');
 const showSettings = ref(false);
-const refreshIntervalOptions = ref([10, 30, 60, 120]);
+const refreshIntervalOptions = ref([1, 5, 10, 30, 60, 120]);
 
 // Fetch data on component mount and start real-time updates
 onMounted(() => {
@@ -35,6 +35,13 @@ onUnmounted(() => {
 
 // Computed properties
 const inventoryItems = computed(() => inventoryDataStore.sortedInventoryItems);
+const interpolatedInventoryItems = computed(() =>
+  inventoryDataStore.sortedInventoryItems.map(item => ({
+    ...item,
+    /* fall back for the very first frame */
+    stockLevel: item.displayStockLevel ?? item.stockLevel
+  }))
+);
 const warehouseData = computed(() => inventoryDataStore.warehouseData);
 const warehouseUtilization = computed(() => inventoryDataStore.warehouseUtilization);
 const kpiData = computed(() => inventoryDataStore.kpiData);
@@ -136,7 +143,7 @@ const handleRestock = ({ itemId, urgent }) => {
           <InventoryOverview
             :inventoryValueByCategory="inventoryValueByCategory"
             :warehouseUtilization="warehouseUtilization"
-            :inventoryItems="inventoryItems"
+            :inventoryItems="interpolatedInventoryItems"
             :lowStockItems="lowStockItems"
             :outOfStockItems="outOfStockItems"
             :totalValue="kpiData.totalValue"
@@ -146,7 +153,7 @@ const handleRestock = ({ itemId, urgent }) => {
         <!-- Items Tab -->
         <template #items>
           <InventoryItemsTable
-            :inventoryItems="inventoryItems"
+            :inventoryItems="interpolatedInventoryItems"
             :warehouseData="warehouseData"
           />
         </template>
