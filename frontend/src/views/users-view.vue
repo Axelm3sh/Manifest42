@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from 'vue';
+import {computed, onMounted, reactive, ref} from 'vue';
+import {useConfirm} from 'primevue/useconfirm';
 import {useI18n} from 'vue-i18n';
 import Card from 'primevue/card';
 import DataTable from 'primevue/datatable';
@@ -13,11 +14,13 @@ import Dialog from 'primevue/dialog';
 import Message from 'primevue/message';
 import ProgressSpinner from 'primevue/progressspinner';
 import Divider from 'primevue/divider';
+import Avatar from 'primevue/avatar';
 
 // Type-only imports to fix circular or runtime issues
 import type {UserSettings} from '@/shared/data-models';
 
 const { t } = useI18n();
+const confirm = useConfirm();
 
 interface User {
   userId: string;
@@ -66,7 +69,7 @@ const editingUser = reactive<User>({
     themePreference: 'system'
   }
 });
-const submitted = ref(false);
+const submitted = ref(false)
 
 const mockUsers: User[] = [
   {
@@ -107,6 +110,46 @@ const mockUsers: User[] = [
       },
       inventoryRefreshIntervalSec: 60,
       themePreference: 'light'
+    }
+  },
+  {
+    userId: '3',
+    userName: 'charlie',
+    roleId: 'guest',
+    settings: {
+      notificationPreferences: {
+        inApp: true,
+        email: false,
+        frequency: 'weekly',
+        showInventoryAlerts: true,
+        showAiInsights: false,
+        showSystemNotifications: true,
+        enableSoundAlerts: false,
+        enableDesktopNotifications: true,
+        autoHideAfter: 3
+      },
+      inventoryRefreshIntervalSec: 120,
+      themePreference: 'system'
+    }
+  },
+  {
+    userId: '4',
+    userName: 'diana',
+    roleId: 'user',
+    settings: {
+      notificationPreferences: {
+        inApp: true,
+        email: true,
+        frequency: 'daily',
+        showInventoryAlerts: true,
+        showAiInsights: true,
+        showSystemNotifications: false,
+        enableSoundAlerts: true,
+        enableDesktopNotifications: false,
+        autoHideAfter: 4
+      },
+      inventoryRefreshIntervalSec: 45,
+      themePreference: 'dark'
     }
   }
 ];
@@ -172,10 +215,71 @@ function openNewUserDialog() {
 }
 
 function confirmDelete(user: User) {
-  if (confirm(t('users.delete_confirmation', { username: user.userName }))) {
-    users.value = users.value.filter(u => u.userId !== user.userId);
-  }
+  confirm.require({
+    message: t('users.delete_confirmation', {username: user.userName}),
+    header: t('common.confirm'),
+    icon: 'pi pi-exclamation-triangle',
+    acceptClass: 'p-button-danger',
+    rejectClass: 'p-button-secondary',
+    accept: () => {
+      users.value = users.value.filter(u => u.userId !== user.userId);
+    },
+    reject: () => {
+    }
+  });
 }
+
+function cancelEdit() {
+  editUserDialog.value = false;
+  // (optional) reset the temporary object if you wish
+  // Object.assign(editingUser, { …initial values… });
+}
+
+function submitUser() {
+  submitted.value = true;
+
+  if (!editingUser.userName || !editingUser.roleId) {
+    return;
+  }
+
+  if (editingUser.userId) {
+    // Update existing user
+    const index = users.value.findIndex(u => u.userId === editingUser.userId);
+    if (index !== -1) {
+      users.value[index] = {...editingUser};
+    }
+  } else {
+    // Create new user
+    const newUser = {
+      ...editingUser,
+      userId: (users.value.length + 1).toString()
+    };
+    users.value.push(newUser);
+  }
+
+  editUserDialog.value = false;
+  submitted.value = false;
+}
+
+const notificationTags = computed(() => {
+  if (!selectedUser.value) return [];
+  const p = selectedUser.value.settings.notificationPreferences;
+  const tags: Array<{ label: string; icon: string; severity: string }> = [];
+
+  const add = (cond: boolean, label: string, icon: string, severity: string) => {
+    if (cond) tags.push({ label, icon: `pi pi-${icon}`, severity });
+  };
+
+  add(p.inApp,                   'In-App',             'bell',         'secondary');
+  add(p.email,                   'Email',              'envelope',     'secondary');
+  add(p.enableSoundAlerts,       'Sound',              'volume-up',    'secondary');
+  add(p.enableDesktopNotifications, 'Desktop',         'desktop',      'secondary');
+  add(p.showInventoryAlerts,     'Inventory Alerts',   'box',          'secondary');
+  add(p.showAiInsights,          'AI Insights',        'chart-line',   'secondary');
+  add(p.showSystemNotifications, 'System',             'cog',          'secondary');
+
+  return tags;
+});
 </script>
 
 <template>
@@ -200,10 +304,10 @@ function confirmDelete(user: User) {
           <Message v-else-if="error" severity="error">{{ error }}</Message>
 
           <!-- Users DataTable -->
-          <DataTable 
+          <DataTable
             v-else
-            :value="users" 
-            :paginator="true" 
+            :value="users"
+            :paginator="true"
             :rows="10"
             :rowHover="true"
             responsiveLayout="scroll"
@@ -233,12 +337,12 @@ function confirmDelete(user: User) {
                 <Tag :value="getRoleName(data.roleId)" :severity="getRoleSeverity(data.roleId)" />
               </template>
               <template #filter="{ filterModel, filterCallback }">
-                <Dropdown 
-                  v-model="filterModel.value" 
+                <Dropdown
+                  v-model="filterModel.value"
                   @change="filterCallback()"
-                  :options="roles" 
-                  optionLabel="roleName" 
-                  optionValue="roleId" 
+                  :options="roles"
+                  optionLabel="roleName"
+                  optionValue="roleId"
                   :placeholder="$t('users.select_role')"
                   class="p-column-filter"
                 />
@@ -266,21 +370,21 @@ function confirmDelete(user: User) {
             <!-- Actions column -->
             <Column :header="$t('common.actions')" :headerStyle="{ width: '10rem' }" bodyStyle="text-align:center">
               <template #body="{ data }">
-                <Button 
-                  icon="pi pi-pencil" 
-                  class="p-button-rounded p-button-text p-button-sm" 
+                <Button
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-text p-button-sm"
                   @click="editUser(data)"
                   :aria-label="$t('common.edit')"
                 />
-                <Button 
-                  icon="pi pi-eye" 
-                  class="p-button-rounded p-button-text p-button-info p-button-sm" 
+                <Button
+                  icon="pi pi-eye"
+                  class="p-button-rounded p-button-text p-button-info p-button-sm"
                   @click="viewUserDetails(data)"
                   :aria-label="$t('common.view')"
                 />
-                <Button 
-                  icon="pi pi-trash" 
-                  class="p-button-rounded p-button-text p-button-danger p-button-sm" 
+                <Button
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-text p-button-danger p-button-sm"
                   @click="confirmDelete(data)"
                   :aria-label="$t('common.delete')"
                 />
@@ -290,9 +394,9 @@ function confirmDelete(user: User) {
 
           <!-- Add new user button -->
           <div class="add-user-container">
-            <Button 
-              icon="pi pi-plus" 
-              :label="$t('users.add_user_button')" 
+            <Button
+              icon="pi pi-plus"
+              :label="$t('users.add_user_button')"
               @click="openNewUserDialog"
               class="p-button-primary"
             />
@@ -302,162 +406,115 @@ function confirmDelete(user: User) {
     </div>
 
     <!-- User Details Dialog -->
-    <Dialog 
-      v-model:visible="userDetailsDialog" 
-      :header="selectedUser ? selectedUser.userName : ''" 
-      :modal="true"
-      :closable="true"
-      :style="{ width: '500px' }"
+    <Dialog
+        v-model:visible="userDetailsDialog"
+        :header="$t('users.user_details')"
+        :modal="true"
+        :closable="true"
+        :style="{ width: '480px' }"
     >
-      <div v-if="selectedUser" class="user-details">
-        <div class="detail-row">
-          <div class="detail-label">{{ $t('users.username') }}:</div>
-          <div class="detail-value">{{ selectedUser.userName }}</div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">{{ $t('users.role') }}:</div>
-          <div class="detail-value">
-            <Tag :value="getRoleName(selectedUser.roleId)" :severity="getRoleSeverity(selectedUser.roleId)" />
-          </div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">{{ $t('users.theme') }}:</div>
-          <div class="detail-value">{{ formatTheme(selectedUser.settings.themePreference) }}</div>
+      <template v-if="selectedUser">
+        <div class="user-summary flex align-items-center justify-content-center mb-3">
+          <Avatar
+              :label="selectedUser.userName.charAt(0).toUpperCase()"
+              shape="circle"
+              size="large"
+              class="mr-2"
+          />
+          <h2 class="m-0 mr-2">{{ selectedUser.userName }}</h2>
+          <Tag
+              :value="getRoleName(selectedUser.roleId)"
+              :severity="getRoleSeverity(selectedUser.roleId)"
+          />
         </div>
 
-        <Divider />
+        <Divider class="mb-3"/>
 
-        <h3>{{ $t('users.notification_preferences') }}</h3>
-        <div class="notification-prefs">
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.in_app') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.inApp ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.email') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.email ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.frequency') }}:</div>
-            <div class="detail-value">{{ selectedUser.settings.notificationPreferences.frequency }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.inventory_alerts') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.showInventoryAlerts ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.ai_insights') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.showAiInsights ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.system_notifications') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.showSystemNotifications ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.sound_alerts') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.enableSoundAlerts ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.desktop_notifications') }}:</div>
-            <div class="detail-value">
-              <i :class="['pi', selectedUser.settings.notificationPreferences.enableDesktopNotifications ? 'pi-check-circle text-success' : 'pi-times-circle text-danger']"></i>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="detail-label">{{ $t('users.auto_hide') }}:</div>
-            <div class="detail-value">{{ selectedUser.settings.notificationPreferences.autoHideAfter }} {{ $t('users.minutes') }}</div>
-          </div>
+        <div class="simple-details">
+          <p>
+            <i class="pi pi-palette mr-1"/>
+            {{ $t('users.theme') }}:
+            <strong>{{ formatTheme(selectedUser.settings.themePreference) }}</strong>
+          </p>
+          <p>
+            <i class="pi pi-refresh mr-1"/>
+            {{ $t('users.inventory_refresh') }}:
+            <strong>{{ selectedUser.settings.inventoryRefreshIntervalSec }} s</strong>
+          </p>
         </div>
-      </div>
+
+        <Divider class="mb-2"/>
+
+        <h3 class="text-secondary mb-2">{{ $t('users.notifications') }}</h3>
+
+        <div v-if="notificationTags.length" class="notification-tags">
+          <Tag
+              v-for="tag in notificationTags"
+              :key="tag.label"
+              :icon="tag.icon"
+              :value="tag.label"
+              :severity="tag.severity"
+              rounded
+              class="mr-2 mb-2"
+          />
+        </div>
+        <Message
+            v-else
+            severity="info"
+            :closable="false"
+            class="mt-2"
+        >
+          {{ $t('users.no_notifications_enabled') }}
+        </Message>
+      </template>
     </Dialog>
 
-    <!-- Edit User Dialog -->
-    <Dialog 
-      v-model:visible="editUserDialog" 
-      :header="editingUser.userId ? $t('users.edit_user') : $t('users.add_user')" 
-      :modal="true"
-      :closable="true"
-      :style="{ width: '500px' }"
+    <!-- Edit / Create User dialog -->
+    <Dialog
+      v-model:visible="editUserDialog"
+      :header="editingUser.userId ? $t('users.edit_user') : $t('users.new_user')"
+      :style="{ width: '600px' }"
+      modal
     >
-      <div class="p-fluid">
-        <div class="field">
-          <label for="userName">{{ $t('users.username') }}</label>
-          <InputText id="userName" v-model="editingUser.userName" :class="{'p-invalid': submitted && !editingUser.userName}" />
-          <small v-if="submitted && !editingUser.userName" class="p-error">{{ $t('validation.required') }}</small>
+      <div class="edit-form">
+        <div class="field flex align-items-center gap-2">
+          <label for="username" class="font-medium w-7rem">
+            {{ $t('users.username') }}:
+          </label>
+          <InputText id="username" v-model="editingUser.userName" class="flex-auto" />
         </div>
 
-        <div class="field">
-          <label for="roleId">{{ $t('users.role') }}</label>
-          <Dropdown 
-            id="roleId" 
-            v-model="editingUser.roleId" 
-            :options="roles" 
-            optionLabel="roleName" 
-            optionValue="roleId" 
-            :class="{'p-invalid': submitted && !editingUser.roleId}"
-          />
-          <small v-if="submitted && !editingUser.roleId" class="p-error">{{ $t('validation.required') }}</small>
-        </div>
-
-        <div class="field">
-          <label for="themePreference">{{ $t('users.theme') }}</label>
-          <Dropdown 
-            id="themePreference" 
-            v-model="editingUser.settings.themePreference" 
-            :options="themeOptions" 
-            optionLabel="label" 
-            optionValue="value" 
+        <div class="field flex align-items-center gap-2">
+          <label for="role" class="font-medium w-7rem">
+            {{ $t('users.role') }}:
+          </label>
+          <Dropdown
+            id="role"
+            v-model="editingUser.roleId"
+            :options="roles"
+            optionLabel="roleName"
+            optionValue="roleId"
+            class="flex-auto"
           />
         </div>
 
-        <Divider />
-
-        <h3>{{ $t('users.notification_preferences') }}</h3>
-
-        <div class="field-checkbox">
-          <Checkbox 
-            id="inApp" 
-            v-model="editingUser.settings.notificationPreferences.inApp" 
-            :binary="true" 
-          />
-          <label for="inApp">{{ $t('users.in_app') }}</label>
-        </div>
-
-        <div class="field-checkbox">
-          <Checkbox 
-            id="email" 
-            v-model="editingUser.settings.notificationPreferences.email" 
-            :binary="true" 
-          />
-          <label for="email">{{ $t('users.email') }}</label>
-        </div>
-
-        <div class="field">
-          <label for="frequency">{{ $t('users.frequency') }}</label>
-          <Dropdown 
-            id="frequency" 
-            v-model="editingUser.settings.notificationPreferences.frequency" 
-            :options="frequencyOptions" 
-            optionLabel="label" 
-            optionValue="value" 
-          />
-        </div>
+        <!-- Any additional rows follow the same
+             “field flex … gap-2” pattern -->
       </div>
+
+      <!-- ── footer ─────────────────────────────────────── -->
       <template #footer>
-        <Button :label="$t('common.cancel')" icon="pi pi-times" class="p-button-text" @click="closeEditUserDialog" />
-        <Button :label="$t('common.save')" icon="pi pi-check" class="p-button-primary" @click="saveUser" />
+        <Button
+          :label="$t('common.cancel')"
+          class="p-button-secondary"
+          @click="cancelEdit"
+        />
+        <Button
+          :label="$t('common.save')"
+          icon="pi pi-check"
+          class="p-button-primary"
+          @click="submitUser"
+        />
       </template>
     </Dialog>
 
@@ -515,4 +572,20 @@ function confirmDelete(user: User) {
 
 /* No need for complex dialog or DataTable styling, Lara already covers paddings, modal look, etc. */
 
+/* Extra breathing room between rows if needed */
+.edit-form .field {
+  margin-bottom: 0.75rem;
+}
+
+.user-summary h2 {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+.simple-details p {
+  margin: 0 0 0.5rem;
+}
+.notification-tags {
+  display: flex;
+  flex-wrap: wrap;
+}
 </style>

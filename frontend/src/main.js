@@ -1,6 +1,7 @@
 import {createApp} from 'vue'
 import PrimeVue from 'primevue/config'
 import ConfirmationService from 'primevue/confirmationservice';
+import ConfirmDialog from "primevue/confirmdialog";
 import {createPinia} from 'pinia'
 import router from './router/index.js'
 
@@ -40,6 +41,7 @@ app.use(PrimeVue,
 app.use(i18n)
 app.use(router)
 app.use(ConfirmationService)
+app.component('ConfirmDialog', ConfirmDialog)
 
 // Global error handler
 app.config.errorHandler = (err, vm, info) => {

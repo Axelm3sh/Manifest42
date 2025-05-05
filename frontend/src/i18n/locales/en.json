@@ -80,6 +80,7 @@
     "system_health": "System Health",
     "last_backup": "Last Backup",
     "recent_activities": "Recent Activities",
+    "no_recent_activities": "No recent activities",
     "quick_actions": "Quick Actions",
     "kpi": {
       "users": "Total Users",
@@ -239,7 +240,11 @@
     "add_user_button": "Add User",
     "select_role": "Select Role",
     "delete_confirmation": "Delete user \"{username}\"?",
-    "minutes": "minutes"
+    "minutes": "minutes",
+    "user_details": "User Details",
+    "inventory_refresh": "Inventory Refresh Interval",
+    "no_notifications_enabled": "No notifications enabled for this user",
+    "new_user": "New User"
   },
   "analyst": {
     "dashboard_title": "Analyst Dashboard",
@@ -327,7 +332,8 @@
     "details_for": "Request #: {id}",
     "select_request": "Select a request on the left",
     "approve_btn": "Approve",
-    "reject_btn": "Reject"
+    "reject_btn": "Reject",
+    "history_for": "View history for request {id}"
   },
   "login": {
     "title": "Login to Manifest42",
