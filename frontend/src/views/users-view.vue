@@ -184,6 +184,32 @@ function cancelEdit() {
   // Object.assign(editingUser, { …initial values… });
 }
 
+function submitUser() {
+  submitted.value = true;
+
+  if (!editingUser.userName || !editingUser.roleId) {
+    return;
+  }
+
+  if (editingUser.userId) {
+    // Update existing user
+    const index = users.value.findIndex(u => u.userId === editingUser.userId);
+    if (index !== -1) {
+      users.value[index] = {...editingUser};
+    }
+  } else {
+    // Create new user
+    const newUser = {
+      ...editingUser,
+      userId: (users.value.length + 1).toString()
+    };
+    users.value.push(newUser);
+  }
+
+  editUserDialog.value = false;
+  submitted.value = false;
+}
+
 const notificationTags = computed(() => {
   if (!selectedUser.value) return [];
   const p = selectedUser.value.settings.notificationPreferences;
