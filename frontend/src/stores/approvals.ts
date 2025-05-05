@@ -97,7 +97,7 @@ export const useApprovalsStore = defineStore('approvals', () => {
 
         function scheduleNext() {
             setTimeout(() => {
-                const req = _fakeRequest()
+                const req = makeFakeRequest()
                 pending.value.unshift(req)
                 notif.addNotification({
                     message: `New approval request for ${req.item} (${req.urgency?.toUpperCase()})`,
@@ -120,7 +120,7 @@ export const useApprovalsStore = defineStore('approvals', () => {
 
     // Seed some mock data for dev
     for (let i = 0; i < 7; i++) {
-        pending.value.push(_fakeRequest(i))
+        pending.value.push(makeFakeRequest(i))
     }
 
     return {pending, history, pendingCount, approve, reject, startMockFeed}
