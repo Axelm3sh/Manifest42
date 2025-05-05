@@ -59,6 +59,9 @@
     "minutes_ago": "{count} minute(s) ago",
     "hours_ago": "{count} hour(s) ago",
     "days_ago": "{count} day(s) ago",
+    "in_minutes": "in {count} minute(s)",
+    "in_hours": "in {count} hour(s)",
+    "in_days": "in {count} day(s)",
     "date_format": "MMM d, yyyy",
     "date_time_format": "MMM d, yyyy h:mm a"
   },
@@ -94,7 +97,8 @@
       "manage_users": "Manage Users",
       "system_settings": "System Settings",
       "view_logs": "View Logs",
-      "backup_system": "Backup System"
+      "backup_system": "Backup System",
+      "manage_inventory": "Manage Inventory"
     }
   },
   "notifications": {
@@ -225,5 +229,244 @@
     "select_role": "Select Role",
     "delete_confirmation": "Delete user \"{username}\"?",
     "minutes": "minutes"
+  },
+  "analyst": {
+    "dashboard_title": "Analyst Dashboard",
+    "dashboard_description": "Analyze data, create simulations, and generate reports",
+    "welcome": "Welcome, {name}",
+    "quick_actions": "Quick Actions",
+    "actions": {
+      "create_simulation": "Create Simulation",
+      "generate_report": "Generate Report",
+      "analyze_trends": "Analyze Trends",
+      "view_inventory": "View Inventory"
+    },
+    "recent_simulations": "Recent Simulations",
+    "new_simulation": "New Simulation",
+    "no_recent_simulations": "No recent simulations",
+    "view_all_simulations": "View All Simulations",
+    "recent_reports": "Recent Reports",
+    "new_report": "New Report",
+    "no_recent_reports": "No recent reports",
+    "view_all_reports": "View All Reports",
+    "status": {
+      "completed": "Completed",
+      "in_progress": "In Progress",
+      "scheduled": "Scheduled",
+      "failed": "Failed"
+    },
+    "kpi": {
+      "active_simulations": "Active Simulations",
+      "completed_reports": "Completed Reports",
+      "data_accuracy": "Data Accuracy",
+      "predictions_generated": "Predictions Generated"
+    }
+  },
+  "manager": {
+    "dashboard_title": "Manager Dashboard",
+    "dashboard_description": "Manage team performance, approvals, and inventory",
+    "welcome": "Welcome, {name}",
+    "quick_actions": "Quick Actions",
+    "actions": {
+      "view_inventory": "View Inventory",
+      "manage_approvals": "Manage Approvals",
+      "view_reports": "View Reports"
+    },
+    "pending_approvals": "Pending Approvals",
+    "no_pending_approvals": "No pending approvals",
+    "view_all_approvals": "View All Approvals",
+    "team_performance": "Team Performance",
+    "avg_performance": "Average Performance",
+    "team_members": "Team Members",
+    "online_now": "Online Now",
+    "priority": {
+      "high": "High Priority",
+      "medium": "Medium Priority",
+      "low": "Low Priority"
+    },
+    "kpi": {
+      "pending_approvals": "Pending Approvals",
+      "inventory_alerts": "Inventory Alerts",
+      "team_performance": "Team Performance",
+      "cost_savings": "Cost Savings"
+    }
+  },
+  "approvals": {
+    "title": "Approvals",
+    "description": "Review and manage pending approval requests",
+    "pending_approvals": "Pending Approvals",
+    "requester": "Requested By",
+    "item_id": "Item ID",
+    "qty": "Quantity",
+    "reason": "Reason",
+    "urgency": "Urgency",
+    "urgency_high": "High",
+    "urgency_medium": "Medium",
+    "urgency_low": "Low"
+  },
+  "login": {
+    "title": "Login to Manifest42",
+    "subtitle": "Enter your credentials to access the dashboard",
+    "username": "Username",
+    "username_placeholder": "Enter your username",
+    "password": "Password",
+    "password_placeholder": "Enter your password",
+    "show_password": "Show password",
+    "hide_password": "Hide password",
+    "show": "Show",
+    "hide": "Hide",
+    "login": "Login",
+    "logging_in": "Logging in...",
+    "demo_title": "Demo Accounts",
+    "admin_role": "Admin",
+    "manager_role": "Manager",
+    "analyst_role": "Analyst",
+    "logistics_role": "Logistics",
+    "error_username_required": "Username is required",
+    "error_password_required": "Password is required",
+    "error_required_fields": "Please fill in all required fields",
+    "error_invalid_credentials": "Invalid username or password",
+    "error_unknown": "An unknown error occurred"
+  },
+  "logistics": {
+    "dashboard_title": "Logistics Dashboard",
+    "dashboard_description": "Manage shipments, deliveries, and inventory movements",
+    "welcome": "Welcome, {name}",
+    "quick_actions": "Quick Actions",
+    "actions": {
+      "create_shipment": "Create Shipment",
+      "schedule_delivery": "Schedule Delivery",
+      "inventory_count": "Inventory Count",
+      "generate_report": "Generate Report"
+    },
+    "recent_shipments": "Recent Shipments",
+    "new_shipment": "New Shipment",
+    "no_recent_shipments": "No recent shipments",
+    "view_all_shipments": "View All Shipments",
+    "inventory_alerts": "Inventory Alerts",
+    "no_inventory_alerts": "No inventory alerts",
+    "view_all_alerts": "View All Alerts",
+    "items_count": "{count} items",
+    "delivered": "Delivered",
+    "estimated_delivery": "Estimated Delivery",
+    "restock": "Restock",
+    "adjust_levels": "Adjust Levels",
+    "status": {
+      "delivered": "Delivered",
+      "in_transit": "In Transit",
+      "processing": "Processing",
+      "scheduled": "Scheduled"
+    },
+    "priority": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "alert_level": {
+      "critical": "Critical",
+      "warning": "Warning",
+      "info": "Info"
+    },
+    "kpi": {
+      "pending_shipments": "Pending Shipments",
+      "in_transit": "In Transit",
+      "delivered_today": "Delivered Today",
+      "stockout_risk": "Stockout Risk"
+    }
+  },
+  "reports": {
+    "title": "Reports",
+    "description": "View and generate inventory and performance reports"
+  },
+  "shipping": {
+    "title": "Shipping",
+    "description": "Manage shipping routes and delivery schedules"
+  },
+  "tracking": {
+    "title": "Tracking",
+    "description": "Track shipments and inventory movements"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "description": "Analyze inventory data and performance metrics"
+  },
+  "simulations": {
+    "title": "Simulations",
+    "description": "Run inventory simulations and forecast scenarios"
+  },
+  "not_found": {
+    "title": "404 - Page Not Found",
+    "message": "The page you are looking for does not exist.",
+    "return_home": "Return to Home"
+  },
+  "inventory": {
+    "title": "Inventory Dashboard",
+    "overview": "Overview",
+    "items": "Items",
+    "warehouses": "Warehouses",
+    "stock_alerts": "Stock Alerts",
+    "settings": "Settings",
+    "refresh": "Refresh Data",
+    "never_updated": "Never updated",
+    "restock_initiated": "Restock initiated for item {itemId}, urgent: {urgent}",
+    "yes": "Yes",
+    "no": "No",
+    "low_stock_items": "Low Stock Items",
+    "product": "Product",
+    "category": "Category",
+    "stock_level": "Stock Level",
+    "reorder_point": "Reorder Point",
+    "unit_price": "Unit Price",
+    "warehouse": "Warehouse",
+    "actions": "Actions",
+    "restock": "Restock",
+    "no_low_stock_items": "No low stock items",
+    "out_of_stock_items": "Out of Stock Items",
+    "last_activity": "Last Activity",
+    "restock_urgent": "Urgent Restock",
+    "no_out_of_stock_items": "No out of stock items",
+    "all_items": "All Items",
+    "total_value": "Total Value",
+    "value_by_category": "Value by Category",
+    "warehouse_utilization": "Warehouse Utilization",
+    "recent_activity": "Recent Activity",
+    "stock_level_summary": "Stock Level Summary",
+    "normal_stock": "Normal Stock",
+    "low_stock": "Low Stock",
+    "out_of_stock": "Out of Stock",
+    "location": "Location",
+    "total_capacity": "Total Capacity",
+    "current_capacity": "Current Capacity",
+    "utilization_rate": "Utilization Rate",
+    "capacity_usage": "Capacity Usage",
+    "total_items": "Total Items",
+    "inventory_turnover": "Inventory Turnover",
+    "real_time_settings": "Real-time Settings",
+    "real_time_updates": "Real-time Updates",
+    "refresh_interval": "Refresh Interval",
+    "last_updated": "Last Updated"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "refresh": "Refresh",
+    "settings": "Settings",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "submit": "Submit",
+    "reset": "Reset",
+    "actions": "Actions",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "placeholder_content": "Content coming soon..."
   }
 }
