@@ -33,7 +33,8 @@
     "actions": "Actions",
     "confirm": "Confirm",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "id": "ID"
   },
   "data_list": {
     "filter": "Filter",
@@ -52,7 +53,11 @@
     "analytics": "Analytics",
     "simulations": "Simulations",
     "shipping": "Shipping",
-    "tracking": "Tracking"
+    "tracking": "Tracking",
+    "collapse_sidebar": "Collapse sidebar",
+    "expand_sidebar": "Expand sidebar",
+    "unknown_user": "Unknown User",
+    "logout": "Logout"
   },
   "time": {
     "just_now": "Just now",
@@ -135,6 +140,12 @@
   },
   "accessibility": {
     "dot_matrix_background": "Interactive dot matrix background."
+  },
+  "roles": {
+    "admin": "Administrator",
+    "manager": "Manager",
+    "analyst": "Analyst",
+    "logistics": "Logistics Specialist"
   },
   "ai_insights": {
     "title": "AI Insights",
@@ -253,7 +264,8 @@
       "completed": "Completed",
       "in_progress": "In Progress",
       "scheduled": "Scheduled",
-      "failed": "Failed"
+      "failed": "Failed",
+      "pending": "Pending"
     },
     "kpi": {
       "active_simulations": "Active Simulations",
@@ -302,7 +314,16 @@
     "urgency": "Urgency",
     "urgency_high": "High",
     "urgency_medium": "Medium",
-    "urgency_low": "Low"
+    "urgency_low": "Low",
+    "time": "Time",
+    "actions": "Actions",
+    "confirm_reject": "Are you sure you want to reject this approval request?",
+    "approval_history": "Approval History",
+    "status": "Status",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "pending": "Pending",
+    "decisions": "Decisions"
   },
   "login": {
     "title": "Login to Manifest42",
@@ -355,7 +376,10 @@
       "delivered": "Delivered",
       "in_transit": "In Transit",
       "processing": "Processing",
-      "scheduled": "Scheduled"
+      "scheduled": "Scheduled",
+      "pending": "Pending",
+      "on_time": "On Time",
+      "delayed": "Delayed"
     },
     "priority": {
       "high": "High",
@@ -393,6 +417,67 @@
   "simulations": {
     "title": "Simulations",
     "description": "Run inventory simulations and forecast scenarios"
+  },
+  "simulation": {
+    "title": "Simulation",
+    "parameters": "Parameters",
+    "results": "Results",
+    "history": "History",
+    "scenarios": "Scenarios",
+    "comparison": "Comparison",
+    "current_scenario": "Current Scenario",
+    "select_scenario": "Select a scenario",
+    "add_to_comparison": "Add to Comparison",
+    "exit_comparison": "Exit Comparison",
+    "compare": "Compare",
+    "save_scenario": "Save Scenario",
+    "scenario_name": "Scenario Name",
+    "enter_scenario_name": "Enter scenario name",
+    "save": "Save",
+    "cancel": "Cancel",
+    "simulation_parameters": "Simulation Parameters",
+    "demand_variability": "Demand Variability",
+    "lead_time": "Lead Time",
+    "days": "days",
+    "reorder_point": "Reorder Point",
+    "units": "units",
+    "order_quantity": "Order Quantity",
+    "initial_stock": "Initial Stock",
+    "simulation_duration": "Simulation Duration",
+    "seasonality_enabled": "Seasonality Enabled",
+    "external_factors_enabled": "External Factors Enabled",
+    "running": "Running...",
+    "run_simulation": "Run Simulation",
+    "reset_to_defaults": "Reset to Defaults",
+    "stock_level": "Stock Level",
+    "demand": "Demand",
+    "no_results": "No results available",
+    "simulation_summary": "Simulation Summary",
+    "average_stock_level": "Average Stock Level",
+    "total_demand": "Total Demand",
+    "total_orders": "Total Orders",
+    "stockout_days": "Stockout Days",
+    "service_level": "Service Level",
+    "inventory_turnover": "Inventory Turnover",
+    "average_order_cycle": "Average Order Cycle",
+    "stock_level_over_time": "Stock Level Over Time",
+    "demand_over_time": "Demand Over Time",
+    "avg_stock": "Avg. Stock",
+    "turnover": "Turnover",
+    "stockouts": "Stockouts",
+    "scenario_comparison": "Scenario Comparison",
+    "clear_comparison": "Clear Comparison",
+    "remove": "Remove",
+    "metric": "Metric",
+    "simulation_history": "Simulation History",
+    "no_history": "No history available",
+    "timestamp": "Timestamp",
+    "saved_scenarios": "Saved Scenarios",
+    "no_scenarios": "No saved scenarios",
+    "load": "Load",
+    "delete": "Delete",
+    "confirm_reset_parameters": "Are you sure you want to reset all parameters to defaults?",
+    "confirm_delete_scenario": "Are you sure you want to delete this scenario?"
   },
   "not_found": {
     "title": "404 - Page Not Found",
