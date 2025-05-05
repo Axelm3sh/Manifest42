@@ -323,7 +323,11 @@
     "approved": "Approved",
     "rejected": "Rejected",
     "pending": "Pending",
-    "decisions": "Decisions"
+    "decisions": "Decisions",
+    "details_for": "Request #: {id}",
+    "select_request": "Select a request on the left",
+    "approve_btn": "Approve",
+    "reject_btn": "Reject"
   },
   "login": {
     "title": "Login to Manifest42",
