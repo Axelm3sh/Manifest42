@@ -9,22 +9,35 @@ import ConfirmDialog from 'primevue/confirmdialog'
 import {useConfirm} from 'primevue/useconfirm'
 import {useApprovalsStore} from '@/stores/approvals'
 
-const {t} = useI18n()
+const { t } = useI18n()
 const store = useApprovalsStore()
 const confirm = useConfirm()
 
 onMounted(() => store.startMockFeed())
 
+/** Normalize any casing → mapped PrimeVue tag config */
+function statusTag(raw: string) {
+  const s = raw.toLowerCase()
+  switch (s) {
+    case 'approved':
+      return { severity: 'success', label: t('approvals.approved') }
+    case 'rejected':
+      return { severity: 'danger', label: t('approvals.rejected') }
+    default:
+      return { severity: 'warning', label: t(`approvals.${s}`) }
+  }
+}
+
 function urgencyTag(urgency?: string) {
   switch (urgency) {
     case 'high':
-      return {severity: 'danger', label: t('approvals.urgency_high')}
+      return { severity: 'danger', label: t('approvals.urgency_high') }
     case 'medium':
-      return {severity: 'warning', label: t('approvals.urgency_medium')}
+      return { severity: 'warning', label: t('approvals.urgency_medium') }
     case 'low':
-      return {severity: 'info', label: t('approvals.urgency_low')}
+      return { severity: 'info', label: t('approvals.urgency_low') }
     default:
-      return {severity: 'secondary', label: '-'}
+      return { severity: 'secondary', label: '-' }
   }
 }
 </script>
@@ -110,18 +123,24 @@ function urgencyTag(urgency?: string) {
     </Column>
     <Column field="status" :header="t('approvals.status')" style="width:8rem">
       <template #body="{ data }">
-        <Tag :severity="data.status === 'Approved' ? 'success' : data.status === 'Rejected' ? 'danger' : 'warning'"
-             :value="t(`approvals.${data.status.toLowerCase()}`)"/>
+        <Tag
+          :severity="statusTag(data.status).severity"
+          :value="statusTag(data.status).label"
+        />
       </template>
     </Column>
     <Column field="approvals" :header="t('approvals.decisions')" style="width:15rem">
       <template #body="{ data }">
         <ul class="p-0 m-0" style="list-style:none;">
           <li v-for="decision in data.approvals" :key="decision.id">
-            <Tag :severity="decision.status === 'Approved' ? 'success' : 'danger'" :value="decision.status"/>
-            <span class="ml-1">{{
-                decision.role
-              }} {{ decision.decisionAt && '(' + new Date(decision.decisionAt).toLocaleTimeString() + ')' }}</span>
+            <Tag
+              :severity="statusTag(decision.status).severity"
+              :value="statusTag(decision.status).label"
+            />
+            <span class="ml-1">
+              {{ decision.role }}
+              {{ decision.decisionAt ? '(' + new Date(decision.decisionAt).toLocaleTimeString() + ')' : '' }}
+            </span>
           </li>
         </ul>
       </template>
