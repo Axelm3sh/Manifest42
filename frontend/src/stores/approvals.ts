@@ -75,7 +75,24 @@ export const useApprovalsStore = defineStore('approvals', () => {
     function _move(id: string, newStatus: 'approved' | 'rejected') {
         const idx = pending.value.findIndex(r => r.id === id)
         if (idx === -1) return
-        const req = {...pending.value[idx], status: newStatus}
+
+        const old = pending.value[idx]
+
+        const managerDecision: Approval = {
+            id: `APP-${crypto.randomUUID()}` as ApprovalId,
+            restockRequestId: old.id as RestockRequestId,
+            approverId: 'user-1' as UserId,      // or pull from auth store
+            role: 'Manager',
+            status: newStatus,
+            decisionAt: new Date().toISOString() as ISODateString
+        }
+
+        const req: ApprovalRequest = {
+            ...old,
+            status: newStatus,
+            approvals: [...old.approvals, managerDecision]
+        }
+
         pending.value.splice(idx, 1)
         history.value.unshift(req)
     }
