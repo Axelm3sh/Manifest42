@@ -10,7 +10,7 @@
       @blur="isFocused = false"
       tabindex="-1"
       role="application"
-      aria-label="Interactive dot matrix background."
+      :aria-label="t('accessibility.dot_matrix_background')"
   >
     <canvas ref="canvasRef" class="dot-matrix-canvas"></canvas>
   </div>
@@ -18,6 +18,10 @@
 
 <script setup>
 import {computed, onMounted, onUnmounted, ref, watch} from 'vue';
+import {useI18n} from 'vue-i18n';
+
+// Initialize i18n
+const { t } = useI18n();
 
 // Props
 const props = defineProps({

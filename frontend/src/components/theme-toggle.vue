@@ -1,5 +1,9 @@
 <script setup>
 import {computed, onMounted, onUnmounted, ref, watch} from 'vue';
+import {useI18n} from 'vue-i18n';
+
+// Initialize i18n
+const { t } = useI18n();
 
 // Determine initial theme: saved or system preference
 const saved = localStorage.getItem('theme');
@@ -39,7 +43,7 @@ onUnmounted(() => {
 
 // Computed helpers for labels and icon classes
 const isDark = computed(() => currentTheme.value === 'dark');
-const ariaLabel = computed(() => isDark.value ? 'Switch to light theme' : 'Switch to dark theme');
+const ariaLabel = computed(() => isDark.value ? t('theme.switch_to_light') : t('theme.switch_to_dark'));
 </script>
 
 <template>
@@ -51,7 +55,7 @@ const ariaLabel = computed(() => isDark.value ? 'Switch to light theme' : 'Switc
   >
     <!-- PrimeIcons sun/moon -->
     <i :class="['pi', isDark ? 'pi-sun' : 'pi-moon']" aria-hidden="true" />
-    <span class="theme-label">{{ isDark ? 'Light Mode' : 'Dark Mode' }}</span>
+    <span class="theme-label">{{ isDark ? t('theme.light_mode') : t('theme.dark_mode') }}</span>
   </button>
 </template>
 

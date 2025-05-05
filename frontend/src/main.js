@@ -1,5 +1,6 @@
 import {createApp} from 'vue'
 import PrimeVue from 'primevue/config'
+import ConfirmationService from 'primevue/confirmationservice';
 import {createPinia} from 'pinia'
 import router from './router/index.js'
 
@@ -38,6 +39,7 @@ app.use(PrimeVue,
 // app.use(PhosphorVue)
 app.use(i18n)
 app.use(router)
+app.use(ConfirmationService)
 
 // Global error handler
 app.config.errorHandler = (err, vm, info) => {

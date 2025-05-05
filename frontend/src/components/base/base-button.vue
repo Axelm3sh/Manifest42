@@ -1,6 +1,5 @@
 <script setup>
 import {computed} from 'vue';
-import Button from 'primevue/button';
 
 const props = defineProps({
   variant: {
@@ -31,55 +30,107 @@ const handleClick = (event) => {
   }
 };
 
-// Map our variant to PrimeVue severity
-const severity = computed(() => {
-  const variantMap = {
-    'default': null,
-    'primary': 'primary',
-    'danger': 'danger',
-    'success': 'success',
-    'warning': 'warning'
-  };
-  return variantMap[props.variant];
-});
-
-// Map our size to PrimeVue size
-const buttonSize = computed(() => {
-  const sizeMap = {
-    'small': 'small',
-    'medium': null, // Default size
-    'large': 'large'
-  };
-  return sizeMap[props.size];
-});
-
-// Tailwind classes for the button
 const buttonClasses = computed(() => {
   return {
+    'base-button': true,
+    [`variant-${props.variant}`]: true,
+    [`size-${props.size}`]: true,
+    'disabled': props.disabled,
     'active': props.active
   };
 });
 </script>
 
 <template>
-  <Button 
-    :severity="severity"
-    :size="buttonSize"
+  <button 
+    :class="buttonClasses" 
     :disabled="disabled"
-    :class="[
-      'transition-colors duration-200',
-      props.active ? 'ring-2 ring-primary-light' : '',
-      props.variant === 'default' ? 'bg-surface border-border text-text hover:bg-surface-hover' : ''
-    ]"
     @click="handleClick"
-    :pt="{
-      root: { class: 'font-medium' }
-    }"
   >
     <slot></slot>
-  </Button>
+  </button>
 </template>
 
-<style>
-/* No scoped styles needed - using TailwindCSS and PrimeVue styling */
+<style scoped>
+.base-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-md);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.base-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Variants */
+.variant-default {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+.variant-default:hover:not(.disabled),
+.variant-default.active {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.variant-primary {
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-primary-dark);
+  color: var(--color-button-text);
+}
+.variant-primary:hover:not(.disabled) {
+  background-color: var(--color-primary-hover);
+}
+.variant-primary.active {
+  background-color: var(--color-primary-dark);
+}
+
+.variant-danger {
+  background-color: var(--color-danger);
+  border: 1px solid var(--color-danger-dark);
+  color: var(--color-button-text);
+}
+.variant-danger:hover:not(.disabled) {
+  background-color: var(--color-danger-dark);
+}
+
+.variant-success {
+  background-color: var(--color-success);
+  border: 1px solid var(--color-success-dark);
+  color: var(--color-button-text);
+}
+.variant-success:hover:not(.disabled) {
+  background-color: var(--color-success-dark);
+}
+
+.variant-warning {
+  background-color: var(--color-warning);
+  border: 1px solid var(--color-warning-dark);
+  color: var(--color-button-text);
+}
+.variant-warning:hover:not(.disabled) {
+  background-color: var(--color-warning-dark);
+}
+
+/* Sizes */
+.size-small {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+}
+
+.size-medium {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
+.size-large {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-size-md);
+}
 </style>

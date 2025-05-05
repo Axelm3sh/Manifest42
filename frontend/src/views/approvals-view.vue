@@ -1,51 +1,180 @@
-<template>
-  <div class="approvals-view">
-    <h1>{{ $t('approvals.title') }}</h1>
-    <p>{{ $t('approvals.description') }}</p>
+<script setup lang="ts">
+import {onMounted} from 'vue'
+import {useI18n} from 'vue-i18n'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import Button from 'primevue/button'
+import Tag from 'primevue/tag'
+import ConfirmDialog from 'primevue/confirmdialog'
+import {useConfirm} from 'primevue/useconfirm'
+import {useApprovalsStore} from '@/stores/approvals'
 
-    <div class="implementation-notice">
-      <h3>{{ $t('common.component_not_implemented') }}</h3>
-      <p>{{ $t('common.implementation_notice') }}</p>
-      <ul>
-        <li>{{ $t('approvals.pending_approvals') }}</li>
-        <li>{{ $t('approvals.approval_history') }}</li>
-        <li>{{ $t('approvals.approval_actions') }}</li>
-      </ul>
-    </div>
-  </div>
-</template>
+const {t} = useI18n()
+const store = useApprovalsStore()
+const confirm = useConfirm()
 
-<script setup>
-import {useI18n} from 'vue-i18n';
+onMounted(() => store.startMockFeed())
 
-const { t } = useI18n();
+function urgencyTag(urgency?: string) {
+  switch (urgency) {
+    case 'high':
+      return {severity: 'danger', label: t('approvals.urgency_high')}
+    case 'medium':
+      return {severity: 'warning', label: t('approvals.urgency_medium')}
+    case 'low':
+      return {severity: 'info', label: t('approvals.urgency_low')}
+    default:
+      return {severity: 'secondary', label: '-'}
+  }
+}
 </script>
 
+<template>
+  <h1 class="mb-2">{{ t('approvals.title') }}</h1>
+  <p class="mb-4">{{ t('approvals.description') }}</p>
+
+  <!-- PENDING LIST -->
+  <h3 class="mb-3">
+    {{ t('approvals.pending_approvals') }}
+    <Tag severity="warning" :value="store.pendingCount" class="ml-2"/>
+  </h3>
+
+  <!-- Pending table – scroll on desktop, stack on mobile -->
+  <DataTable :value="store.pending"
+             dataKey="id"
+             class="mb-6 approvals-table"
+             :scrollable="true"
+             scrollHeight="300px"
+             responsiveLayout="stack">
+    <Column field="id" :header="t('common.id')" style="width:10rem"/>
+    <Column field="requestedBy" :header="t('approvals.requester')"/>
+    <Column field="itemId" :header="t('approvals.item_id')"/>
+    <Column field="quantityRequested" :header="t('approvals.qty')" style="width:6rem"/>
+    <Column field="reason"
+            :header="t('approvals.reason')"
+            style="width:25%"/>
+    <Column field="urgency" :header="t('approvals.urgency')" style="width:8rem">
+      <template #body="{ data }">
+        <Tag :severity="urgencyTag(data.urgency).severity" :value="urgencyTag(data.urgency).label"/>
+      </template>
+    </Column>
+    <Column field="createdAt" :header="t('approvals.time')" style="width:7rem">
+      <template #body="{ data }">
+        {{ new Date(data.createdAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }}
+      </template>
+    </Column>
+    <Column :header="t('approvals.actions')" style="width:11rem">
+      <template #body="{ data }">
+        <Button size="small" severity="success" icon="pi pi-check"
+                @click="store.approve(data.id)"/>
+        <Button
+            size="small"
+            severity="danger"
+            icon="pi pi-times"
+            class="ml-2"
+            @click="confirm.require({
+            message: t('approvals.confirm_reject'),
+            accept: () => store.reject(data.id),
+            acceptLabel: t('common.yes'),
+            rejectLabel: t('common.no'),
+            acceptClass: 'p-button-danger', // Red for reject
+            rejectClass: 'p-button-secondary' // Grey (or 'p-button-success' for green, but here secondary is clearer)
+          })"
+        />
+      </template>
+    </Column>
+  </DataTable>
+
+  <!-- HISTORY -->
+  <h3 class="mb-3">{{ t('approvals.approval_history') }}</h3>
+  <DataTable :value="store.history"
+             dataKey="id"
+             class="approvals-table"
+             :scrollable="true"
+             scrollHeight="250px"
+             responsiveLayout="stack">
+    <Column field="id" :header="t('common.id')" style="width:10rem"/>
+    <Column field="requestedBy" :header="t('approvals.requester')"/>
+    <Column field="itemId" :header="t('approvals.item_id')"/>
+    <Column field="quantityRequested" :header="t('approvals.qty')" style="width:6rem"/>
+    <Column field="reason" :header="t('approvals.reason')" style="width:15rem"/>
+    <Column field="urgency" :header="t('approvals.urgency')" style="width:8rem">
+      <template #body="{ data }">
+        <Tag :severity="urgencyTag(data.urgency).severity" :value="urgencyTag(data.urgency).label"/>
+      </template>
+    </Column>
+    <Column field="createdAt" :header="t('approvals.time')" style="width:7rem">
+      <template #body="{ data }">
+        {{ new Date(data.createdAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }}
+      </template>
+    </Column>
+    <Column field="status" :header="t('approvals.status')" style="width:8rem">
+      <template #body="{ data }">
+        <Tag :severity="data.status === 'Approved' ? 'success' : data.status === 'Rejected' ? 'danger' : 'warning'"
+             :value="t(`approvals.${data.status.toLowerCase()}`)"/>
+      </template>
+    </Column>
+    <Column field="approvals" :header="t('approvals.decisions')" style="width:15rem">
+      <template #body="{ data }">
+        <ul class="p-0 m-0" style="list-style:none;">
+          <li v-for="decision in data.approvals" :key="decision.id">
+            <Tag :severity="decision.status === 'Approved' ? 'success' : 'danger'" :value="decision.status"/>
+            <span class="ml-1">{{
+                decision.role
+              }} {{ decision.decisionAt && '(' + new Date(decision.decisionAt).toLocaleTimeString() + ')' }}</span>
+          </li>
+        </ul>
+      </template>
+    </Column>
+  </DataTable>
+
+  <ConfirmDialog></ConfirmDialog>
+</template>
+
 <style scoped>
-.approvals-view {
-  padding: var(--spacing-lg);
+h3 {
+  font-weight: 600;
 }
 
-.implementation-notice {
-  margin-top: var(--spacing-xl);
-  padding: var(--spacing-lg);
-  background-color: var(--color-surface);
-  border-radius: var(--border-radius-md);
-  border: var(--border-width-thin) solid var(--color-border);
-  border-left: 4px solid var(--color-warning);
+/* Add a little compactness for reason/decision lists */
+ul {
+  padding: 0;
+  margin: 0;
 }
 
-.implementation-notice h3 {
-  margin-top: 0;
-  color: var(--color-warning-dark);
+li {
+  margin-bottom: 0.2em;
 }
 
-.implementation-notice ul {
-  margin-top: var(--spacing-md);
-  padding-left: var(--spacing-lg);
-}
+/* ----------  mobile tweaks  ---------- */
+@media (max-width: 768px) {
+  .approvals-table :deep(.p-datatable-scrollable-body) {
+    /* let the body decide its own height on phones */
+    max-height: 70vh;
+  }
 
-.implementation-notice li {
-  margin-bottom: var(--spacing-sm);
+  /* each stacked row becomes a card‑like block with a light border */
+  .approvals-table :deep(.p-datatable-tt) {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-surface);
+  }
+
+  /* column headers inside stacked cards – bold & tiny */
+  .approvals-table :deep(.p-column-title) {
+    font-weight: 600;
+    font-size: var(--font-size-xs);
+    margin-right: 0.5rem;
+    color: var(--color-text-secondary);
+  }
+
+  /* action buttons wrap nicely */
+  .approvals-table :deep(td:last-child) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
 }
 </style>

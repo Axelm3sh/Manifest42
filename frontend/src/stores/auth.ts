@@ -117,7 +117,7 @@ export const useAuthStore = defineStore('auth', {
               showSystemNotifications: true,
               enableSoundAlerts: false,
               enableDesktopNotifications: false,
-              autoHideAfter: 5
+              autoHideAfter: 10
             },
             inventoryRefreshIntervalSec: 60,
             themePreference: 'system'

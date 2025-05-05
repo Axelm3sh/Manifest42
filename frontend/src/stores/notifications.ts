@@ -26,7 +26,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
     showSystemNotifications: true,
     enableSoundAlerts: false,
     enableDesktopNotifications: false,
-    autoHideAfter: 5 // minutes, 0 means never
+    autoHideAfter: 0 // minutes, 0 means never
   });
   const unreadCount = ref(0);
   const isNotificationCenterOpen = ref(false);
@@ -155,13 +155,16 @@ export const useNotificationsStore = defineStore('notifications', () => {
     return note.id;
   }
 
-  function dismissNotification(id) {
-    const index = notifications.value.findIndex(n => n.id === id);
-    if (index !== -1) {
-      if (!notifications.value[index].isRead) {
-        unreadCount.value--;
+  /** Remove a single notification (and keep `unreadCount` in sync) */
+  function dismissNotification(id: NotificationId) {
+    // find the notification so we can adjust unreadCount correctly
+    const notif = notifications.value.find(n => n.id === id)
+    if (notif) {
+      if (!notif.isRead && unreadCount.value > 0) {
+        unreadCount.value--
       }
-      notifications.value.splice(index, 1);
+      // remove *only* the matching id from the array
+      notifications.value = notifications.value.filter(n => n.id !== id)
     }
   }
 
