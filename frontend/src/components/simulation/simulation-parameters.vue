@@ -165,18 +165,21 @@ const resetToDefaults = () => {
         @click="runSimulation" 
         :disabled="isRunning"
       >
+        <i class="pi" :class="isRunning ? 'pi-spinner pi-spin' : 'pi-play'"></i>
         {{ isRunning ? t('simulation.running') : t('simulation.run_simulation') }}
       </BaseButton>
       <BaseButton 
         variant="default" 
         @click="resetToDefaults"
       >
+        <i class="pi pi-refresh"></i>
         {{ t('simulation.reset_to_defaults') }}
       </BaseButton>
     </div>
 
     <div v-if="error" class="error-message">
-      {{ error }}
+      <i class="pi pi-exclamation-triangle"></i>
+      <span>{{ error }}</span>
     </div>
   </BaseCard>
 </template>
@@ -230,5 +233,13 @@ const resetToDefaults = () => {
   color: #b91c1c;
   border-radius: 0.25rem;
   font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-message .pi {
+  font-size: 1rem;
+  color: #dc2626;
 }
 </style>
