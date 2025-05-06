@@ -56,10 +56,15 @@ const buttonClasses = computed(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   border-radius: var(--border-radius-md);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.base-button .pi {
+  font-size: 1rem;
 }
 
 .base-button.disabled {

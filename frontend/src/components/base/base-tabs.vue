@@ -6,7 +6,11 @@ const props = defineProps({
     type: Array,
     required: true,
     validator: (value) => {
-      return value.every(tab => typeof tab.id === 'string' && typeof tab.label === 'string');
+      return value.every(tab => 
+        typeof tab.id === 'string' && 
+        typeof tab.label === 'string' && 
+        (tab.icon === undefined || typeof tab.icon === 'string')
+      );
     }
   },
   modelValue: {
@@ -51,7 +55,8 @@ const setActiveTab = (tabId) => {
         }"
         :disabled="disabled"
       >
-        {{ tab.label }}
+        <i v-if="tab.icon" class="pi" :class="tab.icon"></i>
+        <span>{{ tab.label }}</span>
       </button>
     </div>
     <div class="tab-content">
@@ -74,6 +79,9 @@ const setActiveTab = (tabId) => {
 }
 
 .tab-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.75rem 1rem;
   background: none;
   border: none;
@@ -83,6 +91,10 @@ const setActiveTab = (tabId) => {
   color: #6b7280;
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
+}
+
+.tab-button .pi {
+  font-size: 1rem;
 }
 
 .tab-button:hover:not(.disabled) {
