@@ -57,8 +57,8 @@ const renderStockLevelChart = () => {
   // In a real app, this would use a charting library like Chart.js
   // For now, we'll create a simple SVG chart
   const data = props.stockLevelsData;
-  const width = 600;
-  const height = 200;
+  const width = 800;
+  const height = 300;
   const padding = 40;
 
   const maxStock = Math.max(...data.map(d => d.stockLevel));
@@ -75,7 +75,7 @@ const renderStockLevelChart = () => {
     <svg width="${width}" height="${height}" class="chart">
       <polyline
         fill="none"
-        stroke="#3b82f6"
+        stroke="var(--color-info)"
         stroke-width="2"
         points="${points}"
       />
@@ -86,7 +86,7 @@ const renderStockLevelChart = () => {
         y1="${height - padding}"
         x2="${width - padding}"
         y2="${height - padding}"
-        stroke="#9ca3af"
+        stroke="var(--color-border)"
       />
 
       <!-- Y-axis -->
@@ -95,7 +95,7 @@ const renderStockLevelChart = () => {
         y1="${padding}"
         x2="${padding}"
         y2="${height - padding}"
-        stroke="#9ca3af"
+        stroke="var(--color-border)"
       />
 
       <!-- X-axis label -->
@@ -103,7 +103,8 @@ const renderStockLevelChart = () => {
         x="${width / 2}"
         y="${height - 5}"
         text-anchor="middle"
-        font-size="12"
+        font-size="14"
+        fill="var(--color-text-secondary)"
       >
         ${sanitize(t('simulation.days'))}
       </text>
@@ -113,7 +114,8 @@ const renderStockLevelChart = () => {
         x="15"
         y="${height / 2}"
         text-anchor="middle"
-        font-size="12"
+        font-size="14"
+        fill="var(--color-text-secondary)"
         transform="rotate(-90, 15, ${height / 2})"
       >
         ${sanitize(t('simulation.stock_level'))}
@@ -127,8 +129,8 @@ const renderDemandChart = () => {
 
   // Similar to stock level chart, but for demand data
   const data = props.demandData;
-  const width = 600;
-  const height = 200;
+  const width = 800;
+  const height = 300;
   const padding = 40;
 
   const maxDemand = Math.max(...data.map(d => d.demand));
@@ -145,7 +147,7 @@ const renderDemandChart = () => {
     <svg width="${width}" height="${height}" class="chart">
       <polyline
         fill="none"
-        stroke="#ef4444"
+        stroke="var(--color-danger)"
         stroke-width="2"
         points="${points}"
       />
@@ -156,7 +158,7 @@ const renderDemandChart = () => {
         y1="${height - padding}"
         x2="${width - padding}"
         y2="${height - padding}"
-        stroke="#9ca3af"
+        stroke="var(--color-border)"
       />
 
       <!-- Y-axis -->
@@ -165,7 +167,7 @@ const renderDemandChart = () => {
         y1="${padding}"
         x2="${padding}"
         y2="${height - padding}"
-        stroke="#9ca3af"
+        stroke="var(--color-border)"
       />
 
       <!-- X-axis label -->
@@ -173,7 +175,8 @@ const renderDemandChart = () => {
         x="${width / 2}"
         y="${height - 5}"
         text-anchor="middle"
-        font-size="12"
+        font-size="14"
+        fill="var(--color-text-secondary)"
       >
         ${sanitize(t('simulation.days'))}
       </text>
@@ -183,7 +186,8 @@ const renderDemandChart = () => {
         x="15"
         y="${height / 2}"
         text-anchor="middle"
-        font-size="12"
+        font-size="14"
+        fill="var(--color-text-secondary)"
         transform="rotate(-90, 15, ${height / 2})"
       >
         ${sanitize(t('simulation.demand'))}
@@ -196,7 +200,7 @@ const renderDemandChart = () => {
 <template>
   <div>
     <div v-if="!results" class="no-results">
-      {{ t('simulation.no_results') }}
+      <i class="pi pi-info-circle"></i> {{ t('simulation.no_results') }}
     </div>
 
     <template v-else>
@@ -257,8 +261,17 @@ const renderDemandChart = () => {
 .no-results {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--color-text-tertiary);
   font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.no-results .pi {
+  color: var(--color-primary);
+  font-size: 1.25rem;
 }
 
 .summary-card {
@@ -273,19 +286,22 @@ const renderDemandChart = () => {
 
 .summary-item {
   padding: 0.75rem;
-  background-color: #f9fafb;
+  background-color: var(--color-surface);
   border-radius: 0.25rem;
+  border: 1px solid var(--color-border);
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .summary-label {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin-bottom: 0.25rem;
 }
 
 .summary-value {
   font-size: 1.25rem;
   font-weight: 600;
+  color: var(--color-text-primary);
 }
 
 .chart-card {
