@@ -189,12 +189,16 @@ const selected = computed(() =>
 
         <!-- actions -->
         <div class="actions mt-6">
+          <div v-if="selected.status !== 'Pending'" class="historical-notice mb-3">
+            {{ t('approvals.already_processed', { status: t(`approvals.${selected.status.toLowerCase()}`) }) }}
+          </div>
           <Button
               severity="success"
               icon="pi pi-check"
               size="large"
               :label="t('approvals.approve_btn')"
               @click="approve()"
+              :disabled="selected.status !== 'Pending'"
           />
           <Button
               severity="danger"
@@ -203,6 +207,7 @@ const selected = computed(() =>
               :label="t('approvals.reject_btn')"
               class="ml-3"
               @click="reject()"
+              :disabled="selected.status !== 'Pending'"
           />
         </div>
       </section>
@@ -328,5 +333,14 @@ const selected = computed(() =>
 
 .actions :deep(.p-button) {
   min-width: 9rem;
+}
+
+.historical-notice {
+  background-color: var(--surface-hover);
+  border-left: 4px solid var(--color-warning);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  font-weight: 500;
 }
 </style>
