@@ -260,6 +260,7 @@ const selected = computed(() =>
   border-bottom: 1px solid var(--color-border);
   transition: background .15s;
   position: relative;
+  color: var(--text-color, var(--color-text)); /* Ensure text is visible */
 }
 
 .request-row.active,
@@ -274,25 +275,24 @@ const selected = computed(() =>
   top: 0;
   width: 4px;
   height: 100%;
-  background: currentColor;
 }
 
-.request-row[data-urgency='high'] {
-  color: var(--color-danger);
+.request-row[data-urgency='high']::before {
+  background-color: var(--color-danger);
 }
 
-.request-row[data-urgency='medium'] {
-  color: var(--color-warning);
+.request-row[data-urgency='medium']::before {
+  background-color: var(--color-warning);
 }
 
-.request-row[data-urgency='low'] {
-  color: var(--color-info);
+.request-row[data-urgency='low']::before {
+  background-color: var(--color-info);
 }
 
 /* left‐pane list: fade out anything not Pending */
 .request-row[data-status="Approved"],
 .request-row[data-status="Rejected"] {
-  opacity: 0.5;
+  opacity: 0.7; /* Increased from 0.5 for better visibility */
   background-color: var(--color-shadow-dark);
 }
 
