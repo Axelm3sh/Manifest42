@@ -1,8 +1,6 @@
 {
   "app": {
-    "vite_logo_alt": "Logo de Vite",
-    "vue_logo_alt": "Logo de Vue",
-    "title": "Vite + Vue",
+    "title": "Manifest42",
     "name": "Manifest42",
     "skip_to_content": "Saltar al contenido principal",
     "footer_text": "© 2025 Manifest42 - Panel de Control de Gestión de Inventario con IA"
