@@ -18,6 +18,7 @@ const activeTab = ref('parameters');
 const showSaveDialog = ref(false);
 const newScenarioName = ref('');
 const selectedScenarioForComparison = ref('');
+const showNewResultBadge = ref(false);
 
 // Fetch data on component mount
 onMounted(() => {
@@ -82,7 +83,13 @@ const comparisonData = computed(() => {
 const tabs = computed(() => {
   const baseTabs = [
     { id: 'parameters', label: t('simulation.parameters'), icon: 'pi-cog' },
-    { id: 'results', label: t('simulation.results'), icon: 'pi-chart-line' },
+    { 
+      id: 'results', 
+      label: t('simulation.results'), 
+      icon: 'pi-chart-line',
+      badge: showNewResultBadge.value ? 'new' : null,
+      badgeClass: 'new-result-badge'
+    },
     { id: 'history', label: t('simulation.history'), icon: 'pi-history' },
     { id: 'scenarios', label: t('simulation.scenarios'), icon: 'pi-list' }
   ];
@@ -97,6 +104,10 @@ const tabs = computed(() => {
 // Methods
 const setActiveTab = (tabId) => {
   activeTab.value = tabId;
+  // Clear the new result badge when navigating to the results tab
+  if (tabId === 'results') {
+    showNewResultBadge.value = false;
+  }
 };
 
 const updateParameter = ({ key, value }) => {
@@ -105,6 +116,10 @@ const updateParameter = ({ key, value }) => {
 
 const runSimulation = () => {
   simulationStore.runSimulation();
+  // Show badge after a small delay to indicate new results
+  setTimeout(() => {
+    showNewResultBadge.value = true;
+  }, 1500);
 };
 
 const openSaveDialog = () => {
