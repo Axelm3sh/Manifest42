@@ -8,7 +8,7 @@ import {useAiInsightsStore} from '../stores/aiInsights';
 import {useSimulationStore} from '../stores/simulationControls';
 import DashboardLayout from '../components/dashboard-layout.vue';
 
-const { t } = useI18n();
+const {t} = useI18n();
 const route = useRoute();
 const authStore = useAuthStore();
 const inventoryStore = useInventoryStore();
@@ -83,6 +83,24 @@ const recentSimulations = shallowRef([]);
 
 // AI recommendations
 const aiRecommendations = shallowRef([]);
+
+// UI state
+const showQuickActions = ref(true);
+const showRecentSimulations = ref(true);
+const showRecentReports = ref(true);
+
+// Toggle visibility functions
+const toggleQuickActions = () => {
+  showQuickActions.value = !showQuickActions.value;
+};
+
+const toggleRecentSimulations = () => {
+  showRecentSimulations.value = !showRecentSimulations.value;
+};
+
+const toggleRecentReports = () => {
+  showRecentReports.value = !showRecentReports.value;
+};
 
 // Load dashboard data
 onMounted(async () => {
@@ -230,32 +248,40 @@ const getTimeAgo = (dateString) => {
   const diffMs = now - date;
   const diffMins = Math.floor(diffMs / (1000 * 60));
 
-  if (diffMins < 60) return t('time.minutes_ago', { count: diffMins });
+  if (diffMins < 60) return t('time.minutes_ago', {count: diffMins});
 
   const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return t('time.hours_ago', { count: diffHours });
+  if (diffHours < 24) return t('time.hours_ago', {count: diffHours});
 
   const diffDays = Math.floor(diffHours / 24);
-  return t('time.days_ago', { count: diffDays });
+  return t('time.days_ago', {count: diffDays});
 };
 
 // Get status class
 const getStatusClass = (status) => {
   switch (status) {
-    case 'completed': return 'status-completed';
-    case 'in_progress': return 'status-in-progress';
-    case 'pending': return 'status-pending';
-    default: return '';
+    case 'completed':
+      return 'status-completed';
+    case 'in_progress':
+      return 'status-in-progress';
+    case 'pending':
+      return 'status-pending';
+    default:
+      return '';
   }
 };
 
 // Get impact class
 const getImpactClass = (impact) => {
   switch (impact) {
-    case 'high': return 'impact-high';
-    case 'medium': return 'impact-medium';
-    case 'low': return 'impact-low';
-    default: return '';
+    case 'high':
+      return 'impact-high';
+    case 'medium':
+      return 'impact-medium';
+    case 'low':
+      return 'impact-low';
+    default:
+      return '';
   }
 };
 
@@ -280,14 +306,14 @@ const createNewReport = () => {
 </script>
 
 <template>
-  <DashboardLayout 
-    :title="t('analyst.dashboard_title')" 
-    :activeItem="getActiveItem()"
+  <DashboardLayout
+      :title="t('analyst.dashboard_title')"
+      :activeItem="getActiveItem()"
   >
     <!-- Main content or router view for child routes -->
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
-        <component :is="Component" />
+        <component :is="Component"/>
       </transition>
     </router-view>
 
@@ -301,7 +327,7 @@ const createNewReport = () => {
       <div v-else>
         <!-- Analyst welcome section -->
         <div class="welcome-section">
-          <h2 class="welcome-title">{{ t('analyst.welcome', { name: authStore.user?.name }) }}</h2>
+          <h2 class="welcome-title">{{ t('analyst.welcome', {name: authStore.user?.name}) }}</h2>
           <p class="welcome-subtitle">{{ t('analyst.dashboard_description') }}</p>
         </div>
 
@@ -313,7 +339,8 @@ const createNewReport = () => {
             <div class="kpi-trend" :class="kpi.trend">
               {{ kpi.change }}
               <span class="trend-icon">
-                <i :class="['pi', kpi.trend === 'up' ? 'pi-arrow-up' : kpi.trend === 'down' ? 'pi-arrow-down' : 'pi-arrow-right']" aria-hidden="true"></i>
+                <i :class="['pi', kpi.trend === 'up' ? 'pi-arrow-up' : kpi.trend === 'down' ? 'pi-arrow-down' : 'pi-arrow-right']"
+                   aria-hidden="true"></i>
               </span>
             </div>
           </div>
@@ -321,94 +348,146 @@ const createNewReport = () => {
 
         <!-- Dashboard sections -->
         <div class="dashboard-sections">
-          <!-- Quick actions -->
-          <div class="analyst-actions">
-            <h3 class="card-title">{{ t('analyst.quick_actions') }}</h3>
-            <div class="actions-grid">
-              <router-link to="/analyst/simulations" class="action-button">
-                {{ t('analyst.actions.create_simulation') }}
-              </router-link>
-              <router-link to="/analyst/reports" class="action-button">
-                {{ t('analyst.actions.generate_report') }}
-              </router-link>
-              <router-link to="/analyst/ai-insights" class="action-button">
-                {{ t('analyst.actions.analyze_trends') }}
-              </router-link>
-              <router-link to="/analyst/inventory" class="action-button">
-                {{ t('analyst.actions.view_inventory') }}
-              </router-link>
-            </div>
-          </div>
-
-          <!-- Recent simulations -->
-          <div class="overview-card">
-            <div class="card-header">
-              <h3 class="card-title">{{ t('analyst.recent_simulations') }}</h3>
-              <router-link to="/analyst/simulations" class="action-link">
-                {{ t('analyst.new_simulation') }}
-              </router-link>
-            </div>
-
-            <div v-if="recentSimulations.length === 0" class="empty-state">
-              {{ t('analyst.no_recent_simulations') }}
-            </div>
-
-            <div v-else class="simulations-list">
-              <div v-for="simulation in recentSimulations.slice(0, 2)" :key="simulation.id" class="simulation-item">
-                <div class="simulation-header">
-                  <div class="simulation-title">{{ simulation.title }}</div>
-                  <div class="simulation-status" :class="getStatusClass(simulation.status)">
-                    {{ t(`analyst.status.${simulation.status}`) }}
-                  </div>
-                </div>
-
-                <div class="simulation-description">{{ simulation.description }}</div>
-
-                <div v-if="simulation.status === 'in_progress'" class="simulation-progress">
-                  <div class="progress-bar-container">
-                    <div class="progress-bar" :style="`width: ${simulation.progress}%`"></div>
-                  </div>
-                  <div class="progress-value">{{ simulation.progress }}%</div>
-                </div>
-
-                <div class="simulation-meta">
-                  <span>{{ getTimeAgo(simulation.createdAt) }}</span>
+          <!-- Main content -->
+          <div class="main-content">
+            <!-- Recent simulations -->
+            <div class="overview-card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="pi pi-calculator" aria-hidden="true"></i>
+                  {{ t('analyst.recent_simulations') }}
+                </h3>
+                <div class="card-header-actions">
+                  <router-link to="/analyst/simulations" class="action-link">
+                    <i class="pi pi-plus-circle" aria-hidden="true"></i>
+                    {{ t('analyst.new_simulation') }}
+                  </router-link>
+                  <button @click="toggleRecentSimulations" class="toggle-button">
+                    <i class="pi" :class="showRecentSimulations ? 'pi-chevron-up' : 'pi-chevron-down'" aria-hidden="true"></i>
+                  </button>
                 </div>
               </div>
-            </div>
 
-            <router-link v-if="recentSimulations.length > 0" to="/analyst/simulations" class="view-all-button">
-              {{ t('analyst.view_all_simulations') }}
-            </router-link>
-          </div>
+              <div v-if="recentSimulations.length === 0 && showRecentSimulations" class="empty-state">
+                {{ t('analyst.no_recent_simulations') }}
+              </div>
 
-          <!-- Recent reports -->
-          <div class="overview-card">
-            <div class="card-header">
-              <h3 class="card-title">{{ t('analyst.recent_reports') }}</h3>
-              <router-link to="/analyst/reports" class="action-link">
-                {{ t('analyst.new_report') }}
+              <div v-else-if="showRecentSimulations" class="simulations-list scrollable-content">
+                <div v-for="simulation in recentSimulations.slice(0, 3)" :key="simulation.id" class="simulation-item">
+                  <div class="simulation-header">
+                    <div class="simulation-title">
+                      <i class="pi pi-calculator" aria-hidden="true"></i>
+                      {{ simulation.title }}
+                    </div>
+                    <div class="simulation-status" :class="getStatusClass(simulation.status)">
+                      <i class="pi"
+                         :class="simulation.status === 'completed' ? 'pi-check-circle' : simulation.status === 'in_progress' ? 'pi-spin pi-spinner' : 'pi-clock'"
+                         aria-hidden="true"></i>
+                      {{ t(`analyst.status.${simulation.status}`) }}
+                    </div>
+                  </div>
+
+                  <div class="simulation-description">
+                    <i class="pi pi-info-circle" aria-hidden="true"></i>
+                    {{ simulation.description }}
+                  </div>
+
+                  <div v-if="simulation.status === 'in_progress'" class="simulation-progress">
+                    <div class="progress-bar-container">
+                      <div class="progress-bar" :style="`width: ${simulation.progress}%`"></div>
+                    </div>
+                    <div class="progress-value">{{ simulation.progress }}%</div>
+                  </div>
+
+                  <div class="simulation-meta">
+                    <i class="pi pi-calendar" aria-hidden="true"></i>
+                    <span>{{ getTimeAgo(simulation.createdAt) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <router-link v-if="recentSimulations.length > 0 && showRecentSimulations" to="/analyst/simulations" class="view-all-button">
+                <i class="pi pi-list" aria-hidden="true"></i>
+                {{ t('analyst.view_all_simulations') }}
               </router-link>
             </div>
 
-            <div v-if="recentReports.length === 0" class="empty-state">
-              {{ t('analyst.no_recent_reports') }}
+            <!-- Recent reports -->
+            <div class="overview-card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="pi pi-file-pdf" aria-hidden="true"></i>
+                  {{ t('analyst.recent_reports') }}
+                </h3>
+                <div class="card-header-actions">
+                  <router-link to="/analyst/reports" class="action-link">
+                    <i class="pi pi-plus-circle" aria-hidden="true"></i>
+                    {{ t('analyst.new_report') }}
+                  </router-link>
+                  <button @click="toggleRecentReports" class="toggle-button">
+                    <i class="pi" :class="showRecentReports ? 'pi-chevron-up' : 'pi-chevron-down'" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div v-if="recentReports.length === 0 && showRecentReports" class="empty-state">
+                {{ t('analyst.no_recent_reports') }}
+              </div>
+
+              <div v-else-if="showRecentReports" class="reports-list scrollable-content">
+                <div v-for="report in recentReports.slice(0, 3)" :key="report.id" class="report-item">
+                  <div class="report-header">
+                    <div class="report-title">
+                      <i class="pi pi-file-pdf" aria-hidden="true"></i>
+                      {{ report.title }}
+                    </div>
+                    <div class="report-date">
+                      <i class="pi pi-calendar" aria-hidden="true"></i>
+                      {{ formatDate(report.createdAt) }}
+                    </div>
+                  </div>
+
+                  <div class="report-insights">
+                    <i class="pi pi-chart-bar" aria-hidden="true"></i>
+                    {{ report.insights }}
+                  </div>
+                </div>
+              </div>
+
+              <router-link v-if="recentReports.length > 0 && showRecentReports" to="/analyst/reports" class="view-all-button">
+                <i class="pi pi-list" aria-hidden="true"></i>
+                {{ t('analyst.view_all_reports') }}
+              </router-link>
             </div>
 
-            <div v-else class="reports-list">
-              <div v-for="report in recentReports.slice(0, 2)" :key="report.id" class="report-item">
-                <div class="report-header">
-                  <div class="report-title">{{ report.title }}</div>
-                  <div class="report-date">{{ formatDate(report.createdAt) }}</div>
+            <!-- Quick actions - moved to last position -->
+            <div class="overview-card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="pi pi-bolt" aria-hidden="true"></i>
+                  {{ t('analyst.quick_actions') }}
+                </h3>
+                <div class="card-header-actions">
+                  <button @click="toggleQuickActions" class="toggle-button">
+                    <i class="pi" :class="showQuickActions ? 'pi-chevron-up' : 'pi-chevron-down'" aria-hidden="true"></i>
+                  </button>
                 </div>
-
-                <div class="report-insights">{{ report.insights }}</div>
+              </div>
+              <div v-if="showQuickActions" class="actions-grid scrollable-content">
+                <router-link to="/analyst/simulations" class="action-button">
+                  {{ t('analyst.actions.create_simulation') }}
+                </router-link>
+                <router-link to="/analyst/reports" class="action-button">
+                  {{ t('analyst.actions.generate_report') }}
+                </router-link>
+                <router-link to="/analyst/ai-insights" class="action-button">
+                  {{ t('analyst.actions.analyze_trends') }}
+                </router-link>
+                <router-link to="/analyst/inventory" class="action-button">
+                  {{ t('analyst.actions.view_inventory') }}
+                </router-link>
               </div>
             </div>
-
-            <router-link v-if="recentReports.length > 0" to="/analyst/reports" class="view-all-button">
-              {{ t('analyst.view_all_reports') }}
-            </router-link>
           </div>
         </div>
       </div>
@@ -436,8 +515,12 @@ const createNewReport = () => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .analyst-dashboard {
@@ -516,9 +599,16 @@ const createNewReport = () => {
 }
 
 .dashboard-sections {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-lg);
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  width: 100%;
 }
 
 .card-title {
@@ -526,6 +616,14 @@ const createNewReport = () => {
   font-weight: var(--font-weight-semibold);
   margin-bottom: var(--spacing-md);
   color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-title .pi {
+  color: var(--color-primary);
+  font-size: 1.2rem;
 }
 
 .card-header {
@@ -533,6 +631,14 @@ const createNewReport = () => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.card-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .action-link {
@@ -540,10 +646,26 @@ const createNewReport = () => {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.2s ease;
+}
+
+.scrollable-content {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.action-link .pi {
+  font-size: 1rem;
 }
 
 .action-link:hover {
-  text-decoration: underline;
+  color: var(--color-primary-dark);
+  text-decoration: none;
 }
 
 .overview-card {
@@ -575,8 +697,14 @@ const createNewReport = () => {
 .simulation-item, .report-item {
   background-color: var(--color-background);
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   box-shadow: var(--shadow-xs);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.simulation-item:hover, .report-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .simulation-header, .report-header {
@@ -588,6 +716,14 @@ const createNewReport = () => {
 .simulation-title, .report-title {
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.simulation-title .pi, .report-title .pi {
+  color: var(--color-primary);
+  font-size: 1.1rem;
 }
 
 .simulation-status {
@@ -595,6 +731,9 @@ const createNewReport = () => {
   font-weight: var(--font-weight-medium);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-full);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .status-completed {
@@ -615,7 +754,20 @@ const createNewReport = () => {
 .simulation-description, .report-insights {
   font-size: var(--font-size-sm);
   color: var(--color-text-tertiary);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  line-height: 1.5;
+}
+
+.simulation-description .pi, .report-insights .pi {
+  color: var(--color-info);
+  font-size: 1rem;
+  margin-top: 0.1rem;
 }
 
 .simulation-progress {
@@ -623,6 +775,7 @@ const createNewReport = () => {
   align-items: center;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-sm);
+  padding-left: 1.5rem;
 }
 
 .progress-bar-container {
@@ -631,12 +784,14 @@ const createNewReport = () => {
   background-color: var(--color-border);
   border-radius: var(--border-radius-full);
   overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .progress-bar {
   height: 100%;
   background-color: var(--color-primary);
   border-radius: var(--border-radius-full);
+  transition: width 0.3s ease;
 }
 
 .progress-value {
@@ -650,37 +805,62 @@ const createNewReport = () => {
 .simulation-meta, .report-date {
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.simulation-meta .pi, .report-date .pi {
+  color: var(--color-text-tertiary);
 }
 
 .view-all-button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   margin-top: var(--spacing-md);
   color: var(--color-primary);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--border-radius-md);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.view-all-button .pi {
+  font-size: 0.9rem;
 }
 
 .view-all-button:hover {
-  text-decoration: underline;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  text-decoration: none;
 }
 
-.analyst-actions {
-  background-color: var(--color-surface);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: var(--spacing-lg);
-  transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
+
+.toggle-button {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  transition: background-color 0.2s ease;
 }
 
-.analyst-actions:hover {
-  box-shadow: var(--shadow-md);
+.toggle-button:hover {
+  background-color: var(--color-primary-light);
+}
+
+.toggle-button .pi {
+  font-size: 1rem;
 }
 
 .actions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: var(--spacing-md);
+  margin-top: var(--spacing-sm);
 }
 
 .action-button {
