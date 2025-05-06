@@ -29,7 +29,13 @@
     "login": "Iniciar sesión",
     "register": "Registrarse",
     "submit": "Enviar",
-    "reset": "Restablecer"
+    "reset": "Restablecer",
+    "actions": "Acciones",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No",
+    "id": "ID",
+    "placeholder_content": "Contenido próximamente..."
   },
   "time": {
     "just_now": "Ahora mismo",

@@ -29,7 +29,13 @@
     "login": "Connexion",
     "register": "S'inscrire",
     "submit": "Soumettre",
-    "reset": "Réinitialiser"
+    "reset": "Réinitialiser",
+    "actions": "Actions",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non",
+    "id": "ID",
+    "placeholder_content": "Contenu à venir..."
   },
   "time": {
     "just_now": "À l'instant",
