@@ -44,7 +44,7 @@ const interpolatedInventoryItems = computed(() =>
 );
 const warehouseData = computed(() => inventoryDataStore.warehouseData);
 const warehouseUtilization = computed(() => inventoryDataStore.warehouseUtilization);
-const kpiData = computed(() => inventoryDataStore.kpiData);
+const kpiData = computed(() => inventoryDataStore.interpolatedKpiData);
 const lowStockItems = computed(() => inventoryDataStore.lowStockItems);
 const outOfStockItems = computed(() => inventoryDataStore.outOfStockItems);
 const inventoryValueByCategory = computed(() => inventoryDataStore.inventoryValueByCategory);

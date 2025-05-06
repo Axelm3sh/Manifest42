@@ -186,6 +186,8 @@ export const useInventoryDataStore = defineStore('inventoryData', () => {
     }
 
     function interpolateValues() {
+        const easeInFactor = 0.2;  // Adjust this value to control the easing speed
+
         // Update inventory items display values
         if (inventoryItems.value.length) {
             inventoryItems.value.forEach(item => {
@@ -199,7 +201,7 @@ export const useInventoryDataStore = defineStore('inventoryData', () => {
                     item.displayStockLevel = item.stockLevel;
                     return;
                 }
-                item.displayStockLevel += getStep(diff, refreshInterval.value);
+                item.displayStockLevel += diff * easeInFactor;
             });
         }
 
@@ -214,7 +216,7 @@ export const useInventoryDataStore = defineStore('inventoryData', () => {
                 displayKpiData.value[key] = target;
                 return;
             }
-            displayKpiData.value[key] += getStep(diff, refreshInterval.value);
+            displayKpiData.value[key] += diff * easeInFactor;
         });
     }
 
