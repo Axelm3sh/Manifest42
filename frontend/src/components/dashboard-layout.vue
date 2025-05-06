@@ -204,12 +204,6 @@ const getDashboardRoute = () => {
         </ul>
       </nav>
 
-      <div class="sidebar-footer">
-        <button class="logout-button" @click="handleLogout">
-          <i class="pi pi-sign-out nav-icon"></i>
-          <span v-if="isSidebarOpen" class="nav-label">{{ t('navigation.logout') }}</span>
-        </button>
-      </div>
     </aside>
 
     <!-- Main content -->
@@ -219,9 +213,12 @@ const getDashboardRoute = () => {
         <h1 class="page-title">{{ props.title }}</h1>
 
         <div class="header-actions">
+          <NotificationCenter />
           <ThemeToggle />
           <LanguageSwitcher />
-          <NotificationCenter />
+          <button class="logout-button header-logout" @click="handleLogout" :title="t('navigation.logout')">
+            <i class="pi pi-sign-out nav-icon"></i>
+          </button>
         </div>
       </header>
 
@@ -390,11 +387,6 @@ const getDashboardRoute = () => {
   margin-right: 0;
 }
 
-.sidebar-footer {
-  padding: var(--spacing-md);
-  border-top: var(--border-width-thin) solid var(--color-border);
-}
-
 .logout-button {
   display: flex;
   align-items: center;
@@ -446,6 +438,28 @@ const getDashboardRoute = () => {
   gap: var(--spacing-md);
 }
 
+/* Header logout button styling */
+.header-logout {
+  padding: var(--spacing-sm);
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              transform var(--transition-fast);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+}
+
+.header-logout:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-primary);
+  transform: scale(1.05);
+}
 
 .content-area {
   flex: 1;

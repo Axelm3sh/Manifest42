@@ -41,14 +41,6 @@ function showHistory(ev: MouseEvent | KeyboardEvent, row: ApprovalRequest) {
   historyPanel.value?.toggle(ev)
 }
 
-function urgencyColor(u?: string) {
-  return {high: 'var(--red-500)', medium: 'var(--orange-400)', low: 'var(--blue-400)'}[u ?? 'low']
-}
-
-function quantitySize(qty: number) {
-  return `${Math.min(28, 14 + qty)}px`
-}
-
 // Maps urgency to PrimeVue severity colour
 function urgencySeverity(u: 'high' | 'medium' | 'low') {
   return u === 'high' ? 'danger'
@@ -68,148 +60,163 @@ const selected = computed(() =>
 </script>
 
 <template>
-  <h1 class="mb-4">{{ t('approvals.title') }}</h1>
+  <div class="approvals-view">
+    <h1 class="mb-4">{{ t('approvals.title') }}</h1>
 
-  <div class="approvals-layout">
-    <!-- LEFT PANE ──────────────────────────────────────── -->
-    <aside class="left-pane">
-      <VirtualScroller
-          :items="allRows"
-          :itemSize="72"
-          class="scroller"
-          showLoader
-      >
-        <template #item="{ item }">
-          <div
-              role="button"
-              tabindex="0"
-              :class="['request-row', { active: item.id === selectedId }]"
-              :data-urgency="item.urgency"
-              :data-status="item.status"
-              @click="selectedId = item.id"
-              @contextmenu.prevent="showHistory($event, item)"
-              @keydown.enter="selectedId = item.id"
-          >
-            <div class="id">{{ item.id }}</div>
-            <div class="meta">
-              <span class="item">{{ item.itemId }}</span>
-              <span class="qty" aria-label="Quantity {{ item.quantityRequested }}">{{ item.quantityRequested }}</span>
-              <button
-                  type="button"
-                  class="history-btn p-button p-button-text p-button-sm"
-                  aria-label="{{ t('approvals.history_for', { id: item.id }) }}"
-                  @click.stop="showHistory($event, item)"
-                  @keydown.enter.stop="showHistory($event, item)"
-              >
-                <i class="pi pi-history"></i>
-              </button>
+    <div class="approvals-layout">
+      <!-- LEFT PANE ──────────────────────────────────────── -->
+      <aside class="left-pane">
+        <VirtualScroller
+            :items="allRows"
+            :itemSize="72"
+            class="scroller"
+            showLoader
+        >
+          <template #item="{ item }">
+            <div
+                role="button"
+                tabindex="0"
+                :class="['request-row', { active: item.id === selectedId }]"
+                :data-urgency="item.urgency"
+                :data-status="item.status"
+                @click="selectedId = item.id"
+                @contextmenu.prevent="showHistory($event, item)"
+                @keydown.enter="selectedId = item.id"
+            >
+              <div class="request-info">
+                <div class="id-container">
+                  <span class="id-label">ID:</span>
+                  <span class="id">{{ item.id }}</span>
+                </div>
+                <div class="item-container">
+                  <span class="item-label">Inventory:</span>
+                  <span class="item">{{ item.itemId }}</span>
+                </div>
+              </div>
+              <div class="meta">
+                <span class="qty" aria-label="Quantity {{ item.quantityRequested }}">{{ item.quantityRequested }}</span>
+                <button
+                    type="button"
+                    class="history-btn p-button p-button-text p-button-sm"
+                    aria-label="{{ t('approvals.history_for', { id: item.id }) }}"
+                    @click.stop="showHistory($event, item)"
+                    @keydown.enter.stop="showHistory($event, item)"
+                >
+                  <i class="pi pi-history"></i>
+                </button>
+              </div>
             </div>
-          </div>
-        </template>
-      </VirtualScroller>
-
-      <!-- QUICK HISTORY POPOVER -->
-      <Popover
-          ref="historyPanel"
-          role="dialog"
-          aria-modal="false"
-          appendTo="body"
-      >
-        <div id="history-title" class="mb-2">{{ t('approvals.approval_history') }}</div>
-        <Timeline :value="historyRow?.approvals ?? []" class="p-0">
-          <template #content="{ item }">
-            <Tag :severity="item.status.toLowerCase()" :value="item.role"/>
-            <span class="ml-1 text-xs">{{ new Date(item.decisionAt).toLocaleString() }}</span>
           </template>
-          <template #opposite/>
-          <template #marker="{ item }">
-            <i :class="['pi',
+        </VirtualScroller>
+
+        <!-- QUICK HISTORY POPOVER -->
+        <Popover
+            ref="historyPanel"
+            role="dialog"
+            aria-modal="false"
+            appendTo="body"
+        >
+          <div id="history-title" class="mb-2">{{ t('approvals.approval_history') }}</div>
+          <Timeline :value="historyRow?.approvals ?? []" class="p-0">
+            <template #content="{ item }">
+              <Tag :severity="item.status.toLowerCase()" :value="item.role"/>
+              <span class="ml-1 text-xs">{{ new Date(item.decisionAt).toLocaleString() }}</span>
+            </template>
+            <template #opposite/>
+            <template #marker="{ item }">
+              <i :class="['pi',
                     item.status === 'Approved' ? 'pi-check'
                   : item.status === 'Rejected' ? 'pi-times'
                   : 'pi-clock']"/>
-          </template>
-        </Timeline>
-      </Popover>
-    </aside>
+            </template>
+          </Timeline>
+        </Popover>
+      </aside>
 
-    <!-- RIGHT PANE ─────────────────────────────────────── -->
-    <section v-if="selected" class="right-pane">
-      <h2 class="sr-only">{{ t('approvals.details_for', {id: selected.id}) }}</h2>
-      <h3 class="mb-3">{{ t('approvals.details_for', {id: selected.id}) }}</h3>
+      <!-- RIGHT PANE ─────────────────────────────────────── -->
+      <section v-if="selected" class="right-pane">
+        <h2 class="sr-only">{{ t('approvals.details_for', {id: selected.id}) }}</h2>
+        <h3 class="mb-3">{{ t('approvals.details_for', {id: selected.id}) }}</h3>
 
-      <dl class="meta-list">
-        <dt>{{ t('approvals.requester') }}</dt>
-        <dd>{{ selected.requestedBy }}</dd>
-        <dt>{{ t('approvals.item_id') }}</dt>
-        <dd>{{ selected.itemId }}</dd>
-        <dt>{{ t('approvals.qty') }}</dt>
-        <dd>{{ selected.quantityRequested }}</dd>
-        <dt>{{ t('approvals.reason') }}</dt>
-        <dd>{{ selected.reason }}</dd>
-        <dt>{{ t('approvals.urgency') }}</dt>
-        <dd>
-          <Tag
-              :value="t(`approvals.urgency_${selected.urgency}`)"
-              :severity="urgencySeverity(selected.urgency)"
-          />
-        </dd>
-      </dl>
+        <dl class="meta-list">
+          <dt>{{ t('approvals.requester') }}</dt>
+          <dd>{{ selected.requestedBy }}</dd>
+          <dt>{{ t('approvals.item_id') }}</dt>
+          <dd>{{ selected.itemId }}</dd>
+          <dt>{{ t('approvals.qty') }}</dt>
+          <dd>{{ selected.quantityRequested }}</dd>
+          <dt>{{ t('approvals.reason') }}</dt>
+          <dd>{{ selected.reason }}</dd>
+          <dt>{{ t('approvals.urgency') }}</dt>
+          <dd>
+            <Tag
+                :value="t(`approvals.urgency_${selected.urgency}`)"
+                :severity="urgencySeverity(selected.urgency)"
+            />
+          </dd>
+        </dl>
 
-      <!-- approval chain -->
-      <h4 class="mt-5 mb-3">{{ t('approvals.decisions') }}</h4>
-      <Timeline
-          :value="selected.approvals"
-          layout="vertical"
-          align="left"
-      >
-        <template #content="{ item }">
-          <Tag
-              :severity="item.status === 'Approved' ? 'success'
+        <!-- approval chain -->
+        <h4 class="mt-5 mb-3">{{ t('approvals.decisions') }}</h4>
+        <Timeline
+            :value="selected.approvals"
+            layout="vertical"
+            align="left"
+        >
+          <template #content="{ item }">
+            <Tag
+                :severity="item.status === 'Approved' ? 'success'
                        : item.status === 'Rejected' ? 'danger'
                        : 'warning'"
-              :value="item.role"
-              class="mr-2"
-          />
-          <span>{{ t(`approvals.${item.status.toLowerCase()}`) }}</span>
-          <span v-if="item.decisionAt" class="ml-2 text-xs text-500">
+                :value="item.role"
+                class="mr-2"
+            />
+            <span>{{ t(`approvals.${item.status.toLowerCase()}`) }}</span>
+            <span v-if="item.decisionAt" class="ml-2 text-xs text-500">
             {{ new Date(item.decisionAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }}
           </span>
-        </template>
-        <template #opposite/>
-        <template #marker="{ item }">
+          </template>
+          <template #opposite/>
+          <template #marker="{ item }">
           <span
               class="pi"
               :class="item.status === 'Approved' ? 'pi-check-circle text-green-500'
                     : item.status === 'Rejected' ? 'pi-times-circle text-red-400'
                     : 'pi-clock text-500'"
           />
-        </template>
-      </Timeline>
+          </template>
+        </Timeline>
 
-      <!-- actions -->
-      <div class="actions mt-6">
-        <Button
-            severity="success"
-            icon="pi pi-check"
-            size="large"
-            :label="t('approvals.approve_btn')"
-            @click="approve()"
-        />
-        <Button
-            severity="danger"
-            icon="pi pi-times"
-            size="large"
-            :label="t('approvals.reject_btn')"
-            class="ml-3"
-            @click="reject()"
-        />
-      </div>
-    </section>
+        <!-- actions -->
+        <div class="actions mt-6">
+          <div v-if="selected.status !== 'Pending'" class="historical-notice mb-3">
+            {{ t('approvals.already_processed', { status: t(`approvals.${selected.status.toLowerCase()}`) }) }}
+          </div>
+          <Button
+              severity="success"
+              icon="pi pi-check"
+              size="large"
+              :label="t('approvals.approve_btn')"
+              @click="approve()"
+              :disabled="selected.status !== 'Pending'"
+          />
+          <Button
+              severity="danger"
+              icon="pi pi-times"
+              size="large"
+              :label="t('approvals.reject_btn')"
+              class="ml-3"
+              @click="reject()"
+              :disabled="selected.status !== 'Pending'"
+          />
+        </div>
+      </section>
 
-    <!-- placeholder when nothing is selected -->
-    <section v-else class="right-pane placeholder">
-      <span class="text-500">{{ t('approvals.select_request') }}</span>
-    </section>
+      <!-- placeholder when nothing is selected -->
+      <section v-else class="right-pane placeholder">
+        <span class="text-500">{{ t('approvals.select_request') }}</span>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -258,6 +265,35 @@ const selected = computed(() =>
   border-bottom: 1px solid var(--color-border);
   transition: background .15s;
   position: relative;
+  color: var(--text-color, var(--color-text)); /* Ensure text is visible */
+}
+
+.request-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.id-container, .item-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.id-label, .item-label {
+  font-size: 0.75rem;
+  color: var(--color-text);
+  min-width: 4rem;
+}
+
+.id {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.item {
+  color: var(--color-text);
 }
 
 .request-row.active,
@@ -272,32 +308,32 @@ const selected = computed(() =>
   top: 0;
   width: 4px;
   height: 100%;
-  background: currentColor;
 }
 
-.request-row[data-urgency='high'] {
-  color: var(--color-danger);
+.request-row[data-urgency='high']::before {
+  background-color: var(--color-danger);
 }
 
-.request-row[data-urgency='medium'] {
-  color: var(--color-warning);
+.request-row[data-urgency='medium']::before {
+  background-color: var(--color-warning);
 }
 
-.request-row[data-urgency='low'] {
-  color: var(--color-info);
+.request-row[data-urgency='low']::before {
+  background-color: var(--color-info);
 }
 
 /* left‐pane list: fade out anything not Pending */
 .request-row[data-status="Approved"],
 .request-row[data-status="Rejected"] {
-  opacity: 0.5;
+  opacity: 0.7; /* Increased from 0.5 for better visibility */
   background-color: var(--color-shadow-dark);
 }
 
 .request-row .meta {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: .5rem;
+  padding-top: 0.25rem;
 }
 
 .qty {
@@ -326,5 +362,14 @@ const selected = computed(() =>
 
 .actions :deep(.p-button) {
   min-width: 9rem;
+}
+
+.historical-notice {
+  background-color: var(--surface-hover);
+  border-left: 4px solid var(--color-warning);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  font-weight: 500;
 }
 </style>
