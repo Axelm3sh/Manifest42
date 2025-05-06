@@ -272,17 +272,19 @@ const handleApproval = (id, action) => {
             <div class="kpi-trend" :class="kpi.trend">
               {{ kpi.change }}
               <span class="trend-icon">
-                {{ kpi.trend === 'up' ? '↑' : kpi.trend === 'down' ? '↓' : '→' }}
+                <i :class="['pi', kpi.trend === 'up' ? 'pi-arrow-up' : kpi.trend === 'down' ? 'pi-arrow-down' : 'pi-arrow-right']" aria-hidden="true"></i>
               </span>
             </div>
           </div>
         </div>
 
         <!-- Dashboard sections -->
-        <div class="dashboard-sections">
+        <div class="dashboard-sections" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--spacing-lg, 1.5rem);">
           <!-- Quick actions -->
           <div class="manager-actions">
-            <h3 class="card-title">{{ t('manager.quick_actions') }}</h3>
+            <div class="card-header">
+              <h3 class="card-title">{{ t('manager.quick_actions') }}</h3>
+            </div>
             <div class="actions-grid">
               <router-link to="/manager/inventory" class="action-button">
                 {{ t('manager.actions.view_inventory') }}
@@ -298,7 +300,12 @@ const handleApproval = (id, action) => {
 
           <!-- Pending approvals summary -->
           <div class="overview-card">
-            <h3 class="card-title">{{ t('manager.pending_approvals') }}</h3>
+            <div class="card-header">
+              <h3 class="card-title">{{ t('manager.pending_approvals') }}</h3>
+              <router-link to="/manager/approvals" class="action-link">
+                {{ t('manager.view_approvals') }}
+              </router-link>
+            </div>
             <div v-if="pendingApprovals.length === 0" class="empty-state">
               {{ t('manager.no_pending_approvals') }}
             </div>
@@ -319,7 +326,9 @@ const handleApproval = (id, action) => {
 
           <!-- Team performance summary -->
           <div class="overview-card">
-            <h3 class="card-title">{{ t('manager.team_performance') }}</h3>
+            <div class="card-header">
+              <h3 class="card-title">{{ t('manager.team_performance') }}</h3>
+            </div>
             <div class="team-summary">
               <div class="team-metric">
                 <div class="metric-label">{{ t('manager.avg_performance') }}</div>
@@ -377,57 +386,63 @@ export const getPerformanceClass = (value) => {
 .manager-dashboard {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--spacing-lg, 1.5rem);
+  width: 100%;
 }
 
 .welcome-section {
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-xl, 1.5rem);
 }
 
 .welcome-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem;
+  font-size: var(--font-size-2xl, 1.5rem);
+  font-weight: var(--font-weight-bold, 600);
+  margin-bottom: var(--spacing-sm, 0.5rem);
   color: var(--color-text-primary);
 }
 
 .welcome-subtitle {
-  font-size: 1rem;
+  font-size: var(--font-size-md, 1rem);
   color: var(--color-text-secondary);
   margin: 0;
 }
 
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--spacing-lg, 1rem);
+  margin-bottom: var(--spacing-xl, 1.5rem);
 }
 
 .kpi-card {
-  background-color: var(--color-background);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  background-color: var(--color-surface, var(--color-background));
+  border-radius: var(--border-radius-lg, 8px);
+  padding: var(--spacing-lg, 1.5rem);
+  box-shadow: var(--color-shadow);
+  transition: box-shadow var(--transition-normal, 0.2s), background-color var(--transition-normal, 0.2s);
+}
+
+.kpi-card:hover {
+  box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
 .kpi-title {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-md, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
   color: var(--color-text-secondary);
-  margin: 0 0 0.5rem;
+  margin-bottom: var(--spacing-sm, 0.5rem);
 }
 
 .kpi-value {
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: var(--font-size-2xl, 2rem);
+  font-weight: var(--font-weight-bold, 600);
   color: var(--color-text-primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-sm, 0.5rem);
 }
 
 .kpi-trend {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
   display: flex;
   align-items: center;
 }
@@ -441,32 +456,56 @@ export const getPerformanceClass = (value) => {
 }
 
 .kpi-trend.neutral {
-  color: var(--color-text-secondary);
+  color: var(--color-text-tertiary, var(--color-text-secondary));
 }
 
 .trend-icon {
-  margin-left: 0.25rem;
+  margin-left: var(--spacing-xs, 0.25rem);
 }
 
 
 .card-title {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: var(--font-size-lg, 1.125rem);
+  font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text-primary);
-  margin: 0 0 1rem;
+  margin-bottom: var(--spacing-md, 1rem);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md, 1rem);
+}
+
+.action-link {
+  color: var(--color-primary);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+}
+
+.action-link:hover {
+  text-decoration: underline;
 }
 
 .overview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  gap: var(--spacing-lg, 1.5rem);
 }
 
 .overview-card {
-  background-color: var(--color-background-secondary);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  background-color: var(--color-surface, var(--color-background-secondary));
+  border-radius: var(--border-radius-lg, 8px);
+  padding: var(--spacing-lg, 1.5rem);
+  box-shadow: var(--color-shadow);
+  margin-bottom: var(--spacing-lg, 1.5rem);
+  transition: box-shadow var(--transition-normal, 0.2s), background-color var(--transition-normal, 0.2s);
+}
+
+.overview-card:hover {
+  box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
 .approvals-summary {
@@ -538,49 +577,61 @@ export const getPerformanceClass = (value) => {
 }
 
 .view-all-button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  font-weight: 500;
+  display: inline-block;
+  margin-top: var(--spacing-md, 1rem);
   color: var(--color-primary);
-  cursor: pointer;
-  transition: all 0.2s;
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
 }
 
 .view-all-button:hover {
-  background-color: var(--color-primary-muted);
+  text-decoration: underline;
+}
+
+.manager-actions {
+  background-color: var(--color-surface, var(--color-background));
+  border-radius: var(--border-radius-lg, 8px);
+  padding: var(--spacing-lg, 1.5rem);
+  box-shadow: var(--color-shadow);
+  margin-bottom: var(--spacing-lg, 1.5rem);
+  transition: box-shadow var(--transition-normal, 0.2s), background-color var(--transition-normal, 0.2s);
+}
+
+.manager-actions:hover {
+  box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
 .actions-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--spacing-md, 1rem);
 }
 
 .action-button {
-  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md, 1rem);
   background-color: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  font-weight: 500;
+  border: var(--border-width-thin, 1px) solid var(--color-border);
+  border-radius: var(--border-radius-md, 6px);
   color: var(--color-text-primary);
-  cursor: pointer;
-  transition: all 0.2s;
+  font-weight: var(--font-weight-medium, 500);
   text-align: center;
+  transition: background-color var(--transition-fast, 0.15s), border-color var(--transition-fast, 0.15s);
+  text-decoration: none;
 }
 
 .action-button:hover {
-  background-color: var(--color-bg-hover);
-  border-color: var(--color-border-hover);
+  background-color: var(--color-surface-hover, var(--color-bg-hover));
+  border-color: var(--color-primary, var(--color-border-hover));
+  text-decoration: none;
 }
 
 .empty-state {
-  padding: 2rem;
-  text-align: center;
-  color: var(--color-text-secondary);
+  color: var(--color-text-tertiary, var(--color-text-secondary));
   font-style: italic;
+  padding: var(--spacing-md, 1rem) 0;
 }
 
 .approvals-list {
@@ -682,7 +733,7 @@ export const getPerformanceClass = (value) => {
   padding: 1.5rem;
   border-radius: 8px;
   background-color: var(--color-background-secondary);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--color-shadow);
 }
 
 .member-header {
