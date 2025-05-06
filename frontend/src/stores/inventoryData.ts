@@ -4,8 +4,19 @@ import {computed, ref, shallowRef} from 'vue';
 /* ------------------------------------------------------------------ *
  * CONSTANTS                                                            *
  * ------------------------------------------------------------------ */
-/** milliseconds between visual updates (~30 FPS) */
-const INTERPOLATION_TICK = 1000 / 30;
+/** milliseconds between visual updates (~5 FPS) */
+const INTERPOLATION_TICK = 1000 / 5;
+
+/**
+ * Animation smoothing factor: how quickly values animate to their targets
+ *
+ * @remarks
+ * Different factors affect animation speed:
+ * - 0.2 = Quick updates (reaches ~67% in 5 frames)
+ * - 0.1 = Medium speed updates
+ * - 0.05 = Smooth & gradual updates
+ */
+const easeInFactor = 0.05;
 
 /**
  * Using the current user-selected refreshInterval (seconds), we can
@@ -186,7 +197,6 @@ export const useInventoryDataStore = defineStore('inventoryData', () => {
     }
 
     function interpolateValues() {
-        const easeInFactor = 0.2;  // Adjust this value to control the easing speed
 
         // Update inventory items display values
         if (inventoryItems.value.length) {
