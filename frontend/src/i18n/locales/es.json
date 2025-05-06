@@ -335,7 +335,9 @@
     "approve_btn": "Aprobar",
     "reject_btn": "Rechazar",
     "history_for": "Ver historial de la solicitud {id}",
-    "already_processed": "Esta solicitud ya ha sido {status} y no puede ser modificada"
+    "already_processed": "Esta solicitud ya ha sido {status} y no puede ser modificada",
+    "no_decisions_yet": "Aún no se han tomado decisiones",
+    "item_quantity": "Cant: {count}"
   },
   "login": {
     "title": "Iniciar sesión en Manifest42",

@@ -91,10 +91,14 @@ const selected = computed(() =>
                 <div class="item-container">
                   <span class="item-label">Inventory:</span>
                   <span class="item">{{ item.itemId }}</span>
+                  <span class="item-quantity">{{ t('approvals.item_quantity', { count: item.quantityRequested }) }}</span>
                 </div>
               </div>
               <div class="meta">
-                <span class="qty" aria-label="Quantity {{ item.quantityRequested }}">{{ item.quantityRequested }}</span>
+                <span v-if="item.status !== 'Pending' && item.approvals.length > 0" class="last-decision">
+                  <i :class="['pi', item.status === 'Approved' ? 'pi-check-circle text-green-500' : 'pi-times-circle text-red-400']"></i>
+                  {{ new Date(item.approvals[0].decisionAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }}
+                </span>
                 <button
                     type="button"
                     class="history-btn p-button p-button-text p-button-sm"
@@ -117,7 +121,11 @@ const selected = computed(() =>
             appendTo="body"
         >
           <div id="history-title" class="mb-2">{{ t('approvals.approval_history') }}</div>
-          <Timeline :value="historyRow?.approvals ?? []" class="p-0">
+          <div v-if="!historyRow?.approvals?.length" class="empty-history">
+            <i class="pi pi-info-circle mr-2"></i>
+            <span>{{ t('approvals.no_decisions_yet') || 'No decisions have been made yet' }}</span>
+          </div>
+          <Timeline v-else :value="historyRow?.approvals ?? []" class="p-0">
             <template #content="{ item }">
               <Tag :severity="item.status.toLowerCase()" :value="item.role"/>
               <span class="ml-1 text-xs">{{ new Date(item.decisionAt).toLocaleString() }}</span>
@@ -125,9 +133,9 @@ const selected = computed(() =>
             <template #opposite/>
             <template #marker="{ item }">
               <i :class="['pi',
-                    item.status === 'Approved' ? 'pi-check'
-                  : item.status === 'Rejected' ? 'pi-times'
-                  : 'pi-clock']"/>
+                    item.status === 'Approved' ? 'pi-check-circle text-green-500'
+                  : item.status === 'Rejected' ? 'pi-times-circle text-red-400'
+                  : 'pi-clock text-blue-500']"/>
             </template>
           </Timeline>
         </Popover>
@@ -247,7 +255,7 @@ const selected = computed(() =>
 }
 
 .left-pane {
-  width: 340px;
+  width: 380px;
   border-right: 1px solid var(--color-border);
   overflow: hidden;
 }
@@ -296,6 +304,16 @@ const selected = computed(() =>
   color: var(--color-text);
 }
 
+.item-quantity {
+  font-size: 0.75rem;
+  background: var(--surface-hover);
+  color: var(--color-text-primary);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  margin-left: 0.5rem;
+  display: inline-block;
+}
+
 .request-row.active,
 .request-row:hover {
   background: var(--surface-hover);
@@ -336,11 +354,14 @@ const selected = computed(() =>
   padding-top: 0.25rem;
 }
 
-.qty {
+
+.last-decision {
   font-size: .75rem;
-  background: var(--color-surface-active);
-  padding: 0 .4rem;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
 }
 
 .urgency-dot {
@@ -371,5 +392,15 @@ const selected = computed(() =>
   border-radius: 4px;
   color: var(--color-text-primary);
   font-weight: 500;
+}
+
+.empty-history {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: var(--surface-hover);
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
 }
 </style>

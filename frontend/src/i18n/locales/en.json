@@ -335,7 +335,9 @@
     "approve_btn": "Approve",
     "reject_btn": "Reject",
     "history_for": "View history for request {id}",
-    "already_processed": "This request has already been {status} and cannot be modified"
+    "already_processed": "This request has already been {status} and cannot be modified",
+    "no_decisions_yet": "No decisions have been made yet",
+    "item_quantity": "Qty: {count}"
   },
   "login": {
     "title": "Login to Manifest42",
