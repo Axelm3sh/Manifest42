@@ -81,16 +81,16 @@ const comparisonData = computed(() => {
 // Tab configuration
 const tabs = computed(() => {
   const baseTabs = [
-    { id: 'parameters', label: t('simulation.parameters') },
-    { id: 'results', label: t('simulation.results') },
-    { id: 'history', label: t('simulation.history') },
-    { id: 'scenarios', label: t('simulation.scenarios') }
+    { id: 'parameters', label: t('simulation.parameters'), icon: 'pi-cog' },
+    { id: 'results', label: t('simulation.results'), icon: 'pi-chart-line' },
+    { id: 'history', label: t('simulation.history'), icon: 'pi-history' },
+    { id: 'scenarios', label: t('simulation.scenarios'), icon: 'pi-list' }
   ];
-  
+
   if (comparisonMode.value) {
-    baseTabs.push({ id: 'comparison', label: t('simulation.comparison') });
+    baseTabs.push({ id: 'comparison', label: t('simulation.comparison'), icon: 'pi-chart-bar' });
   }
-  
+
   return baseTabs;
 });
 
@@ -165,9 +165,10 @@ const resetToDefaults = () => {
 <template>
   <div class="simulation-controls">
     <div class="simulation-header">
-      <h2>{{ t('simulation.title') }}</h2>
+      <h2><i class="pi pi-sliders-h"></i> {{ t('simulation.title') }}</h2>
       <div class="scenario-controls">
         <div class="current-scenario">
+          <i class="pi pi-bookmark"></i>
           <span>{{ t('simulation.current_scenario') }}:</span>
           <strong>{{ savedScenarios[currentScenario]?.name }}</strong>
         </div>
@@ -190,17 +191,17 @@ const resetToDefaults = () => {
             @click="addToComparison" 
             :disabled="!selectedScenarioForComparison || comparisonMode"
           >
-            {{ t('simulation.add_to_comparison') }}
+            <i class="pi pi-plus"></i> {{ t('simulation.add_to_comparison') }}
           </BaseButton>
           <BaseButton 
             @click="toggleComparisonMode" 
             :active="comparisonMode"
             :disabled="comparisonScenarios.length < 2"
           >
-            {{ comparisonMode ? t('simulation.exit_comparison') : t('simulation.compare') }}
+            <i class="pi" :class="comparisonMode ? 'pi-times' : 'pi-chart-bar'"></i> {{ comparisonMode ? t('simulation.exit_comparison') : t('simulation.compare') }}
           </BaseButton>
           <BaseButton @click="openSaveDialog">
-            {{ t('simulation.save_scenario') }}
+            <i class="pi pi-save"></i> {{ t('simulation.save_scenario') }}
           </BaseButton>
         </div>
       </div>
@@ -209,9 +210,11 @@ const resetToDefaults = () => {
     <!-- Save Scenario Dialog -->
     <div v-if="showSaveDialog" class="save-dialog-overlay">
       <div class="save-dialog">
-        <h3>{{ t('simulation.save_scenario') }}</h3>
+        <h3><i class="pi pi-save"></i> {{ t('simulation.save_scenario') }}</h3>
         <div class="dialog-content">
-          <label for="scenario-name">{{ t('simulation.scenario_name') }}</label>
+          <label for="scenario-name">
+            <i class="pi pi-tag"></i> {{ t('simulation.scenario_name') }}
+          </label>
           <input 
             id="scenario-name"
             v-model="newScenarioName"
@@ -225,12 +228,12 @@ const resetToDefaults = () => {
             variant="primary"
             @click="saveScenario"
           >
-            {{ t('simulation.save') }}
+            <i class="pi pi-check"></i> {{ t('simulation.save') }}
           </BaseButton>
           <BaseButton 
             @click="cancelSaveDialog"
           >
-            {{ t('simulation.cancel') }}
+            <i class="pi pi-times"></i> {{ t('simulation.cancel') }}
           </BaseButton>
         </div>
       </div>
@@ -320,6 +323,13 @@ const resetToDefaults = () => {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.simulation-header h2 .pi {
+  color: var(--color-primary);
 }
 
 .scenario-controls {
@@ -330,6 +340,14 @@ const resetToDefaults = () => {
 
 .current-scenario {
   font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.current-scenario .pi {
+  color: var(--color-primary);
+  font-size: 1rem;
 }
 
 .scenario-actions {
@@ -370,6 +388,25 @@ const resetToDefaults = () => {
   margin: 0 0 1rem 0;
   font-size: 1.25rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.save-dialog h3 .pi {
+  color: var(--color-primary);
+}
+
+.dialog-content label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.dialog-content label .pi {
+  color: var(--color-primary);
 }
 
 .dialog-content {
