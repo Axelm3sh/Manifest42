@@ -12,8 +12,8 @@ import InventoryItemsTable from './inventory-items-table.vue';
 import InventoryWarehouses from './inventory-warehouses.vue';
 import InventoryStockAlerts from './inventory-stock-alerts.vue';
 
-const { t } = useI18n();
-const { formatDateTime } = useFormatters();
+const {t} = useI18n();
+const {formatDateTime} = useFormatters();
 const inventoryDataStore = useInventoryDataStore();
 
 // Reactive state
@@ -36,11 +36,11 @@ onUnmounted(() => {
 // Computed properties
 const inventoryItems = computed(() => inventoryDataStore.sortedInventoryItems);
 const interpolatedInventoryItems = computed(() =>
-  inventoryDataStore.sortedInventoryItems.map(item => ({
-    ...item,
-    /* fall back for the very first frame */
-    stockLevel: item.displayStockLevel ?? item.stockLevel
-  }))
+    inventoryDataStore.sortedInventoryItems.map(item => ({
+      ...item,
+      /* fall back for the very first frame */
+      stockLevel: item.displayStockLevel ?? item.stockLevel
+    }))
 );
 const warehouseData = computed(() => inventoryDataStore.warehouseData);
 const warehouseUtilization = computed(() => inventoryDataStore.warehouseUtilization);
@@ -58,10 +58,10 @@ const lastUpdated = computed(() => {
 
 // Tab configuration
 const tabs = computed(() => [
-  { id: 'overview', label: t('inventory.overview') },
-  { id: 'items', label: t('inventory.items') },
-  { id: 'warehouses', label: t('inventory.warehouses') },
-  { id: 'stock_alerts', label: t('inventory.stock_alerts') }
+  {id: 'overview', label: t('inventory.overview'), icon: 'pi-chart-pie'},
+  {id: 'items', label: t('inventory.items'), icon: 'pi-list'},
+  {id: 'warehouses', label: t('inventory.warehouses'), icon: 'pi-building'},
+  {id: 'stock_alerts', label: t('inventory.stock_alerts'), icon: 'pi-exclamation-triangle'}
 ]);
 
 // Methods
@@ -86,92 +86,93 @@ const refreshData = () => {
   inventoryDataStore.fetchWarehouseData();
 };
 
-const handleRestock = ({ itemId, urgent }) => {
+const handleRestock = ({itemId, urgent}) => {
   // In a real app, this would call an API to restock the item
   console.log(`Restocking item ${itemId}, urgent: ${urgent}`);
   // For now, just show an alert
-  alert(t('inventory.restock_initiated', { itemId, urgent: urgent ? t('inventory.yes') : t('inventory.no') }));
+  alert(t('inventory.restock_initiated', {itemId, urgent: urgent ? t('inventory.yes') : t('inventory.no')}));
 };
 </script>
 
 <template>
   <div class="inventory-dashboard">
     <div class="dashboard-header">
-      <h2>{{ t('inventory.title') }}</h2>
+      <h2><i class="pi pi-box"></i> {{ t('inventory.title') }}</h2>
       <div class="dashboard-actions">
-        <BaseButton 
-          @click="toggleSettings" 
-          :active="showSettings"
+        <BaseButton
+            @click="toggleSettings"
+            :active="showSettings"
         >
-          {{ t('inventory.settings') }}
+          <i class="pi pi-cog"></i> {{ t('inventory.settings') }}
         </BaseButton>
-        <BaseButton 
-          variant="primary"
-          @click="refreshData"
+        <BaseButton
+            variant="primary"
+            @click="refreshData"
         >
-          {{ t('inventory.refresh') }}
+          <i class="pi pi-refresh"></i> {{ t('inventory.refresh') }}
         </BaseButton>
       </div>
     </div>
 
     <!-- Settings Panel -->
     <InventorySettings
-      v-if="showSettings"
-      :isRealTimeEnabled="isRealTimeEnabled"
-      :refreshInterval="refreshInterval"
-      :refreshIntervalOptions="refreshIntervalOptions"
-      :lastUpdated="lastUpdated"
-      @toggle-real-time="toggleRealTimeUpdates"
-      @set-refresh-interval="setRefreshInterval"
+        v-if="showSettings"
+        :isRealTimeEnabled="isRealTimeEnabled"
+        :refreshInterval="refreshInterval"
+        :refreshIntervalOptions="refreshIntervalOptions"
+        :lastUpdated="lastUpdated"
+        @toggle-real-time="toggleRealTimeUpdates"
+        @set-refresh-interval="setRefreshInterval"
     />
 
     <!-- KPI Cards -->
-    <InventoryKpiCards :kpiData="kpiData" :isLoading="isLoading" />
+    <InventoryKpiCards :kpiData="kpiData" :isLoading="isLoading"/>
 
     <!-- Loading Indicator -->
     <div v-if="isLoading" class="loading-indicator">
+      <i class="pi pi-spin pi-spinner"></i>
       {{ t('common.loading') }}
     </div>
     <div v-else>
       <!-- Tabs Navigation -->
-      <BaseTabs 
-        v-model="activeTab"
-        :tabs="tabs"
+      <BaseTabs
+          v-model="activeTab"
+          :tabs="tabs"
       >
         <!-- Overview Tab -->
         <template #overview>
           <InventoryOverview
-            :inventoryValueByCategory="inventoryValueByCategory"
-            :warehouseUtilization="warehouseUtilization"
-            :inventoryItems="interpolatedInventoryItems"
-            :lowStockItems="lowStockItems"
-            :outOfStockItems="outOfStockItems"
-            :totalValue="kpiData.totalValue"
+              :inventoryValueByCategory="inventoryValueByCategory"
+              :warehouseUtilization="warehouseUtilization"
+              :inventoryItems="interpolatedInventoryItems"
+              :lowStockItems="lowStockItems"
+              :outOfStockItems="outOfStockItems"
+              :totalValue="kpiData.totalValue"
           />
         </template>
 
         <!-- Items Tab -->
         <template #items>
           <InventoryItemsTable
-            :inventoryItems="interpolatedInventoryItems"
-            :warehouseData="warehouseData"
+              :inventoryItems="interpolatedInventoryItems"
+              :warehouseData="warehouseData"
           />
         </template>
 
         <!-- Warehouses Tab -->
         <template #warehouses>
           <InventoryWarehouses
-            :warehouseData="warehouseData"
+              :warehouseData="warehouseData"
           />
         </template>
 
         <!-- Stock Alerts Tab -->
         <template #stock_alerts>
           <InventoryStockAlerts
-            :lowStockItems="lowStockItems"
-            :outOfStockItems="outOfStockItems"
-            :warehouseData="warehouseData"
-            @restock="handleRestock"
+              :lowStockItems="lowStockItems"
+              :outOfStockItems="outOfStockItems"
+              :warehouseData="warehouseData"
+              @restock="handleRestock"
           />
         </template>
       </BaseTabs>
@@ -195,6 +196,13 @@ const handleRestock = ({ itemId, urgent }) => {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dashboard-header h2 .pi {
+  color: var(--color-primary);
 }
 
 .dashboard-actions {
@@ -206,8 +214,14 @@ const handleRestock = ({ itemId, urgent }) => {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 0.75rem;
   padding: 2rem;
   color: var(--color-text-secondary);
   font-style: italic;
+}
+
+.loading-indicator .pi {
+  font-size: 1.5rem;
+  color: var(--color-primary);
 }
 </style>
