@@ -164,9 +164,13 @@ const resetToDefaults = () => {
         variant="primary" 
         @click="runSimulation" 
         :disabled="isRunning"
+        class="run-button"
       >
         <i class="pi" :class="isRunning ? 'pi-spinner pi-spin' : 'pi-play'"></i>
         {{ isRunning ? t('simulation.running') : t('simulation.run_simulation') }}
+        <div v-if="isRunning" class="progress-bar-container">
+          <div class="progress-bar"></div>
+        </div>
       </BaseButton>
       <BaseButton 
         variant="default" 
@@ -241,5 +245,35 @@ const resetToDefaults = () => {
 .error-message .pi {
   font-size: 1rem;
   color: #dc2626;
+}
+
+.run-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 0%;
+  animation: progress-animation 2s ease-in-out forwards;
+}
+
+@keyframes progress-animation {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
 }
 </style>
