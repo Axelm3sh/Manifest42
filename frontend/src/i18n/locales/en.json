@@ -1,8 +1,6 @@
 {
   "app": {
-    "vite_logo_alt": "Vite logo",
-    "vue_logo_alt": "Vue logo",
-    "title": "Vite + Vue",
+    "title": "Manifest42",
     "name": "Manifest42",
     "skip_to_content": "Skip to main content",
     "footer_text": "© 2025 Manifest42 - AI-Powered Inventory Management Dashboard"
