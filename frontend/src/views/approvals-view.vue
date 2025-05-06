@@ -41,14 +41,6 @@ function showHistory(ev: MouseEvent | KeyboardEvent, row: ApprovalRequest) {
   historyPanel.value?.toggle(ev)
 }
 
-function urgencyColor(u?: string) {
-  return {high: 'var(--red-500)', medium: 'var(--orange-400)', low: 'var(--blue-400)'}[u ?? 'low']
-}
-
-function quantitySize(qty: number) {
-  return `${Math.min(28, 14 + qty)}px`
-}
-
 // Maps urgency to PrimeVue severity colour
 function urgencySeverity(u: 'high' | 'medium' | 'low') {
   return u === 'high' ? 'danger'
@@ -91,9 +83,17 @@ const selected = computed(() =>
                 @contextmenu.prevent="showHistory($event, item)"
                 @keydown.enter="selectedId = item.id"
             >
-              <div class="id">{{ item.id }}</div>
+              <div class="request-info">
+                <div class="id-container">
+                  <span class="id-label">ID:</span>
+                  <span class="id">{{ item.id }}</span>
+                </div>
+                <div class="item-container">
+                  <span class="item-label">Inventory:</span>
+                  <span class="item">{{ item.itemId }}</span>
+                </div>
+              </div>
               <div class="meta">
-                <span class="item">{{ item.itemId }}</span>
                 <span class="qty" aria-label="Quantity {{ item.quantityRequested }}">{{ item.quantityRequested }}</span>
                 <button
                     type="button"
@@ -268,6 +268,34 @@ const selected = computed(() =>
   color: var(--text-color, var(--color-text)); /* Ensure text is visible */
 }
 
+.request-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.id-container, .item-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.id-label, .item-label {
+  font-size: 0.75rem;
+  color: var(--color-text);
+  min-width: 4rem;
+}
+
+.id {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.item {
+  color: var(--color-text);
+}
+
 .request-row.active,
 .request-row:hover {
   background: var(--surface-hover);
@@ -303,8 +331,9 @@ const selected = computed(() =>
 
 .request-row .meta {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: .5rem;
+  padding-top: 0.25rem;
 }
 
 .qty {
