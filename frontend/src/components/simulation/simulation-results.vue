@@ -2,7 +2,7 @@
 import {useI18n} from 'vue-i18n';
 import BaseCard from '../base/base-card.vue';
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const props = defineProps({
   results: {
@@ -43,11 +43,11 @@ const formatPercent = (value) => {
 const sanitize = (str) => {
   if (!str) return '';
   return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
 };
 
 // Chart rendering functions
@@ -67,8 +67,8 @@ const renderStockLevelChart = () => {
   const xScale = (width - padding * 2) / maxDay;
   const yScale = (height - padding * 2) / maxStock;
 
-  const points = data.map(d => 
-    `${padding + d.day * xScale},${height - padding - d.stockLevel * yScale}`
+  const points = data.map(d =>
+      `${padding + d.day * xScale},${height - padding - d.stockLevel * yScale}`
   ).join(' ');
 
   return `
@@ -139,8 +139,8 @@ const renderDemandChart = () => {
   const xScale = (width - padding * 2) / maxDay;
   const yScale = (height - padding * 2) / maxDemand;
 
-  const points = data.map(d => 
-    `${padding + d.day * xScale},${height - padding - d.demand * yScale}`
+  const points = data.map(d =>
+      `${padding + d.day * xScale},${height - padding - d.demand * yScale}`
   ).join(' ');
 
   return `
@@ -259,7 +259,10 @@ const renderDemandChart = () => {
             <div class="summary-icon"><i class="pi pi-calendar"></i></div>
             <div class="summary-content">
               <div class="summary-label">{{ t('simulation.average_order_cycle') }}</div>
-              <div class="summary-value">{{ formatNumber(summary.averageOrderCycle, 1) }} {{ t('simulation.days') }}</div>
+              <div class="summary-value">{{ formatNumber(summary.averageOrderCycle, 1) }} {{
+                  t('simulation.days')
+                }}
+              </div>
             </div>
           </div>
         </div>
@@ -334,13 +337,33 @@ const renderDemandChart = () => {
   opacity: 0.7;
 }
 
-.summary-item[data-type="stock"]::before { background-color: #3b82f6; }
-.summary-item[data-type="demand"]::before { background-color: #f59e0b; }
-.summary-item[data-type="orders"]::before { background-color: #10b981; }
-.summary-item[data-type="stockout"]::before { background-color: #ef4444; }
-.summary-item[data-type="service"]::before { background-color: #8b5cf6; }
-.summary-item[data-type="turnover"]::before { background-color: #ec4899; }
-.summary-item[data-type="cycle"]::before { background-color: #6366f1; }
+.summary-item[data-type="stock"]::before {
+  background-color: #3b82f6;
+}
+
+.summary-item[data-type="demand"]::before {
+  background-color: #f59e0b;
+}
+
+.summary-item[data-type="orders"]::before {
+  background-color: #10b981;
+}
+
+.summary-item[data-type="stockout"]::before {
+  background-color: #ef4444;
+}
+
+.summary-item[data-type="service"]::before {
+  background-color: #8b5cf6;
+}
+
+.summary-item[data-type="turnover"]::before {
+  background-color: #ec4899;
+}
+
+.summary-item[data-type="cycle"]::before {
+  background-color: #6366f1;
+}
 
 .summary-icon {
   display: flex;
@@ -354,13 +377,40 @@ const renderDemandChart = () => {
   color: #3b82f6;
 }
 
-.summary-item[data-type="stock"] .summary-icon { background-color: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-.summary-item[data-type="demand"] .summary-icon { background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-.summary-item[data-type="orders"] .summary-icon { background-color: rgba(16, 185, 129, 0.1); color: #10b981; }
-.summary-item[data-type="stockout"] .summary-icon { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; }
-.summary-item[data-type="service"] .summary-icon { background-color: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
-.summary-item[data-type="turnover"] .summary-icon { background-color: rgba(236, 72, 153, 0.1); color: #ec4899; }
-.summary-item[data-type="cycle"] .summary-icon { background-color: rgba(99, 102, 241, 0.1); color: #6366f1; }
+.summary-item[data-type="stock"] .summary-icon {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.summary-item[data-type="demand"] .summary-icon {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.summary-item[data-type="orders"] .summary-icon {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.summary-item[data-type="stockout"] .summary-icon {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.summary-item[data-type="service"] .summary-icon {
+  background-color: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.summary-item[data-type="turnover"] .summary-icon {
+  background-color: rgba(236, 72, 153, 0.1);
+  color: #ec4899;
+}
+
+.summary-item[data-type="cycle"] .summary-icon {
+  background-color: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
 
 .summary-icon i {
   font-size: 1.25rem;
