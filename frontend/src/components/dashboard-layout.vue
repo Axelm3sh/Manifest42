@@ -218,6 +218,7 @@ const getDashboardRoute = () => {
           <LanguageSwitcher />
           <button class="logout-button header-logout" @click="handleLogout" :title="t('navigation.logout')">
             <i class="pi pi-sign-out nav-icon"></i>
+            <span class="logout-text">{{ t('navigation.logout') }}</span>
           </button>
         </div>
       </header>
@@ -453,12 +454,31 @@ const getDashboardRoute = () => {
   align-items: center;
   justify-content: center;
   width: auto;
+  overflow: hidden;
+  position: relative;
 }
 
 .header-logout:hover {
   background-color: var(--color-surface-hover);
   color: var(--color-primary);
   transform: scale(1.05);
+}
+
+/* Logout text styling */
+.logout-text {
+  max-width: 0;
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: max-width var(--transition-normal),
+              opacity var(--transition-normal),
+              margin-left var(--transition-normal);
+}
+
+.header-logout:hover .logout-text {
+  max-width: 100px;
+  opacity: 1;
+  margin-left: var(--spacing-sm);
 }
 
 .content-area {
