@@ -280,31 +280,10 @@ const handleApproval = (id, action) => {
 
         <!-- Dashboard sections -->
         <div class="dashboard-sections" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--spacing-lg, 1.5rem);">
-          <!-- Quick actions -->
-          <div class="manager-actions">
-            <div class="card-header">
-              <h3 class="card-title">{{ t('manager.quick_actions') }}</h3>
-            </div>
-            <div class="actions-grid">
-              <router-link to="/manager/inventory" class="action-button">
-                {{ t('manager.actions.view_inventory') }}
-              </router-link>
-              <router-link to="/manager/approvals" class="action-button">
-                {{ t('manager.actions.manage_approvals') }}
-              </router-link>
-              <router-link to="/manager/reports" class="action-button">
-                {{ t('manager.actions.view_reports') }}
-              </router-link>
-            </div>
-          </div>
-
           <!-- Pending approvals summary -->
           <div class="overview-card">
             <div class="card-header">
               <h3 class="card-title">{{ t('manager.pending_approvals') }}</h3>
-              <router-link to="/manager/approvals" class="action-link">
-                {{ t('manager.view_approvals') }}
-              </router-link>
             </div>
             <div v-if="pendingApprovals.length === 0" class="empty-state">
               {{ t('manager.no_pending_approvals') }}
@@ -325,23 +304,55 @@ const handleApproval = (id, action) => {
           </div>
 
           <!-- Team performance summary -->
-          <div class="overview-card">
+          <div class="overview-card team-performance-card">
             <div class="card-header">
               <h3 class="card-title">{{ t('manager.team_performance') }}</h3>
             </div>
             <div class="team-summary">
-              <div class="team-metric">
+              <div class="team-metric performance-metric">
+                <div class="metric-icon">
+                  <i class="pi pi-chart-line" aria-hidden="true"></i>
+                </div>
                 <div class="metric-label">{{ t('manager.avg_performance') }}</div>
-                <div class="metric-value">{{ managerMetrics.teamPerformance }}%</div>
+                <div class="metric-value" :class="getPerformanceClass(managerMetrics.teamPerformance)">
+                  {{ managerMetrics.teamPerformance }}%
+                </div>
+                <div class="metric-progress">
+                  <div class="progress-bar" :style="{width: `${managerMetrics.teamPerformance}%`}"></div>
+                </div>
               </div>
               <div class="team-metric">
+                <div class="metric-icon">
+                  <i class="pi pi-users" aria-hidden="true"></i>
+                </div>
                 <div class="metric-label">{{ t('manager.team_members') }}</div>
                 <div class="metric-value">{{ teamMembers.length }}</div>
               </div>
               <div class="team-metric">
+                <div class="metric-icon">
+                  <i class="pi pi-user-plus" aria-hidden="true"></i>
+                </div>
                 <div class="metric-label">{{ t('manager.online_now') }}</div>
                 <div class="metric-value">{{ teamMembers.filter(m => m.status === 'online').length }}</div>
               </div>
+            </div>
+          </div>
+
+          <!-- Quick actions -->
+          <div class="manager-actions">
+            <div class="card-header">
+              <h3 class="card-title">{{ t('manager.quick_actions') }}</h3>
+            </div>
+            <div class="actions-grid">
+              <router-link to="/manager/inventory" class="action-button">
+                {{ t('manager.actions.view_inventory') }}
+              </router-link>
+              <router-link to="/manager/approvals" class="action-button">
+                {{ t('manager.actions.manage_approvals') }}
+              </router-link>
+              <router-link to="/manager/reports" class="action-button">
+                {{ t('manager.actions.view_reports') }}
+              </router-link>
             </div>
           </div>
         </div>
@@ -561,6 +572,22 @@ export const getPerformanceClass = (value) => {
   padding: 1rem;
   border-radius: 8px;
   background-color: var(--color-background);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.team-metric:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.performance-metric {
+  border-bottom: 3px solid var(--color-primary);
+}
+
+.metric-icon {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
 }
 
 .metric-label {
@@ -574,6 +601,38 @@ export const getPerformanceClass = (value) => {
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.metric-progress {
+  width: 100%;
+  height: 6px;
+  background-color: var(--color-background-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 3px;
+}
+
+.performance-excellent {
+  color: var(--color-success);
+}
+
+.performance-good {
+  color: var(--color-primary);
+}
+
+.performance-average {
+  color: var(--color-warning);
+}
+
+.performance-poor {
+  color: var(--color-error);
 }
 
 .view-all-button {
