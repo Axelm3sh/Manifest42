@@ -34,7 +34,8 @@
     "confirm": "Confirm",
     "yes": "Yes",
     "no": "No",
-    "id": "ID"
+    "id": "ID",
+    "placeholder_content": "Content coming soon..."
   },
   "data_list": {
     "filter": "Filter",
@@ -541,28 +542,5 @@
     "real_time_updates": "Real-time Updates",
     "refresh_interval": "Refresh Interval",
     "last_updated": "Last Updated"
-  },
-  "common": {
-    "loading": "Loading...",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "view": "View",
-    "search": "Search",
-    "filter": "Filter",
-    "sort": "Sort",
-    "refresh": "Refresh",
-    "settings": "Settings",
-    "logout": "Logout",
-    "login": "Login",
-    "register": "Register",
-    "submit": "Submit",
-    "reset": "Reset",
-    "actions": "Actions",
-    "confirm": "Confirm",
-    "yes": "Yes",
-    "no": "No",
-    "placeholder_content": "Content coming soon..."
   }
 }
