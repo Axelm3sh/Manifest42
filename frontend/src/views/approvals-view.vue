@@ -68,148 +68,150 @@ const selected = computed(() =>
 </script>
 
 <template>
-  <h1 class="mb-4">{{ t('approvals.title') }}</h1>
+  <div class="approvals-view">
+    <h1 class="mb-4">{{ t('approvals.title') }}</h1>
 
-  <div class="approvals-layout">
-    <!-- LEFT PANE ──────────────────────────────────────── -->
-    <aside class="left-pane">
-      <VirtualScroller
-          :items="allRows"
-          :itemSize="72"
-          class="scroller"
-          showLoader
-      >
-        <template #item="{ item }">
-          <div
-              role="button"
-              tabindex="0"
-              :class="['request-row', { active: item.id === selectedId }]"
-              :data-urgency="item.urgency"
-              :data-status="item.status"
-              @click="selectedId = item.id"
-              @contextmenu.prevent="showHistory($event, item)"
-              @keydown.enter="selectedId = item.id"
-          >
-            <div class="id">{{ item.id }}</div>
-            <div class="meta">
-              <span class="item">{{ item.itemId }}</span>
-              <span class="qty" aria-label="Quantity {{ item.quantityRequested }}">{{ item.quantityRequested }}</span>
-              <button
-                  type="button"
-                  class="history-btn p-button p-button-text p-button-sm"
-                  aria-label="{{ t('approvals.history_for', { id: item.id }) }}"
-                  @click.stop="showHistory($event, item)"
-                  @keydown.enter.stop="showHistory($event, item)"
-              >
-                <i class="pi pi-history"></i>
-              </button>
+    <div class="approvals-layout">
+      <!-- LEFT PANE ──────────────────────────────────────── -->
+      <aside class="left-pane">
+        <VirtualScroller
+            :items="allRows"
+            :itemSize="72"
+            class="scroller"
+            showLoader
+        >
+          <template #item="{ item }">
+            <div
+                role="button"
+                tabindex="0"
+                :class="['request-row', { active: item.id === selectedId }]"
+                :data-urgency="item.urgency"
+                :data-status="item.status"
+                @click="selectedId = item.id"
+                @contextmenu.prevent="showHistory($event, item)"
+                @keydown.enter="selectedId = item.id"
+            >
+              <div class="id">{{ item.id }}</div>
+              <div class="meta">
+                <span class="item">{{ item.itemId }}</span>
+                <span class="qty" aria-label="Quantity {{ item.quantityRequested }}">{{ item.quantityRequested }}</span>
+                <button
+                    type="button"
+                    class="history-btn p-button p-button-text p-button-sm"
+                    aria-label="{{ t('approvals.history_for', { id: item.id }) }}"
+                    @click.stop="showHistory($event, item)"
+                    @keydown.enter.stop="showHistory($event, item)"
+                >
+                  <i class="pi pi-history"></i>
+                </button>
+              </div>
             </div>
-          </div>
-        </template>
-      </VirtualScroller>
-
-      <!-- QUICK HISTORY POPOVER -->
-      <Popover
-          ref="historyPanel"
-          role="dialog"
-          aria-modal="false"
-          appendTo="body"
-      >
-        <div id="history-title" class="mb-2">{{ t('approvals.approval_history') }}</div>
-        <Timeline :value="historyRow?.approvals ?? []" class="p-0">
-          <template #content="{ item }">
-            <Tag :severity="item.status.toLowerCase()" :value="item.role"/>
-            <span class="ml-1 text-xs">{{ new Date(item.decisionAt).toLocaleString() }}</span>
           </template>
-          <template #opposite/>
-          <template #marker="{ item }">
-            <i :class="['pi',
+        </VirtualScroller>
+
+        <!-- QUICK HISTORY POPOVER -->
+        <Popover
+            ref="historyPanel"
+            role="dialog"
+            aria-modal="false"
+            appendTo="body"
+        >
+          <div id="history-title" class="mb-2">{{ t('approvals.approval_history') }}</div>
+          <Timeline :value="historyRow?.approvals ?? []" class="p-0">
+            <template #content="{ item }">
+              <Tag :severity="item.status.toLowerCase()" :value="item.role"/>
+              <span class="ml-1 text-xs">{{ new Date(item.decisionAt).toLocaleString() }}</span>
+            </template>
+            <template #opposite/>
+            <template #marker="{ item }">
+              <i :class="['pi',
                     item.status === 'Approved' ? 'pi-check'
                   : item.status === 'Rejected' ? 'pi-times'
                   : 'pi-clock']"/>
-          </template>
-        </Timeline>
-      </Popover>
-    </aside>
+            </template>
+          </Timeline>
+        </Popover>
+      </aside>
 
-    <!-- RIGHT PANE ─────────────────────────────────────── -->
-    <section v-if="selected" class="right-pane">
-      <h2 class="sr-only">{{ t('approvals.details_for', {id: selected.id}) }}</h2>
-      <h3 class="mb-3">{{ t('approvals.details_for', {id: selected.id}) }}</h3>
+      <!-- RIGHT PANE ─────────────────────────────────────── -->
+      <section v-if="selected" class="right-pane">
+        <h2 class="sr-only">{{ t('approvals.details_for', {id: selected.id}) }}</h2>
+        <h3 class="mb-3">{{ t('approvals.details_for', {id: selected.id}) }}</h3>
 
-      <dl class="meta-list">
-        <dt>{{ t('approvals.requester') }}</dt>
-        <dd>{{ selected.requestedBy }}</dd>
-        <dt>{{ t('approvals.item_id') }}</dt>
-        <dd>{{ selected.itemId }}</dd>
-        <dt>{{ t('approvals.qty') }}</dt>
-        <dd>{{ selected.quantityRequested }}</dd>
-        <dt>{{ t('approvals.reason') }}</dt>
-        <dd>{{ selected.reason }}</dd>
-        <dt>{{ t('approvals.urgency') }}</dt>
-        <dd>
-          <Tag
-              :value="t(`approvals.urgency_${selected.urgency}`)"
-              :severity="urgencySeverity(selected.urgency)"
-          />
-        </dd>
-      </dl>
+        <dl class="meta-list">
+          <dt>{{ t('approvals.requester') }}</dt>
+          <dd>{{ selected.requestedBy }}</dd>
+          <dt>{{ t('approvals.item_id') }}</dt>
+          <dd>{{ selected.itemId }}</dd>
+          <dt>{{ t('approvals.qty') }}</dt>
+          <dd>{{ selected.quantityRequested }}</dd>
+          <dt>{{ t('approvals.reason') }}</dt>
+          <dd>{{ selected.reason }}</dd>
+          <dt>{{ t('approvals.urgency') }}</dt>
+          <dd>
+            <Tag
+                :value="t(`approvals.urgency_${selected.urgency}`)"
+                :severity="urgencySeverity(selected.urgency)"
+            />
+          </dd>
+        </dl>
 
-      <!-- approval chain -->
-      <h4 class="mt-5 mb-3">{{ t('approvals.decisions') }}</h4>
-      <Timeline
-          :value="selected.approvals"
-          layout="vertical"
-          align="left"
-      >
-        <template #content="{ item }">
-          <Tag
-              :severity="item.status === 'Approved' ? 'success'
+        <!-- approval chain -->
+        <h4 class="mt-5 mb-3">{{ t('approvals.decisions') }}</h4>
+        <Timeline
+            :value="selected.approvals"
+            layout="vertical"
+            align="left"
+        >
+          <template #content="{ item }">
+            <Tag
+                :severity="item.status === 'Approved' ? 'success'
                        : item.status === 'Rejected' ? 'danger'
                        : 'warning'"
-              :value="item.role"
-              class="mr-2"
-          />
-          <span>{{ t(`approvals.${item.status.toLowerCase()}`) }}</span>
-          <span v-if="item.decisionAt" class="ml-2 text-xs text-500">
+                :value="item.role"
+                class="mr-2"
+            />
+            <span>{{ t(`approvals.${item.status.toLowerCase()}`) }}</span>
+            <span v-if="item.decisionAt" class="ml-2 text-xs text-500">
             {{ new Date(item.decisionAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }}
           </span>
-        </template>
-        <template #opposite/>
-        <template #marker="{ item }">
+          </template>
+          <template #opposite/>
+          <template #marker="{ item }">
           <span
               class="pi"
               :class="item.status === 'Approved' ? 'pi-check-circle text-green-500'
                     : item.status === 'Rejected' ? 'pi-times-circle text-red-400'
                     : 'pi-clock text-500'"
           />
-        </template>
-      </Timeline>
+          </template>
+        </Timeline>
 
-      <!-- actions -->
-      <div class="actions mt-6">
-        <Button
-            severity="success"
-            icon="pi pi-check"
-            size="large"
-            :label="t('approvals.approve_btn')"
-            @click="approve()"
-        />
-        <Button
-            severity="danger"
-            icon="pi pi-times"
-            size="large"
-            :label="t('approvals.reject_btn')"
-            class="ml-3"
-            @click="reject()"
-        />
-      </div>
-    </section>
+        <!-- actions -->
+        <div class="actions mt-6">
+          <Button
+              severity="success"
+              icon="pi pi-check"
+              size="large"
+              :label="t('approvals.approve_btn')"
+              @click="approve()"
+          />
+          <Button
+              severity="danger"
+              icon="pi pi-times"
+              size="large"
+              :label="t('approvals.reject_btn')"
+              class="ml-3"
+              @click="reject()"
+          />
+        </div>
+      </section>
 
-    <!-- placeholder when nothing is selected -->
-    <section v-else class="right-pane placeholder">
-      <span class="text-500">{{ t('approvals.select_request') }}</span>
-    </section>
+      <!-- placeholder when nothing is selected -->
+      <section v-else class="right-pane placeholder">
+        <span class="text-500">{{ t('approvals.select_request') }}</span>
+      </section>
+    </div>
   </div>
 </template>
 
