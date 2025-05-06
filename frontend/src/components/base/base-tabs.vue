@@ -9,7 +9,9 @@ const props = defineProps({
       return value.every(tab => 
         typeof tab.id === 'string' && 
         typeof tab.label === 'string' && 
-        (tab.icon === undefined || typeof tab.icon === 'string')
+        (tab.icon === undefined || typeof tab.icon === 'string') &&
+        (tab.badge === undefined || tab.badge === null || typeof tab.badge === 'string') &&
+        (tab.badgeClass === undefined || tab.badgeClass === null || typeof tab.badgeClass === 'string')
       );
     }
   },
@@ -57,6 +59,7 @@ const setActiveTab = (tabId) => {
       >
         <i v-if="tab.icon" class="pi" :class="tab.icon"></i>
         <span>{{ tab.label }}</span>
+        <span v-if="tab.badge" class="tab-badge" :class="tab.badgeClass">{{ tab.badge }}</span>
       </button>
     </div>
     <div class="tab-content">
@@ -113,5 +116,38 @@ const setActiveTab = (tabId) => {
 
 .tab-content {
   flex: 1;
+}
+
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.15rem 0.35rem;
+  border-radius: 1rem;
+  background-color: #ef4444;
+  color: white;
+  margin-left: 0.5rem;
+}
+
+.new-result-badge {
+  background-color: #10b981;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 </style>
