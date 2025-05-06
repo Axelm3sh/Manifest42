@@ -32,7 +32,7 @@ const deleteScenario = (id) => {
 <template>
   <BaseCard :title="t('simulation.saved_scenarios')">
     <div v-if="scenarios.length === 0" class="no-scenarios">
-      {{ t('simulation.no_scenarios') }}
+      <i class="pi pi-info-circle"></i> {{ t('simulation.no_scenarios') }}
     </div>
 
     <div v-else class="scenarios-list">
@@ -42,7 +42,10 @@ const deleteScenario = (id) => {
         class="scenario-item"
         :class="{ 'active': currentScenario === scenario.id }"
       >
-        <div class="scenario-name">{{ scenario.name }}</div>
+        <div class="scenario-name">
+          <i class="pi" :class="currentScenario === scenario.id ? 'pi-bookmark-fill' : 'pi-bookmark'"></i>
+          {{ scenario.name }}
+        </div>
         <div class="scenario-actions">
           <BaseButton 
             variant="primary"
@@ -50,7 +53,7 @@ const deleteScenario = (id) => {
             @click="loadScenario(scenario.id)" 
             :disabled="currentScenario === scenario.id"
           >
-            {{ t('simulation.load') }}
+            <i class="pi pi-download"></i> {{ t('simulation.load') }}
           </BaseButton>
           <BaseButton 
             v-if="scenario.id !== 'default'"
@@ -58,7 +61,7 @@ const deleteScenario = (id) => {
             size="small"
             @click="deleteScenario(scenario.id)" 
           >
-            {{ t('simulation.delete') }}
+            <i class="pi pi-trash"></i> {{ t('simulation.delete') }}
           </BaseButton>
         </div>
       </div>
@@ -70,8 +73,17 @@ const deleteScenario = (id) => {
 .no-scenarios {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--color-text-tertiary);
   font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.no-scenarios .pi {
+  color: var(--color-primary);
+  font-size: 1.25rem;
 }
 
 .scenarios-list {
@@ -85,18 +97,33 @@ const deleteScenario = (id) => {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background-color: #f9fafb;
+  background-color: var(--color-surface);
   border-radius: 0.25rem;
   border-left: 4px solid transparent;
+  transition: background-color 0.2s, border-color 0.2s;
+  box-shadow: 0 1px 3px var(--color-shadow);
+}
+
+.scenario-item:hover {
+  background-color: var(--color-surface-hover);
 }
 
 .scenario-item.active {
-  border-left-color: #3b82f6;
-  background-color: #eff6ff;
+  border-left-color: var(--color-primary);
+  background-color: var(--color-primary-muted);
 }
 
 .scenario-name {
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.scenario-name .pi {
+  color: var(--color-primary);
+  font-size: 1rem;
 }
 
 .scenario-actions {

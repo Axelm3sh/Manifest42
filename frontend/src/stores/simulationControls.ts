@@ -160,32 +160,36 @@ export const useSimulationControlsStore = defineStore('simulationControls', () =
     try {
       // In a real app, this might be an API call or a more complex simulation
       const results = generateSimulationResults(simulationParameters.value);
-      simulationResults.value = results;
 
-      // Add to history
-      simulationHistory.value.push({
-        id: `sim-${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        parameters: { ...simulationParameters.value },
-        summary: {
-          averageStockLevel: results.averageStockLevel,
-          totalDemand: results.totalDemand,
-          stockoutDays: results.stockoutDays,
-          serviceLevel: results.serviceLevel
+      // Add a delay to simulate processing time and allow the loading animation to be visible
+      setTimeout(() => {
+        simulationResults.value = results;
+
+        // Add to history
+        simulationHistory.value.push({
+          id: `sim-${Date.now()}`,
+          timestamp: new Date().toISOString(),
+          parameters: { ...simulationParameters.value },
+          summary: {
+            averageStockLevel: results.averageStockLevel,
+            totalDemand: results.totalDemand,
+            stockoutDays: results.stockoutDays,
+            serviceLevel: results.serviceLevel
+          }
+        });
+
+        // Limit history to last 10 simulations
+        if (simulationHistory.value.length > 10) {
+          simulationHistory.value = simulationHistory.value.slice(-10);
         }
-      });
 
-      // Limit history to last 10 simulations
-      if (simulationHistory.value.length > 10) {
-        simulationHistory.value = simulationHistory.value.slice(-10);
-      }
+        // Update current scenario results
+        if (savedScenarios.value[currentScenario.value]) {
+          savedScenarios.value[currentScenario.value].results = results;
+        }
 
-      // Update current scenario results
-      if (savedScenarios.value[currentScenario.value]) {
-        savedScenarios.value[currentScenario.value].results = results;
-      }
-
-      isRunning.value = false;
+        isRunning.value = false;
+      }, 1500); // 1.5 second delay to match the animation duration
     } catch (err: any) {
       error.value = err.message || 'Failed to run simulation';
       isRunning.value = false;
