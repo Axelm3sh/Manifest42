@@ -59,6 +59,134 @@ A prototype web UI for a warehouse management system that:
 7. **Logout**  
    Securely terminate the session.
 
+## User Roles and Dashboard Functionality
+
+### Admin Role
+**Overview:** Administrators have the highest level of access and are responsible for system management, user administration, and overseeing the entire inventory management system.
+
+**Key Dashboard Features:**
+- **System Status Monitoring:** View users online, pending approvals, system health, and backup status
+- **User Management:** Add, edit, and deactivate user accounts
+- **System Settings:** Configure application settings and permissions
+- **Inventory Management:** Access to all inventory data and management functions
+
+**Common Tasks:**
+- Approving new user registrations
+- Managing user roles and permissions
+- Monitoring system health and performance
+- Reviewing system logs and activity history
+- Configuring system-wide settings
+
+**Navigation Tips:**
+- Use the quick actions panel for fast access to common administrative tasks
+- Monitor the recent activities section to stay informed about important system events
+- Check the system status card regularly to ensure optimal system performance
+
+### Manager Role
+**Overview:** Managers oversee operations, team performance, and make approval decisions for inventory adjustments and other operational changes.
+
+**Key Dashboard Features:**
+- **Approval Management:** Review and process pending approval requests
+- **Team Performance Monitoring:** Track team member performance metrics
+- **Inventory Oversight:** View inventory alerts and status
+- **Cost Savings Tracking:** Monitor financial metrics related to inventory optimization
+
+**Common Tasks:**
+- Reviewing and approving inventory adjustments
+- Monitoring team performance and productivity
+- Analyzing cost savings opportunities
+- Generating and reviewing reports
+- Making operational decisions based on AI recommendations
+
+**Navigation Tips:**
+- Prioritize approval requests by their urgency level (high, medium, low)
+- Use the team performance card to identify top performers and areas for improvement
+- Access quick actions for immediate response to critical inventory situations
+
+### Analyst Role
+**Overview:** Analysts focus on data analysis, running simulations, generating reports, and leveraging AI insights to optimize inventory management.
+
+**Key Dashboard Features:**
+- **Simulation Management:** Create and monitor inventory simulations
+- **Report Generation:** Create and access analytical reports
+- **AI Insights:** View and act on AI-generated recommendations
+- **Data Accuracy Monitoring:** Track and improve data quality metrics
+
+**Common Tasks:**
+- Creating and running inventory simulations
+- Analyzing simulation results and generating insights
+- Producing reports for management review
+- Monitoring data accuracy and quality
+- Implementing AI recommendations for inventory optimization
+
+**Navigation Tips:**
+- Toggle section visibility to customize your dashboard view
+- Use the simulation progress bars to track ongoing simulations
+- Review AI recommendations sorted by confidence level and potential impact
+- Access the analytics section for in-depth data exploration
+
+### Logistics Role
+**Overview:** Logistics personnel manage shipments, deliveries, and day-to-day inventory movements, focusing on operational execution.
+
+**Key Dashboard Features:**
+- **Shipment Tracking:** Monitor pending, in-transit, and delivered shipments
+- **Inventory Alerts:** View and respond to stock level warnings
+- **Delivery Management:** Track upcoming deliveries and their status
+- **Stockout Risk Monitoring:** Identify and address potential stockout situations
+
+**Common Tasks:**
+- Creating and tracking shipments
+- Responding to inventory alerts (low stock, stockout risk, excess inventory)
+- Monitoring delivery schedules and addressing delays
+- Managing day-to-day inventory movements
+- Coordinating with suppliers and distribution centers
+
+**Navigation Tips:**
+- Use status indicators to quickly identify delayed shipments or critical inventory alerts
+- Check the upcoming deliveries section daily to prepare for new arrivals
+- Respond promptly to critical-level inventory alerts to prevent stockouts
+- Use the shipment creation function to initiate new outbound shipments
+
+## Troubleshooting Tips
+
+### Common Issues and Solutions
+
+1. **Login Problems**
+   - Ensure you're using the correct credentials
+   - Check if your account is active
+   - Clear browser cache and cookies
+   - Contact an administrator if problems persist
+
+2. **Dashboard Not Loading**
+   - Check your internet connection
+   - Refresh the page
+   - Clear browser cache
+   - Try using a different browser
+
+3. **Data Not Updating**
+   - Check if real-time data streaming is enabled
+   - Refresh the dashboard
+   - Verify API connectivity
+   - Contact technical support if the issue persists
+
+4. **Permission Denied Errors**
+   - Verify that you have the appropriate role for the action
+   - Log out and log back in
+   - Contact an administrator to review your permissions
+
+5. **Slow Dashboard Performance**
+   - Close unnecessary browser tabs
+   - Clear browser cache
+   - Check your internet connection speed
+   - Reduce the number of active dashboard widgets
+
+### Getting Help
+If you encounter issues not covered above, please:
+- Check the documentation in the Help section
+- Contact your system administrator
+- Submit a support ticket through the Help desk
+- Refer to the training materials for your specific role
+
 ## Expected Outcomes
 
 - **Optimized Warehouse Operations**: Achieve efficiency through real-time inventory visibility
