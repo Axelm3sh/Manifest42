@@ -23,8 +23,10 @@ const getActiveItem = () => {
   const path = route.path;
   if (path === '/logistics') return 'dashboard';
   if (path === '/logistics/inventory') return 'inventory';
-  if (path === '/logistics/shipments') return 'shipments';
-  if (path === '/logistics/deliveries') return 'deliveries';
+  if (path === '/logistics/shipping') return 'shipping';
+  if (path === '/logistics/tracking') return 'tracking';
+  if (path === '/logistics/shipments') return 'shipping';
+  if (path === '/logistics/deliveries') return 'tracking';
   if (path === '/logistics/notifications') return 'notifications';
   return 'dashboard';
 };
@@ -327,7 +329,7 @@ const handleInventoryAction = (id, action) => {
             <div class="kpi-trend" :class="kpi.trend">
               {{ kpi.change }}
               <span class="trend-icon">
-                {{ kpi.trend === 'up' ? '↑' : kpi.trend === 'down' ? '↓' : '→' }}
+                <i :class="['pi', kpi.trend === 'up' ? 'pi-arrow-up' : kpi.trend === 'down' ? 'pi-arrow-down' : 'pi-arrow-right']" aria-hidden="true"></i>
               </span>
             </div>
           </div>
@@ -337,19 +339,21 @@ const handleInventoryAction = (id, action) => {
         <div class="dashboard-sections">
           <!-- Quick actions -->
           <div class="logistics-actions">
-            <h3 class="card-title">{{ t('logistics.quick_actions') }}</h3>
+            <div class="card-header">
+              <h3 class="card-title">{{ t('logistics.quick_actions') }}</h3>
+            </div>
             <div class="actions-grid">
-              <router-link to="/logistics/shipments" class="action-button">
+              <router-link to="/logistics/shipping" class="action-button">
+                <i class="pi pi-truck" aria-hidden="true"></i>
                 {{ t('logistics.actions.create_shipment') }}
               </router-link>
-              <router-link to="/logistics/deliveries" class="action-button">
+              <router-link to="/logistics/tracking" class="action-button">
+                <i class="pi pi-calendar" aria-hidden="true"></i>
                 {{ t('logistics.actions.schedule_delivery') }}
               </router-link>
               <router-link to="/logistics/inventory" class="action-button">
+                <i class="pi pi-list" aria-hidden="true"></i>
                 {{ t('logistics.actions.inventory_count') }}
-              </router-link>
-              <router-link to="/logistics/reports" class="action-button">
-                {{ t('logistics.actions.generate_report') }}
               </router-link>
             </div>
           </div>
@@ -358,7 +362,7 @@ const handleInventoryAction = (id, action) => {
           <div class="overview-card">
             <div class="card-header">
               <h3 class="card-title">{{ t('logistics.recent_shipments') }}</h3>
-              <router-link to="/logistics/shipments" class="action-link">
+              <router-link to="/logistics/shipping" class="action-link">
                 {{ t('logistics.new_shipment') }}
               </router-link>
             </div>
@@ -370,24 +374,54 @@ const handleInventoryAction = (id, action) => {
             <div v-else class="shipments-list">
               <div v-for="shipment in recentShipments.slice(0, 2)" :key="shipment.id" class="shipment-item">
                 <div class="shipment-header">
-                  <div class="shipment-id">{{ shipment.id }}</div>
+                  <div class="shipment-id">
+                    <i class="pi pi-box" aria-hidden="true"></i>
+                    {{ shipment.id }}
+                  </div>
                   <div class="shipment-status" :class="getStatusClass(shipment.status)">
+                    <i :class="['status-icon', 'pi', 
+                      shipment.status === 'delivered' ? 'pi-check-circle' : 
+                      shipment.status === 'in_transit' ? 'pi-sync' : 
+                      shipment.status === 'pending' ? 'pi-clock' : 
+                      shipment.status === 'delayed' ? 'pi-exclamation-triangle' : 'pi-info-circle']" 
+                      aria-hidden="true"></i>
                     {{ t(`logistics.status.${shipment.status}`) }}
                   </div>
                 </div>
 
-                <div class="shipment-destination">{{ shipment.destination }}</div>
+                <div class="shipment-destination">
+                  <i class="pi pi-map-marker" aria-hidden="true"></i>
+                  {{ shipment.destination }}
+                </div>
 
                 <div class="shipment-details">
                   <div class="shipment-items">
+                    <i class="pi pi-list" aria-hidden="true"></i>
                     {{ t('logistics.items_count', { count: shipment.items }) }}
                   </div>
-                  <div class="shipment-priority" :class="`priority-${shipment.priority}`">
-                    {{ t(`logistics.priority.${shipment.priority}`) }}
+                  <div class="shipment-priority-container">
+                    <div class="shipment-priority" :class="`priority-${shipment.priority}`">
+                      <i :class="['priority-icon', 'pi', 
+                        shipment.priority === 'high' ? 'pi-flag-fill' : 
+                        shipment.priority === 'medium' ? 'pi-flag' : 'pi-bookmark']" 
+                        aria-hidden="true"></i>
+                      {{ t(`logistics.priority.${shipment.priority}`) }}
+                    </div>
+                    <div class="shipment-progress-container">
+                      <div class="shipment-progress-bar" 
+                        :class="`priority-${shipment.priority}`"
+                        :style="{
+                          width: shipment.status === 'delivered' ? '100%' : 
+                                shipment.status === 'in_transit' ? '60%' : 
+                                shipment.status === 'pending' ? '20%' : '40%'
+                        }">
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <div class="shipment-delivery">
+                  <i class="pi pi-calendar" aria-hidden="true"></i>
                   <span v-if="shipment.status === 'delivered'">
                     {{ t('logistics.delivered') }}: {{ getTimeAgo(shipment.deliveredAt) }}
                   </span>
@@ -398,14 +432,17 @@ const handleInventoryAction = (id, action) => {
               </div>
             </div>
 
-            <router-link v-if="recentShipments.length > 0" to="/logistics/shipments" class="view-all-button">
+            <router-link v-if="recentShipments.length > 0" to="/logistics/shipping" class="view-all-button">
+              <i class="pi pi-arrow-right" aria-hidden="true"></i>
               {{ t('logistics.view_all_shipments') }}
             </router-link>
           </div>
 
           <!-- Inventory alerts -->
           <div class="overview-card">
-            <h3 class="card-title">{{ t('logistics.inventory_alerts') }}</h3>
+            <div class="card-header">
+              <h3 class="card-title">{{ t('logistics.inventory_alerts') }}</h3>
+            </div>
 
             <div v-if="inventoryAlerts.length === 0" class="empty-state">
               {{ t('logistics.no_inventory_alerts') }}
@@ -414,31 +451,43 @@ const handleInventoryAction = (id, action) => {
             <div v-else class="alerts-list">
               <div v-for="alert in inventoryAlerts.slice(0, 2)" :key="alert.id" class="alert-item" :class="getAlertLevelClass(alert.level)">
                 <div class="alert-header">
-                  <div class="alert-title">{{ alert.item }}</div>
-                  <div class="alert-level">{{ t(`logistics.alert_level.${alert.level}`) }}</div>
+                  <div class="alert-title">
+                    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+                    {{ alert.item }}
+                  </div>
+                  <div class="alert-level" :class="`alert-level-${alert.level}`">
+                    <i :class="['alert-icon', 'pi', 
+                      alert.level === 'critical' ? 'pi-exclamation-circle' : 
+                      alert.level === 'warning' ? 'pi-exclamation-triangle' : 
+                      'pi-info-circle']" 
+                      aria-hidden="true"></i>
+                    {{ t(`logistics.alert_level.${alert.level}`) }}
+                  </div>
                 </div>
 
-                <div class="alert-sku">{{ alert.sku }}</div>
-                <div class="alert-details">{{ alert.details }}</div>
+                <div class="alert-sku">
+                  <i class="pi pi-tag" aria-hidden="true"></i>
+                  {{ alert.sku }}
+                </div>
+                <div class="alert-details">
+                  <i class="pi pi-info-circle" aria-hidden="true"></i>
+                  {{ alert.details }}
+                </div>
 
                 <div class="alert-actions">
                   <button 
                     class="alert-action-button"
                     @click="handleInventoryAction(alert.id, 'restock')"
                   >
+                    <i class="pi pi-refresh" aria-hidden="true"></i>
                     {{ t('logistics.restock') }}
-                  </button>
-                  <button 
-                    class="alert-action-button"
-                    @click="handleInventoryAction(alert.id, 'adjust')"
-                  >
-                    {{ t('logistics.adjust_levels') }}
                   </button>
                 </div>
               </div>
             </div>
 
             <router-link v-if="inventoryAlerts.length > 0" to="/logistics/inventory" class="view-all-button">
+              <i class="pi pi-arrow-right" aria-hidden="true"></i>
               {{ t('logistics.view_all_alerts') }}
             </router-link>
           </div>
@@ -503,12 +552,12 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--color-shadow);
   transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
 .kpi-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--color-shadow);
 }
 
 .kpi-title {
@@ -549,7 +598,7 @@ const handleInventoryAction = (id, action) => {
 
 .dashboard-sections {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: var(--spacing-lg);
 }
 
@@ -582,13 +631,13 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--color-shadow);
   margin-bottom: var(--spacing-lg);
   transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
 .overview-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--color-shadow);
 }
 
 .empty-state {
@@ -607,8 +656,8 @@ const handleInventoryAction = (id, action) => {
 .shipment-item, .alert-item {
   background-color: var(--color-background);
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-md);
-  box-shadow: var(--shadow-xs);
+  padding: var(--spacing-lg);
+  box-shadow: var(--color-shadow);
 }
 
 .shipment-header, .alert-header {
@@ -672,11 +721,42 @@ const handleInventoryAction = (id, action) => {
   color: var(--color-text-secondary);
 }
 
+.shipment-priority-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
 .shipment-priority {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-full);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.priority-icon, .status-icon {
+  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shipment-progress-container {
+  height: 6px;
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-full);
+  overflow: hidden;
+  width: 100%;
+}
+
+.shipment-progress-bar {
+  height: 100%;
+  border-radius: var(--border-radius-full);
+  transition: width 0.3s ease;
 }
 
 .priority-high {
@@ -706,9 +786,37 @@ const handleInventoryAction = (id, action) => {
   border-left: 3px solid var(--color-info);
 }
 
+.alert-level {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.alert-icon {
+  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-level-critical {
+  background-color: var(--color-error-light);
+  color: var(--color-error-dark);
+}
+
+.alert-level-warning {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning-dark);
+}
+
+.alert-level-info {
+  background-color: var(--color-info-light);
+  color: var(--color-info-dark);
+}
+
 .alert-actions {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
   margin-top: var(--spacing-sm);
 }
 
@@ -721,15 +829,21 @@ const handleInventoryAction = (id, action) => {
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   cursor: pointer;
-  transition: background-color var(--transition-fast);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .alert-action-button:hover {
   background-color: var(--color-surface-hover);
+  border-color: var(--color-primary);
 }
 
 .view-all-button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
   margin-top: var(--spacing-md);
   color: var(--color-primary);
   font-weight: var(--font-weight-medium);
@@ -744,13 +858,13 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--color-shadow);
   margin-bottom: var(--spacing-lg);
   transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
 .logistics-actions:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--color-shadow);
 }
 
 .actions-grid {
@@ -772,6 +886,7 @@ const handleInventoryAction = (id, action) => {
   text-align: center;
   transition: background-color var(--transition-fast), border-color var(--transition-fast);
   text-decoration: none;
+  gap: var(--spacing-sm);
 }
 
 .action-button:hover {

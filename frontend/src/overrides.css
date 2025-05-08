@@ -146,11 +146,11 @@ a:hover {
 /*HACKY*/
 /* Make sure our design-token surfaces win, even if PrimeVue injects its own later */
 .surface-card {
-  /* …we override it to our token */
+  /* we override it to our token */
   background-color: var(--surface-card) !important;
 }
 
 .surface-card.surface-hover {
-  /* …we override it to our token */
+  /* we override it to our token */
   background-color: var(--surface-hover) !important;
 }
