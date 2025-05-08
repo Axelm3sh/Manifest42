@@ -575,7 +575,7 @@ onMounted(async () => {
 .create-button {
   padding: var(--spacing-sm) var(--spacing-md);
   background-color: var(--color-primary);
-  color: var(--color-text-on-primary);
+  color: var(--color-text-primary);
   border: none;
   border-radius: var(--border-radius-md);
   font-weight: var(--font-weight-medium);
@@ -725,7 +725,7 @@ onMounted(async () => {
 .primary-button {
   padding: var(--spacing-sm) var(--spacing-md);
   background-color: var(--color-primary);
-  color: var(--color-text-on-primary);
+  color: var(--color-text);
   border: none;
   border-radius: var(--border-radius-md);
   font-size: var(--font-size-md);
