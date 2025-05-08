@@ -327,7 +327,7 @@ const handleInventoryAction = (id, action) => {
             <div class="kpi-trend" :class="kpi.trend">
               {{ kpi.change }}
               <span class="trend-icon">
-                {{ kpi.trend === 'up' ? '↑' : kpi.trend === 'down' ? '↓' : '→' }}
+                <i :class="['pi', kpi.trend === 'up' ? 'pi-arrow-up' : kpi.trend === 'down' ? 'pi-arrow-down' : 'pi-arrow-right']" aria-hidden="true"></i>
               </span>
             </div>
           </div>
@@ -337,19 +337,21 @@ const handleInventoryAction = (id, action) => {
         <div class="dashboard-sections">
           <!-- Quick actions -->
           <div class="logistics-actions">
-            <h3 class="card-title">{{ t('logistics.quick_actions') }}</h3>
+            <div class="card-header">
+              <h3 class="card-title">{{ t('logistics.quick_actions') }}</h3>
+            </div>
             <div class="actions-grid">
               <router-link to="/logistics/shipments" class="action-button">
+                <i class="pi pi-truck" aria-hidden="true"></i>
                 {{ t('logistics.actions.create_shipment') }}
               </router-link>
               <router-link to="/logistics/deliveries" class="action-button">
+                <i class="pi pi-calendar" aria-hidden="true"></i>
                 {{ t('logistics.actions.schedule_delivery') }}
               </router-link>
               <router-link to="/logistics/inventory" class="action-button">
+                <i class="pi pi-list" aria-hidden="true"></i>
                 {{ t('logistics.actions.inventory_count') }}
-              </router-link>
-              <router-link to="/logistics/reports" class="action-button">
-                {{ t('logistics.actions.generate_report') }}
               </router-link>
             </div>
           </div>
@@ -370,16 +372,23 @@ const handleInventoryAction = (id, action) => {
             <div v-else class="shipments-list">
               <div v-for="shipment in recentShipments.slice(0, 2)" :key="shipment.id" class="shipment-item">
                 <div class="shipment-header">
-                  <div class="shipment-id">{{ shipment.id }}</div>
+                  <div class="shipment-id">
+                    <i class="pi pi-box" aria-hidden="true"></i>
+                    {{ shipment.id }}
+                  </div>
                   <div class="shipment-status" :class="getStatusClass(shipment.status)">
                     {{ t(`logistics.status.${shipment.status}`) }}
                   </div>
                 </div>
 
-                <div class="shipment-destination">{{ shipment.destination }}</div>
+                <div class="shipment-destination">
+                  <i class="pi pi-map-marker" aria-hidden="true"></i>
+                  {{ shipment.destination }}
+                </div>
 
                 <div class="shipment-details">
                   <div class="shipment-items">
+                    <i class="pi pi-list" aria-hidden="true"></i>
                     {{ t('logistics.items_count', { count: shipment.items }) }}
                   </div>
                   <div class="shipment-priority" :class="`priority-${shipment.priority}`">
@@ -388,6 +397,7 @@ const handleInventoryAction = (id, action) => {
                 </div>
 
                 <div class="shipment-delivery">
+                  <i class="pi pi-calendar" aria-hidden="true"></i>
                   <span v-if="shipment.status === 'delivered'">
                     {{ t('logistics.delivered') }}: {{ getTimeAgo(shipment.deliveredAt) }}
                   </span>
@@ -399,13 +409,16 @@ const handleInventoryAction = (id, action) => {
             </div>
 
             <router-link v-if="recentShipments.length > 0" to="/logistics/shipments" class="view-all-button">
+              <i class="pi pi-arrow-right" aria-hidden="true"></i>
               {{ t('logistics.view_all_shipments') }}
             </router-link>
           </div>
 
           <!-- Inventory alerts -->
           <div class="overview-card">
-            <h3 class="card-title">{{ t('logistics.inventory_alerts') }}</h3>
+            <div class="card-header">
+              <h3 class="card-title">{{ t('logistics.inventory_alerts') }}</h3>
+            </div>
 
             <div v-if="inventoryAlerts.length === 0" class="empty-state">
               {{ t('logistics.no_inventory_alerts') }}
@@ -414,31 +427,36 @@ const handleInventoryAction = (id, action) => {
             <div v-else class="alerts-list">
               <div v-for="alert in inventoryAlerts.slice(0, 2)" :key="alert.id" class="alert-item" :class="getAlertLevelClass(alert.level)">
                 <div class="alert-header">
-                  <div class="alert-title">{{ alert.item }}</div>
+                  <div class="alert-title">
+                    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+                    {{ alert.item }}
+                  </div>
                   <div class="alert-level">{{ t(`logistics.alert_level.${alert.level}`) }}</div>
                 </div>
 
-                <div class="alert-sku">{{ alert.sku }}</div>
-                <div class="alert-details">{{ alert.details }}</div>
+                <div class="alert-sku">
+                  <i class="pi pi-tag" aria-hidden="true"></i>
+                  {{ alert.sku }}
+                </div>
+                <div class="alert-details">
+                  <i class="pi pi-info-circle" aria-hidden="true"></i>
+                  {{ alert.details }}
+                </div>
 
                 <div class="alert-actions">
                   <button 
                     class="alert-action-button"
                     @click="handleInventoryAction(alert.id, 'restock')"
                   >
+                    <i class="pi pi-refresh" aria-hidden="true"></i>
                     {{ t('logistics.restock') }}
-                  </button>
-                  <button 
-                    class="alert-action-button"
-                    @click="handleInventoryAction(alert.id, 'adjust')"
-                  >
-                    {{ t('logistics.adjust_levels') }}
                   </button>
                 </div>
               </div>
             </div>
 
             <router-link v-if="inventoryAlerts.length > 0" to="/logistics/inventory" class="view-all-button">
+              <i class="pi pi-arrow-right" aria-hidden="true"></i>
               {{ t('logistics.view_all_alerts') }}
             </router-link>
           </div>
@@ -503,12 +521,12 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--color-shadow);
   transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
 .kpi-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--color-shadow);
 }
 
 .kpi-title {
@@ -582,13 +600,13 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--color-shadow);
   margin-bottom: var(--spacing-lg);
   transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
 .overview-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--color-shadow);
 }
 
 .empty-state {
@@ -608,7 +626,7 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-background);
   border-radius: var(--border-radius-md);
   padding: var(--spacing-md);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--color-shadow);
 }
 
 .shipment-header, .alert-header {
@@ -721,15 +739,21 @@ const handleInventoryAction = (id, action) => {
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   cursor: pointer;
-  transition: background-color var(--transition-fast);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .alert-action-button:hover {
   background-color: var(--color-surface-hover);
+  border-color: var(--color-primary);
 }
 
 .view-all-button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
   margin-top: var(--spacing-md);
   color: var(--color-primary);
   font-weight: var(--font-weight-medium);
@@ -744,13 +768,13 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--color-shadow);
   margin-bottom: var(--spacing-lg);
   transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
 .logistics-actions:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--color-shadow);
 }
 
 .actions-grid {
@@ -772,6 +796,7 @@ const handleInventoryAction = (id, action) => {
   text-align: center;
   transition: background-color var(--transition-fast), border-color var(--transition-fast);
   text-decoration: none;
+  gap: var(--spacing-sm);
 }
 
 .action-button:hover {
