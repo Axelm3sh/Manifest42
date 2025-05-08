@@ -33,6 +33,8 @@
     "yes": "Sí",
     "no": "No",
     "id": "ID",
+    "other": "Otro",
+    "generating_report": "Generando informe...",
     "placeholder_content": "Contenido próximamente..."
   },
   "data_list": {
@@ -412,7 +414,86 @@
   },
   "reports": {
     "title": "Informes",
-    "description": "Ver y generar informes de inventario y rendimiento"
+    "description": "Ver y generar informes de inventario y rendimiento",
+    "report_filters": "Filtros de Informe",
+    "report_type": "Tipo de Informe",
+    "date_range": "Rango de Fechas",
+    "warehouse": "Almacén",
+    "category": "Categoría",
+    "generate_report": "Generar Informe",
+    "export": "Exportar",
+    "no_report_generated": "No se ha generado ningún informe",
+    "select_filters": "Seleccione filtros y genere un informe para ver datos",
+    "inventory_report": "Informe de Inventario",
+    "inventory_report_description": "Visión general completa de los niveles de inventario actuales, valores y distribución por categorías y almacenes",
+    "performance_report": "Informe de Rendimiento",
+    "performance_report_description": "Análisis de métricas de rendimiento de inventario incluyendo rotación, precisión y tasas de cumplimiento",
+    "forecast_report": "Informe de Pronóstico",
+    "supplier_report": "Informe de Proveedores",
+    "inventory_by_category": "Inventario por Categoría",
+    "inventory_details": "Detalles de Inventario",
+    "performance_trends": "Tendencias de Rendimiento",
+    "performance_details": "Detalles de Rendimiento",
+    "select_report_type": "Seleccionar Tipo de Informe",
+    "select_date_range": "Seleccionar Rango de Fechas",
+    "select_warehouse": "Seleccionar Almacén",
+    "select_category": "Seleccionar Categoría",
+    "please_select_required": "Por favor seleccione tipo de informe y rango de fechas",
+    "date_ranges": {
+      "last_7_days": "Últimos 7 Días",
+      "last_30_days": "Últimos 30 Días",
+      "last_90_days": "Últimos 90 Días",
+      "last_year": "Último Año",
+      "custom_range": "Rango Personalizado"
+    },
+    "warehouses": {
+      "all": "Todos los Almacenes",
+      "east_coast": "Almacén Costa Este",
+      "west_coast": "Almacén Costa Oeste",
+      "central": "Almacén Central"
+    },
+    "categories": {
+      "all": "Todas las Categorías",
+      "electronics": "Electrónica",
+      "clothing": "Ropa",
+      "food": "Alimentos y Bebidas",
+      "home": "Artículos para el Hogar"
+    },
+    "table": {
+      "sku": "SKU",
+      "name": "Nombre",
+      "category": "Categoría",
+      "warehouse": "Almacén",
+      "quantity": "Cantidad",
+      "value": "Valor",
+      "last_updated": "Última Actualización",
+      "metric": "Métrica",
+      "current": "Actual",
+      "previous": "Anterior",
+      "change": "Cambio",
+      "target": "Objetivo",
+      "status": "Estado"
+    },
+    "status": {
+      "good": "Bueno",
+      "improving": "Mejorando",
+      "warning": "Advertencia",
+      "critical": "Crítico"
+    },
+    "months": {
+      "jan": "Ene",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Abr",
+      "may": "May",
+      "jun": "Jun",
+      "jul": "Jul",
+      "aug": "Ago",
+      "sep": "Sep",
+      "oct": "Oct",
+      "nov": "Nov",
+      "dec": "Dic"
+    }
   },
   "shipping": {
     "title": "Envíos",
@@ -542,5 +623,13 @@
     "real_time_updates": "Actualizaciones en Tiempo Real",
     "refresh_interval": "Intervalo de Actualización",
     "last_updated": "Última Actualización"
+  },
+  "performance": {
+    "order_fulfillment": "Cumplimiento de Pedidos",
+    "inventory_accuracy": "Precisión de Inventario",
+    "carrying_cost": "Costo de Mantenimiento",
+    "stockout_rate": "Tasa de Agotamiento",
+    "trend_up": "Subida",
+    "trend_down": "Bajada"
   }
 }

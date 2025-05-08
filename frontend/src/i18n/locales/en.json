@@ -33,6 +33,8 @@
     "yes": "Yes",
     "no": "No",
     "id": "ID",
+    "other": "Other",
+    "generating_report": "Generating report...",
     "placeholder_content": "Content coming soon..."
   },
   "data_list": {
@@ -412,7 +414,86 @@
   },
   "reports": {
     "title": "Reports",
-    "description": "View and generate inventory and performance reports"
+    "description": "View and generate inventory and performance reports",
+    "report_filters": "Report Filters",
+    "report_type": "Report Type",
+    "date_range": "Date Range",
+    "warehouse": "Warehouse",
+    "category": "Category",
+    "generate_report": "Generate Report",
+    "export": "Export",
+    "no_report_generated": "No Report Generated",
+    "select_filters": "Select filters and generate a report to view data",
+    "inventory_report": "Inventory Report",
+    "inventory_report_description": "Comprehensive overview of current inventory levels, values, and distribution across categories and warehouses",
+    "performance_report": "Performance Report",
+    "performance_report_description": "Analysis of inventory performance metrics including turnover, accuracy, and fulfillment rates",
+    "forecast_report": "Forecast Report",
+    "supplier_report": "Supplier Report",
+    "inventory_by_category": "Inventory by Category",
+    "inventory_details": "Inventory Details",
+    "performance_trends": "Performance Trends",
+    "performance_details": "Performance Details",
+    "select_report_type": "Select Report Type",
+    "select_date_range": "Select Date Range",
+    "select_warehouse": "Select Warehouse",
+    "select_category": "Select Category",
+    "please_select_required": "Please select report type and date range",
+    "date_ranges": {
+      "last_7_days": "Last 7 Days",
+      "last_30_days": "Last 30 Days",
+      "last_90_days": "Last 90 Days",
+      "last_year": "Last Year",
+      "custom_range": "Custom Range"
+    },
+    "warehouses": {
+      "all": "All Warehouses",
+      "east_coast": "East Coast Warehouse",
+      "west_coast": "West Coast Warehouse",
+      "central": "Central Warehouse"
+    },
+    "categories": {
+      "all": "All Categories",
+      "electronics": "Electronics",
+      "clothing": "Clothing",
+      "food": "Food & Beverage",
+      "home": "Home Goods"
+    },
+    "table": {
+      "sku": "SKU",
+      "name": "Name",
+      "category": "Category",
+      "warehouse": "Warehouse",
+      "quantity": "Quantity",
+      "value": "Value",
+      "last_updated": "Last Updated",
+      "metric": "Metric",
+      "current": "Current",
+      "previous": "Previous",
+      "change": "Change",
+      "target": "Target",
+      "status": "Status"
+    },
+    "status": {
+      "good": "Good",
+      "improving": "Improving",
+      "warning": "Warning",
+      "critical": "Critical"
+    },
+    "months": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Apr",
+      "may": "May",
+      "jun": "Jun",
+      "jul": "Jul",
+      "aug": "Aug",
+      "sep": "Sep",
+      "oct": "Oct",
+      "nov": "Nov",
+      "dec": "Dec"
+    }
   },
   "shipping": {
     "title": "Shipping",
@@ -542,5 +623,13 @@
     "real_time_updates": "Real-time Updates",
     "refresh_interval": "Refresh Interval",
     "last_updated": "Last Updated"
+  },
+  "performance": {
+    "order_fulfillment": "Order Fulfillment",
+    "inventory_accuracy": "Inventory Accuracy",
+    "carrying_cost": "Carrying Cost",
+    "stockout_rate": "Stockout Rate",
+    "trend_up": "Up",
+    "trend_down": "Down"
   }
 }
