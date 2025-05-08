@@ -596,7 +596,7 @@ const handleInventoryAction = (id, action) => {
 
 .dashboard-sections {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: var(--spacing-lg);
 }
 
@@ -654,7 +654,7 @@ const handleInventoryAction = (id, action) => {
 .shipment-item, .alert-item {
   background-color: var(--color-background);
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   box-shadow: var(--color-shadow);
 }
 
@@ -814,7 +814,7 @@ const handleInventoryAction = (id, action) => {
 
 .alert-actions {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
   margin-top: var(--spacing-sm);
 }
 
