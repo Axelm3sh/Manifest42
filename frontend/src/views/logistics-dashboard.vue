@@ -23,8 +23,10 @@ const getActiveItem = () => {
   const path = route.path;
   if (path === '/logistics') return 'dashboard';
   if (path === '/logistics/inventory') return 'inventory';
-  if (path === '/logistics/shipments') return 'shipments';
-  if (path === '/logistics/deliveries') return 'deliveries';
+  if (path === '/logistics/shipping') return 'shipping';
+  if (path === '/logistics/tracking') return 'tracking';
+  if (path === '/logistics/shipments') return 'shipping';
+  if (path === '/logistics/deliveries') return 'tracking';
   if (path === '/logistics/notifications') return 'notifications';
   return 'dashboard';
 };
@@ -341,11 +343,11 @@ const handleInventoryAction = (id, action) => {
               <h3 class="card-title">{{ t('logistics.quick_actions') }}</h3>
             </div>
             <div class="actions-grid">
-              <router-link to="/logistics/shipments" class="action-button">
+              <router-link to="/logistics/shipping" class="action-button">
                 <i class="pi pi-truck" aria-hidden="true"></i>
                 {{ t('logistics.actions.create_shipment') }}
               </router-link>
-              <router-link to="/logistics/deliveries" class="action-button">
+              <router-link to="/logistics/tracking" class="action-button">
                 <i class="pi pi-calendar" aria-hidden="true"></i>
                 {{ t('logistics.actions.schedule_delivery') }}
               </router-link>
@@ -360,7 +362,7 @@ const handleInventoryAction = (id, action) => {
           <div class="overview-card">
             <div class="card-header">
               <h3 class="card-title">{{ t('logistics.recent_shipments') }}</h3>
-              <router-link to="/logistics/shipments" class="action-link">
+              <router-link to="/logistics/shipping" class="action-link">
                 {{ t('logistics.new_shipment') }}
               </router-link>
             </div>
@@ -430,7 +432,7 @@ const handleInventoryAction = (id, action) => {
               </div>
             </div>
 
-            <router-link v-if="recentShipments.length > 0" to="/logistics/shipments" class="view-all-button">
+            <router-link v-if="recentShipments.length > 0" to="/logistics/shipping" class="view-all-button">
               <i class="pi pi-arrow-right" aria-hidden="true"></i>
               {{ t('logistics.view_all_shipments') }}
             </router-link>
