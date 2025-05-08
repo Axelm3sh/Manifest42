@@ -135,7 +135,7 @@
                       type="text"
                       v-model="state.customerShipment.customerName"
                       class="enhanced-input"
-                      placeholder="Enter customer name"
+                      :placeholder="$t('shipping.customer_name_placeholder')"
                   />
                 </div>
                 <div class="form-group">
@@ -181,7 +181,7 @@
                       type="text"
                       v-model="state.customerShipment.deliveryAddress"
                       class="enhanced-input"
-                      placeholder="Enter delivery address"
+                      :placeholder="$t('shipping.delivery_address_placeholder')"
                   />
                 </div>
               </div>
@@ -484,9 +484,9 @@ const saveShipment = (type) => {
   const newShipment = {
     shipmentId: 'SHP-' + Math.floor(Math.random() * 10000),
     type: type,
-    origin: originWarehouse ? originWarehouse.name : 'Unknown',
+    origin: originWarehouse ? originWarehouse.name : t('shipping.unknown_location'),
     destination: type === 'warehouse'
-        ? (state.warehouses.find(w => w.id === shipment.destinationWarehouseId)?.name || 'Unknown')
+        ? (state.warehouses.find(w => w.id === shipment.destinationWarehouseId)?.name || t('shipping.unknown_location'))
         : shipment.customerName,
     shipmentDate: shipment.shipmentDate,
     itemsCount: shipment.items.length,
@@ -1196,13 +1196,13 @@ onMounted(async () => {
 }
 
 .shipment-type.warehouse {
-  background-color: var(--blue-50);
-  color: var(--blue-700);
+  background-color: var(--p-blue-50);
+  color: var(--p-blue-700);
 }
 
 .shipment-type.customer {
-  background-color: var(--green-50);
-  color: var(--green-700);
+  background-color: var(--p-green-50);
+  color: var(--p-green-700);
 }
 
 .shipment-details {
