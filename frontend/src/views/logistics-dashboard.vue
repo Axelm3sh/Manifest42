@@ -377,6 +377,12 @@ const handleInventoryAction = (id, action) => {
                     {{ shipment.id }}
                   </div>
                   <div class="shipment-status" :class="getStatusClass(shipment.status)">
+                    <i :class="['status-icon', 'pi', 
+                      shipment.status === 'delivered' ? 'pi-check-circle' : 
+                      shipment.status === 'in_transit' ? 'pi-sync' : 
+                      shipment.status === 'pending' ? 'pi-clock' : 
+                      shipment.status === 'delayed' ? 'pi-exclamation-triangle' : 'pi-info-circle']" 
+                      aria-hidden="true"></i>
                     {{ t(`logistics.status.${shipment.status}`) }}
                   </div>
                 </div>
@@ -391,8 +397,24 @@ const handleInventoryAction = (id, action) => {
                     <i class="pi pi-list" aria-hidden="true"></i>
                     {{ t('logistics.items_count', { count: shipment.items }) }}
                   </div>
-                  <div class="shipment-priority" :class="`priority-${shipment.priority}`">
-                    {{ t(`logistics.priority.${shipment.priority}`) }}
+                  <div class="shipment-priority-container">
+                    <div class="shipment-priority" :class="`priority-${shipment.priority}`">
+                      <i :class="['priority-icon', 'pi', 
+                        shipment.priority === 'high' ? 'pi-flag-fill' : 
+                        shipment.priority === 'medium' ? 'pi-flag' : 'pi-bookmark']" 
+                        aria-hidden="true"></i>
+                      {{ t(`logistics.priority.${shipment.priority}`) }}
+                    </div>
+                    <div class="shipment-progress-container">
+                      <div class="shipment-progress-bar" 
+                        :class="`priority-${shipment.priority}`"
+                        :style="{
+                          width: shipment.status === 'delivered' ? '100%' : 
+                                shipment.status === 'in_transit' ? '60%' : 
+                                shipment.status === 'pending' ? '20%' : '40%'
+                        }">
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -690,11 +712,42 @@ const handleInventoryAction = (id, action) => {
   color: var(--color-text-secondary);
 }
 
+.shipment-priority-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
 .shipment-priority {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-full);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.priority-icon, .status-icon {
+  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shipment-progress-container {
+  height: 6px;
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-full);
+  overflow: hidden;
+  width: 100%;
+}
+
+.shipment-progress-bar {
+  height: 100%;
+  border-radius: var(--border-radius-full);
+  transition: width 0.3s ease;
 }
 
 .priority-high {
