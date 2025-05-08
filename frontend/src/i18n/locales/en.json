@@ -585,6 +585,7 @@
     "stock_alerts": "Stock Alerts",
     "settings": "Settings",
     "refresh": "Refresh Data",
+    "refreshing": "Refreshing...",
     "never_updated": "Never updated",
     "restock_initiated": "Restock initiated for item {itemId}, urgent: {urgent}",
     "yes": "Yes",

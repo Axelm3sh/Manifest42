@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from 'vue';
+import {computed, onMounted, onUnmounted, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useInventoryDataStore} from '../../stores/inventoryData';
 import {useFormatters} from '../../composables/useFormatters';
@@ -33,6 +33,16 @@ onUnmounted(() => {
   inventoryDataStore.stopRealTimeUpdates();
 });
 
+// Watch for real-time updates
+let lastKnownUpdate = inventoryDataStore.lastUpdated;
+watch(() => inventoryDataStore.lastUpdated, (newValue) => {
+  // Only trigger animation if this is a real-time update (not a manual refresh)
+  if (newValue && !isRefreshing.value && lastKnownUpdate !== newValue) {
+    onRealTimeUpdate();
+  }
+  lastKnownUpdate = newValue;
+});
+
 // Computed properties
 const inventoryItems = computed(() => inventoryDataStore.sortedInventoryItems);
 const interpolatedInventoryItems = computed(() =>
@@ -55,6 +65,10 @@ const lastUpdated = computed(() => {
   if (!inventoryDataStore.lastUpdated) return t('inventory.never_updated');
   return formatDateTime(inventoryDataStore.lastUpdated);
 });
+
+// State for refresh button animation
+const isRefreshing = ref(false);
+const isAutoRefreshed = ref(false);
 
 // Tab configuration
 const tabs = computed(() => [
@@ -87,8 +101,23 @@ const setRefreshInterval = (seconds) => {
 };
 
 const refreshData = () => {
+  isRefreshing.value = true;
   inventoryDataStore.fetchInventoryData();
   inventoryDataStore.fetchWarehouseData();
+
+  // Reset the refreshing state after a short delay to show the animation
+  setTimeout(() => {
+    isRefreshing.value = false;
+  }, 1000);
+};
+
+// Method to handle real-time update completion
+const onRealTimeUpdate = () => {
+  // Show a quick animation when real-time update completes
+  isAutoRefreshed.value = true;
+  setTimeout(() => {
+    isAutoRefreshed.value = false;
+  }, 500);
 };
 
 const handleRestock = ({itemId, urgent}) => {
@@ -113,8 +142,15 @@ const handleRestock = ({itemId, urgent}) => {
         <BaseButton
             variant="primary"
             @click="refreshData"
+            :disabled="isRefreshing"
+            class="refresh-button"
+            :class="{ 'auto-refreshed': isAutoRefreshed }"
         >
-          <i class="pi pi-refresh"></i> {{ t('inventory.refresh') }}
+          <i class="pi" :class="isRefreshing ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
+          {{ isRefreshing ? t('inventory.refreshing') : t('inventory.refresh') }}
+          <div v-if="isRefreshing" class="progress-bar-container">
+            <div class="progress-bar"></div>
+          </div>
         </BaseButton>
       </div>
     </div>
@@ -239,5 +275,49 @@ const handleRestock = ({itemId, urgent}) => {
 
 :deep(.base-card:hover) {
   box-shadow: var(--shadow-md);
+}
+/* Refresh button styles */
+.refresh-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 0%;
+  animation: progress-animation 1s ease-in-out forwards;
+}
+
+@keyframes progress-animation {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* Auto-refresh animation */
+.auto-refreshed .pi-refresh {
+  animation: spin-animation 0.5s ease-in-out;
+}
+
+@keyframes spin-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

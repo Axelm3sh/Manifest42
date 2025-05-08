@@ -585,6 +585,7 @@
     "stock_alerts": "Alertas de Stock",
     "settings": "Configuración",
     "refresh": "Actualizar Datos",
+    "refreshing": "Actualizando...",
     "never_updated": "Nunca actualizado",
     "restock_initiated": "Reabastecimiento iniciado para el artículo {itemId}, urgente: {urgent}",
     "yes": "Sí",

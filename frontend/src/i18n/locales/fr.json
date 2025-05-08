@@ -585,6 +585,7 @@
     "stock_alerts": "Alertes de Stock",
     "settings": "Paramètres",
     "refresh": "Actualiser les Données",
+    "refreshing": "Actualisation...",
     "never_updated": "Jamais mis à jour",
     "restock_initiated": "Réapprovisionnement initié pour l'article {itemId}, urgent: {urgent}",
     "yes": "Oui",
