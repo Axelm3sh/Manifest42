@@ -453,7 +453,14 @@ const handleInventoryAction = (id, action) => {
                     <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
                     {{ alert.item }}
                   </div>
-                  <div class="alert-level">{{ t(`logistics.alert_level.${alert.level}`) }}</div>
+                  <div class="alert-level" :class="`alert-level-${alert.level}`">
+                    <i :class="['alert-icon', 'pi', 
+                      alert.level === 'critical' ? 'pi-exclamation-circle' : 
+                      alert.level === 'warning' ? 'pi-exclamation-triangle' : 
+                      'pi-info-circle']" 
+                      aria-hidden="true"></i>
+                    {{ t(`logistics.alert_level.${alert.level}`) }}
+                  </div>
                 </div>
 
                 <div class="alert-sku">
@@ -775,6 +782,34 @@ const handleInventoryAction = (id, action) => {
 
 .alert-info {
   border-left: 3px solid var(--color-info);
+}
+
+.alert-level {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.alert-icon {
+  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-level-critical {
+  background-color: var(--color-error-light);
+  color: var(--color-error-dark);
+}
+
+.alert-level-warning {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning-dark);
+}
+
+.alert-level-info {
+  background-color: var(--color-info-light);
+  color: var(--color-info-dark);
 }
 
 .alert-actions {
