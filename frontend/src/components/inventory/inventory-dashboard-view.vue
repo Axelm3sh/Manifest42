@@ -61,7 +61,12 @@ const tabs = computed(() => [
   {id: 'overview', label: t('inventory.overview'), icon: 'pi-chart-pie'},
   {id: 'items', label: t('inventory.items'), icon: 'pi-list'},
   {id: 'warehouses', label: t('inventory.warehouses'), icon: 'pi-building'},
-  {id: 'stock_alerts', label: t('inventory.stock_alerts'), icon: 'pi-exclamation-triangle'}
+  {
+    id: 'stock_alerts', 
+    label: t('inventory.stock_alerts'), 
+    icon: 'pi-exclamation-triangle',
+    badge: outOfStockItems.value.length > 0 ? outOfStockItems.value.length.toString() : null
+  }
 ]);
 
 // Methods

@@ -33,6 +33,8 @@
     "yes": "Oui",
     "no": "Non",
     "id": "ID",
+    "other": "Autre",
+    "generating_report": "Génération du rapport...",
     "placeholder_content": "Contenu à venir..."
   },
   "data_list": {
@@ -412,7 +414,86 @@
   },
   "reports": {
     "title": "Rapports",
-    "description": "Voir et générer des rapports d'inventaire et de performance"
+    "description": "Voir et générer des rapports d'inventaire et de performance",
+    "report_filters": "Filtres de Rapport",
+    "report_type": "Type de Rapport",
+    "date_range": "Plage de Dates",
+    "warehouse": "Entrepôt",
+    "category": "Catégorie",
+    "generate_report": "Générer un Rapport",
+    "export": "Exporter",
+    "no_report_generated": "Aucun Rapport Généré",
+    "select_filters": "Sélectionnez des filtres et générez un rapport pour voir les données",
+    "inventory_report": "Rapport d'Inventaire",
+    "inventory_report_description": "Aperçu complet des niveaux d'inventaire actuels, des valeurs et de la distribution par catégories et entrepôts",
+    "performance_report": "Rapport de Performance",
+    "performance_report_description": "Analyse des métriques de performance d'inventaire, y compris la rotation, la précision et les taux d'exécution",
+    "forecast_report": "Rapport de Prévision",
+    "supplier_report": "Rapport de Fournisseur",
+    "inventory_by_category": "Inventaire par Catégorie",
+    "inventory_details": "Détails de l'Inventaire",
+    "performance_trends": "Tendances de Performance",
+    "performance_details": "Détails de Performance",
+    "select_report_type": "Sélectionner le Type de Rapport",
+    "select_date_range": "Sélectionner la Plage de Dates",
+    "select_warehouse": "Sélectionner l'Entrepôt",
+    "select_category": "Sélectionner la Catégorie",
+    "please_select_required": "Veuillez sélectionner le type de rapport et la plage de dates",
+    "date_ranges": {
+      "last_7_days": "7 Derniers Jours",
+      "last_30_days": "30 Derniers Jours",
+      "last_90_days": "90 Derniers Jours",
+      "last_year": "Année Dernière",
+      "custom_range": "Plage Personnalisée"
+    },
+    "warehouses": {
+      "all": "Tous les Entrepôts",
+      "east_coast": "Entrepôt Côte Est",
+      "west_coast": "Entrepôt Côte Ouest",
+      "central": "Entrepôt Central"
+    },
+    "categories": {
+      "all": "Toutes les Catégories",
+      "electronics": "Électronique",
+      "clothing": "Vêtements",
+      "food": "Alimentation et Boissons",
+      "home": "Articles Ménagers"
+    },
+    "table": {
+      "sku": "SKU",
+      "name": "Nom",
+      "category": "Catégorie",
+      "warehouse": "Entrepôt",
+      "quantity": "Quantité",
+      "value": "Valeur",
+      "last_updated": "Dernière Mise à Jour",
+      "metric": "Métrique",
+      "current": "Actuel",
+      "previous": "Précédent",
+      "change": "Changement",
+      "target": "Objectif",
+      "status": "Statut"
+    },
+    "status": {
+      "good": "Bon",
+      "improving": "En Amélioration",
+      "warning": "Avertissement",
+      "critical": "Critique"
+    },
+    "months": {
+      "jan": "Jan",
+      "feb": "Fév",
+      "mar": "Mar",
+      "apr": "Avr",
+      "may": "Mai",
+      "jun": "Juin",
+      "jul": "Juil",
+      "aug": "Août",
+      "sep": "Sep",
+      "oct": "Oct",
+      "nov": "Nov",
+      "dec": "Déc"
+    }
   },
   "shipping": {
     "title": "Expédition",
@@ -542,5 +623,13 @@
     "real_time_updates": "Mises à Jour en Temps Réel",
     "refresh_interval": "Intervalle de Rafraîchissement",
     "last_updated": "Dernière Mise à Jour"
+  },
+  "performance": {
+    "order_fulfillment": "Taux d'Exécution des Commandes",
+    "inventory_accuracy": "Précision de l'Inventaire",
+    "carrying_cost": "Coût de Possession",
+    "stockout_rate": "Taux de Rupture de Stock",
+    "trend_up": "Hausse",
+    "trend_down": "Baisse"
   }
 }

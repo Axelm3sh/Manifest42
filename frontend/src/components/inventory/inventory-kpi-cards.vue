@@ -117,6 +117,14 @@ const props = defineProps({
   font-size: 2rem;
 }*/
 
+.low-stock-icon {
+  color: var(--color-warning);
+}
+
+.out-of-stock-icon {
+  color: var(--color-danger);
+}
+
 .kpi-data {
   display: flex;
   flex-direction: column;
