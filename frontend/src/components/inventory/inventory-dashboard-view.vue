@@ -229,4 +229,15 @@ const handleRestock = ({itemId, urgent}) => {
   font-size: 1.5rem;
   color: var(--color-primary);
 }
+
+/* Add light grey background to cards in light mode */
+:deep(.base-card) {
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
+}
+
+:deep(.base-card:hover) {
+  box-shadow: var(--shadow-md);
+}
 </style>
