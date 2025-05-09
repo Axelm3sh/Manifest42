@@ -137,25 +137,24 @@ this section provides more detailed information about the development environmen
 #### Project Structure
 ```
 Manifest42/
-├── frontend/           # Vue 3 frontend application
-│   ├── src/            # Source code
-│   │   ├── assets/     # Static assets
-│   │   ├── components/ # Vue components
-│   │   ├── composables/ # Vue composables (reusable composition functions)
-│   │   ├── i18n/       # Internationalization
-│   │   ├── router/     # Vue Router configuration
-│   │   ├── stores/     # Pinia stores (state management)
-│   │   ├── utils/      # Utility functions
-│   │   └── views/      # Page components
-│   ├── api/            # Mock API server
-│   ├── shared/         # Shared data models and types
-│   ├── public/         # Public static files
-│   ├── tests/          # Unit and integration tests
-│   ├── cypress/        # End-to-end tests
-│   ├── docs/           # Documentation
-│   └── .storybook/     # Storybook configuration
-├── .github/            # GitHub workflows and templates
-└── .vercel/            # Vercel deployment configuration
+├── frontend/ # Vue 3 frontend application
+│ ├── src/ # Source code
+│ │ ├── assets/ # Static assets
+│ │ ├── components/ # Vue components
+│ │ ├── composables/ # Vue composables (reusable composition functions)
+│ │ ├── i18n/ # Internationalization
+│ │ ├── router/ # Vue Router configuration
+│ │ ├── stores/ # Pinia stores (state management)
+│ │ ├── utils/ # Utility functions
+│ │ └── views/ # Page components
+│ ├── api/ # Mock API server
+│ ├── shared/ # Shared data models and types
+│ ├── public/ # Public static files
+│ ├── tests/ # Unit and integration tests
+│ ├── cypress/ # End-to-end tests
+│ ├── docs/ # Documentation
+│ └── .storybook/ # Storybook configuration
+└── .github/ # GitHub workflows and templates
 ```
 
 #### Development Commands
