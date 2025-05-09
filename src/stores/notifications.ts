@@ -2,11 +2,11 @@
 import {defineStore} from 'pinia';
 import {computed, ref} from 'vue';
 import type {
-  ISODateString,
-  Notification,
-  NotificationAction,
-  NotificationId,
-  NotificationPreferences
+    ISODateString,
+    Notification,
+    NotificationAction,
+    NotificationId,
+    NotificationPreferences
 } from "../../shared/data-models";
 import {useAuthStore} from "./auth";
 
