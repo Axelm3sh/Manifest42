@@ -199,7 +199,7 @@ const handleMouseLeave = () => {
   mouseLeaveTime.value = performance.now();
 };
 
-// Handle click for ripple effect
+// Handle click for ripple effect (bazinga)
 const handleClick = (event) => {
   if (!backgroundRef.value) return;
 

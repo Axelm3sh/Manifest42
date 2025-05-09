@@ -1,7 +1,9 @@
 # AI-Powered Inventory Management Dashboard
 
 ## Project Overview
-This project is an advanced inventory management dashboard with AI-driven insights. Built with Vue 3 and Vite, it provides a comprehensive solution for warehouse operations, inventory tracking, and logistics management.
+This project is an advanced inventory management dashboard with AI-driven insights mock.
+Built with Vue 3 and Vite, it provides a comprehensive solution for warehouse operations, 
+inventory tracking, and logistics management.
 
 ## Design and Architecture 
 Our system delivers a sophisticated dashboard with AI-driven insights, providing customized access and features based on user roles:
@@ -92,7 +94,10 @@ This project offers two setup paths depending on your needs:
 
 ### Quick Setup (For Reviewers)
 
-If you want to quickly try out the application without diving into development details, follow these steps:
+If you want to quickly try out the application without diving into development details,
+Visit our site at [Manifest42 Dashboard](https://manifest42.vercel.app/)
+
+Or if you want to try it on your local machine, follow these steps:
 
 #### Prerequisites
 - Node.js (v14 or higher)
@@ -100,16 +105,17 @@ If you want to quickly try out the application without diving into development d
 - Git (+ GitHub Desktop, optional for visual users)
 
 #### Steps
+
 1. Clone the repository
    ```bash
    git clone https://github.com/Axelm3sh/Manifest42.git
-   cd Manifest42
+   cd Manifest42/frontend
    ```
 
 2. Install dependencies and start both frontend and mock API
    ```bash
    npm install
-   npm run dev:all
+   npm run dev
    ```
 
 3. Open your browser and navigate to `http://localhost:3000`
@@ -132,7 +138,7 @@ this section provides more detailed information about the development environmen
 - Node.js (v14 or higher)
 - npm (v7 or higher)
 - Git
-- A code editor (VS Code recommended)
+- A code editor (VS Code/WebStorm/your preferred IDE)
 
 #### Project Structure
 ```
@@ -141,12 +147,21 @@ Manifest42/
 │   ├── src/            # Source code
 │   │   ├── assets/     # Static assets
 │   │   ├── components/ # Vue components
-│   │   ├── views/      # Page components
+│   │   ├── composables/ # Vue composables (reusable composition functions)
+│   │   ├── i18n/       # Internationalization
 │   │   ├── router/     # Vue Router configuration
-│   │   ├── store/      # Vuex store
-│   │   └── api/        # API client
-│   └── public/         # Public static files
-└── api/                # Mock API server
+│   │   ├── stores/     # Pinia stores (state management)
+│   │   ├── utils/      # Utility functions
+│   │   └── views/      # Page components
+│   ├── api/            # Mock API server
+│   ├── shared/         # Shared data models and types
+│   ├── public/         # Public static files
+│   ├── tests/          # Unit and integration tests
+│   ├── cypress/        # End-to-end tests
+│   ├── docs/           # Documentation
+│   └── .storybook/     # Storybook configuration
+├── .github/            # GitHub workflows and templates
+└── .vercel/            # Vercel deployment configuration
 ```
 
 #### Development Commands
@@ -217,7 +232,7 @@ npm run preview:staging
 npm run preview:prod
 ```
 
-#### Environment Configuration
+#### Environment Configuration (unused)
 The project uses `.env` files for environment configuration:
 - `.env` - Default environment variables
 - `.env.development` - Development-specific variables

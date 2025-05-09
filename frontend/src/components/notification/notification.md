@@ -4,17 +4,21 @@ The Notification module provides components for managing and displaying system n
 
 ## Components
 
-### notification-bell.vue
-A bell icon component that indicates the presence of unread notifications. It typically appears in the application header and can display a badge with the count of unread notifications.
-
-### notification-center-view.vue
-The main view for the notification center that displays all notifications in a centralized location. It provides functionality to view, filter, and manage notifications.
-
-### notification-list.vue
-A component that renders a list of notifications with appropriate styling based on notification type (info, warning, error, success) and read/unread status.
+### notification-center.vue
+A comprehensive component that combines a notification bell icon with a notification center. Features include:
+- Bell icon with badge showing unread notification count
+- Tabbed interface for viewing notifications by type (all, info, success, warning, error)
+- Ability to mark notifications as read
+- Functionality to dismiss individual or all notifications
+- Support for notification actions
+- Integration with notification preferences
 
 ### notification-preferences.vue
-Allows users to configure their notification preferences, including which types of notifications they want to receive and through which channels (in-app, email, etc.).
+Allows users to configure their notification preferences, including:
+- Toggling inventory alerts, AI insights, and system notifications
+- Enabling/disabling sound alerts
+- Enabling/disabling desktop notifications
+- Setting auto-hide duration for notifications
 
 ## Usage
 
@@ -25,10 +29,39 @@ Example integration:
 <template>
   <div class="app-header">
     <div class="header-actions">
-      <notification-bell @click="openNotificationCenter" />
+      <notification-center />
     </div>
   </div>
-  
-  <notification-center-view v-if="showNotificationCenter" />
 </template>
+
+<script setup>
+import NotificationCenter from '@/components/notification/notification-center.vue'
+</script>
 ```
+
+## Features
+- Different styling for notification types (info, success, warning, error)
+- Unread notification count badge
+- Ability to filter notifications by type
+- Mark all notifications as read with a single click
+- Dismiss individual or all notifications
+- Support for actionable notifications with custom buttons
+- Configurable notification preferences
+- Auto-hide functionality for notifications
+
+## Architecture
+
+The notification system is built around a central Pinia store (`useNotificationsStore`) that manages the state and business logic for notifications. This store is used by the notification components and integrated throughout the application.
+
+### Notifications Store
+The notifications store (`stores/notifications.ts`) provides:
+- State management for notifications and preferences
+- Methods for creating, adding, and dismissing notifications
+- Functions for marking notifications as read
+- Support for notification actions
+- Desktop notification integration
+- Sound alerts
+- Mock notification generation for testing
+
+### Integration
+The notification system is integrated into various dashboard views and layouts, allowing for consistent notification handling throughout the application. Components can easily access the notification store to display or create notifications.

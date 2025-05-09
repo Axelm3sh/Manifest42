@@ -33,6 +33,9 @@ A component that allows users to switch between different language options in th
 ### theme-toggle.vue
 A component that allows users to switch between light and dark themes.
 
+### DotMatrixBackground.vue
+An interactive background component that creates a dot matrix visual effect with mouse-following glow and click ripple animations. Features responsive design, accessibility support including reduced motion preferences, and theme integration.
+
 ## Component Design Principles
 
 1. **Modularity**: Components should be focused on a single responsibility
