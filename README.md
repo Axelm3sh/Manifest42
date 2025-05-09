@@ -86,11 +86,72 @@ For common issues, solutions, and getting help, please refer to the Troubleshoot
 - UI Components: A mix of Custom-built with Vue 3 and [PrimeVue components](https://primevue.org/)
 - Deployment: Vercel
 
-## Development
+## Installation & Setup
 
-This section provides essential commands for local development.
+This project offers two setup paths depending on your needs:
 
-### Setup and Installation
+### Quick Setup (For Reviewers)
+
+If you want to quickly try out the application without diving into development details, follow these steps:
+
+#### Prerequisites
+- Node.js (v14 or higher)
+- npm (v7 or higher)
+- Git (+ GitHub Desktop, optional for visual users)
+
+#### Steps
+1. Clone the repository
+   ```bash
+   git clone https://github.com/Axelm3sh/Manifest42.git
+   cd Manifest42
+   ```
+
+2. Install dependencies and start both frontend and mock API
+   ```bash
+   npm install
+   npm run dev:all
+   ```
+
+3. Open your browser and navigate to `http://localhost:3000`
+
+#### Test Accounts
+You can use the in-app demo buttons to test different user roles.
+
+#### Basic Usage
+- After logging in, you'll be directed to a dashboard based on your role
+- Explore the KPIs and metrics displayed on your dashboard
+- Try out the AI-driven features like demand forecasting and inventory optimization
+- Use the navigation menu to access different sections of the application
+
+### Development Setup (For Contributors)
+
+If you're planning to contribute to the project,
+this section provides more detailed information about the development environment and workflow.
+
+#### Prerequisites
+- Node.js (v14 or higher)
+- npm (v7 or higher)
+- Git
+- A code editor (VS Code recommended)
+
+#### Project Structure
+```
+Manifest42/
+├── frontend/           # Vue 3 frontend application
+│   ├── src/            # Source code
+│   │   ├── assets/     # Static assets
+│   │   ├── components/ # Vue components
+│   │   ├── views/      # Page components
+│   │   ├── router/     # Vue Router configuration
+│   │   ├── store/      # Vuex store
+│   │   └── api/        # API client
+│   └── public/         # Public static files
+└── api/                # Mock API server
+```
+
+#### Development Commands
+
+##### Setup and Installation
 ```bash
 # Install dependencies
 npm install
@@ -105,7 +166,7 @@ npm run api
 npm run dev:all
 ```
 
-### Testing
+##### Testing
 ```bash
 # Run unit tests
 npm run test
@@ -123,7 +184,7 @@ npm run test:e2e
 npm run test:e2e:open
 ```
 
-### Storybook
+##### Storybook
 ```bash
 # Start Storybook development server
 npm run storybook
@@ -132,7 +193,7 @@ npm run storybook
 npm run build-storybook
 ```
 
-### Build
+##### Build
 ```bash
 # Build for development
 npm run build
@@ -156,7 +217,20 @@ npm run preview:staging
 npm run preview:prod
 ```
 
-### Style Guidelines
+#### Environment Configuration
+The project uses `.env` files for environment configuration:
+- `.env` - Default environment variables
+- `.env.development` - Development-specific variables
+- `.env.production` - Production-specific variables
+
+#### Contribution Guidelines
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+#### Style Guidelines
 This project follows a comprehensive set of Vue.js style guidelines. Please refer to the [Vue.js Style Guide](./.junie/guidelines.md) for detailed information on:
 
 - JavaScript naming conventions and code style
