@@ -15,15 +15,15 @@ const reportGenerated = ref(false);
 // Filter selections
 const selectedReportType = ref(null);
 const selectedDateRange = ref(null);
-const selectedWarehouse = ref(null);
-const selectedCategory = ref(null);
+const selectedWarehouse = ref({id: 'all', name: 'All Warehouses'});
+const selectedCategory = ref({id: 'all', name: 'All Categories'});
 
 // Filter options
 const reportTypes = ref([
-  {id: 'inventory', name: 'Inventory Report'},
-  {id: 'performance', name: 'Performance Report'},
-  {id: 'forecast', name: 'Forecast Report'},
-  {id: 'supplier', name: 'Supplier Report'}
+  {id: 'inventory', name: 'Inventory Report', disabled: false},
+  {id: 'performance', name: 'Performance Report', disabled: false},
+  {id: 'forecast', name: 'Forecast Report', disabled: true},
+  {id: 'supplier', name: 'Supplier Report', disabled: true}
 ]);
 
 const dateRanges = ref([
@@ -205,7 +205,19 @@ const generateReport = () => {
     return;
   }
 
+  // Don't allow generating disabled report types
+  if (selectedReportType.value.disabled) {
+    console.error('This report type is not available yet');
+    return;
+  }
+
+  // Don't allow multiple clicks while loading
+  if (isLoading.value) {
+    return;
+  }
+
   isLoading.value = true;
+  reportGenerated.value = false; // Reset report state
 
   // Simulate API call
   setTimeout(() => {
@@ -288,7 +300,15 @@ const getStatusClass = (status) => {
                 optionLabel="name"
                 class="w-full"
                 :placeholder="t('reports.select_report_type')"
-            />
+                optionDisabledKey="disabled"
+            >
+              <template #option="slotProps">
+                <div :class="{'text-gray-400': slotProps.option.disabled}">
+                  {{ slotProps.option.name }}
+                  <span v-if="slotProps.option.disabled" class="ml-2 text-xs">(Coming soon)</span>
+                </div>
+              </template>
+            </Dropdown>
           </div>
           <div class="filter-item">
             <label for="date-range">{{ t('reports.date_range') }}</label>
@@ -326,10 +346,11 @@ const getStatusClass = (status) => {
         </div>
         <div class="action-buttons">
           <Button
-              :label="t('reports.generate_report')"
-              icon="pi pi-refresh"
+              :label="isLoading ? t('common.generating') : t('reports.generate_report')"
+              :icon="isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-refresh'"
               @click="generateReport"
               class="p-button-primary"
+              :disabled="isLoading || !selectedReportType || !selectedDateRange || (selectedReportType && selectedReportType.disabled)"
           />
           <Button
               :label="t('reports.export')"
@@ -540,7 +561,10 @@ const getStatusClass = (status) => {
             </div>
           </div>
           <div class="kpi-card">
-            <h3 class="kpi-title">{{ t('performance.stockout_rate') }}</h3>
+            <h3 class="kpi-title">
+              <i class="pi pi-exclamation-circle"></i>
+              {{ t('performance.stockout_rate') }}
+            </h3>
             <div class="kpi-value">{{ performanceData.stockoutRate }}%</div>
             <div class="kpi-trend down">
               -0.8% {{ t('performance.trend_down') }}
@@ -564,6 +588,16 @@ const getStatusClass = (status) => {
                 <!-- Line chart grid -->
                 <line x1="50" y1="50" x2="50" y2="250" stroke="var(--color-border)"/>
                 <line x1="50" y1="250" x2="750" y2="250" stroke="var(--color-border)"/>
+
+                <!-- Dashed bars across horizontal axis -->
+                <line x1="50" y1="50" x2="50" y2="250" stroke="var(--color-border)" stroke-dasharray="5,5"/>
+                <line x1="150" y1="50" x2="150" y2="250" stroke="var(--color-border)" stroke-dasharray="5,5"/>
+                <line x1="250" y1="50" x2="250" y2="250" stroke="var(--color-border)" stroke-dasharray="5,5"/>
+                <line x1="350" y1="50" x2="350" y2="250" stroke="var(--color-border)" stroke-dasharray="5,5"/>
+                <line x1="450" y1="50" x2="450" y2="250" stroke="var(--color-border)" stroke-dasharray="5,5"/>
+                <line x1="550" y1="50" x2="550" y2="250" stroke="var(--color-border)" stroke-dasharray="5,5"/>
+                <line x1="650" y1="50" x2="650" y2="250" stroke="var(--color-border)" stroke-dasharray="5,5"/>
+                <line x1="750" y1="50" x2="750" y2="250" stroke="var(--color-border)" stroke-dasharray="5,5"/>
 
                 <!-- Performance line -->
                 <polyline
@@ -657,6 +691,7 @@ const getStatusClass = (status) => {
           </DataTable>
         </div>
       </div>
+
     </div>
 
     <!-- Empty State -->
