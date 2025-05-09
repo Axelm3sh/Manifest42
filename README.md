@@ -134,12 +134,6 @@ You can use the in-app demo buttons to test different user roles.
 If you're planning to contribute to the project,
 this section provides more detailed information about the development environment and workflow.
 
-#### Prerequisites
-- Node.js (v14 or higher)
-- npm (v7 or higher)
-- Git
-- A code editor (VS Code/WebStorm/your preferred IDE)
-
 #### Project Structure
 ```
 Manifest42/
