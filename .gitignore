@@ -36,11 +36,11 @@ coverage
 *.sw?
 
 # Testing
-/cypress/videos/
-/cypress/screenshots/
-/test-results/
-/playwright-report/
-/playwright/.cache/
+cypress/videos/
+cypress/screenshots/
+test-results/
+playwright-report/
+playwright/.cache/
 
 # Temporary files
 .temp

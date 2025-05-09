@@ -1,7 +1,9 @@
 # AI-Powered Inventory Management Dashboard
 
 ## Project Overview
-This project is an advanced inventory management dashboard with AI-driven insights. Built with Vue 3 and Vite, it provides a comprehensive solution for warehouse operations, inventory tracking, and logistics management.
+This project is an advanced inventory management dashboard with AI-driven insights mock.
+Built with Vue 3 and Vite, it provides a comprehensive solution for warehouse operations, 
+inventory tracking, and logistics management.
 
 ## Design and Architecture 
 Our system delivers a sophisticated dashboard with AI-driven insights, providing customized access and features based on user roles:
@@ -83,13 +85,80 @@ For common issues, solutions, and getting help, please refer to the Troubleshoot
 ## Technical Stack
 - Frontend: Vue 3 with Composition API
 - Build Tool: Vite
-- UI Components: Custom-built with Vue 3
+- UI Components: A mix of Custom-built with Vue 3 and [PrimeVue components](https://primevue.org/)
+- Deployment: Vercel
 
-## Development
+## Installation & Setup
 
-This section provides essential commands for local development.
+This project offers two setup paths depending on your needs:
 
-### Setup and Installation
+### Quick Setup (For Reviewers)
+
+If you want to quickly try out the application without diving into development details,
+Visit our site at [Manifest42 Dashboard](https://manifest42.vercel.app/)
+
+Or if you want to try it on your local machine, follow these steps:
+
+#### Prerequisites
+- Node.js (v14 or higher)
+- npm (v7 or higher)
+- Git (+ GitHub Desktop, optional for visual users)
+
+#### Steps
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/Axelm3sh/Manifest42.git
+   cd Manifest42
+   ```
+
+2. Install dependencies and start both frontend and mock API
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+3. Open your browser and navigate to `http://localhost:3000`
+
+#### Test Accounts
+You can use the in-app demo buttons to test different user roles.
+
+#### Basic Usage
+- After logging in, you'll be directed to a dashboard based on your role
+- Explore the KPIs and metrics displayed on your dashboard
+- Try out the AI-driven features like demand forecasting and inventory optimization
+- Use the navigation menu to access different sections of the application
+
+### Development Setup (For Contributors)
+
+If you're planning to contribute to the project,
+this section provides more detailed information about the development environment and workflow.
+
+#### Project Structure
+```
+Manifest42/
+├── src/ # Source code
+│ ├── assets/ # Static assets
+│ ├── components/ # Vue components
+│ ├── composables/ # Vue composables (reusable composition functions)
+│ ├── i18n/ # Internationalization
+│ ├── router/ # Vue Router configuration
+│ ├── stores/ # Pinia stores (state management)
+│ ├── utils/ # Utility functions
+│ └── views/ # Page components
+├── api/ # Mock API server
+├── shared/ # Shared data models and types
+├── public/ # Public static files
+├── tests/ # Unit and integration tests
+├── cypress/ # End-to-end tests
+├── docs/ # Documentation
+├── .storybook/ # Storybook configuration
+└── .github/ # GitHub workflows and templates
+```
+
+#### Development Commands
+
+##### Setup and Installation
 ```bash
 # Install dependencies
 npm install
@@ -104,7 +173,7 @@ npm run api
 npm run dev:all
 ```
 
-### Testing
+##### Testing
 ```bash
 # Run unit tests
 npm run test
@@ -122,7 +191,7 @@ npm run test:e2e
 npm run test:e2e:open
 ```
 
-### Storybook
+##### Storybook
 ```bash
 # Start Storybook development server
 npm run storybook
@@ -131,7 +200,7 @@ npm run storybook
 npm run build-storybook
 ```
 
-### Build
+##### Build
 ```bash
 # Build for development
 npm run build
@@ -155,7 +224,14 @@ npm run preview:staging
 npm run preview:prod
 ```
 
-### Style Guidelines
+#### Contribution Guidelines
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+#### Style Guidelines
 This project follows a comprehensive set of Vue.js style guidelines. Please refer to the [Vue.js Style Guide](./.junie/guidelines.md) for detailed information on:
 
 - JavaScript naming conventions and code style
