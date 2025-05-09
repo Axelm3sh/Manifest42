@@ -747,8 +747,9 @@ const handleInventoryAction = (id, action) => {
 
 .shipment-progress-container {
   height: 6px;
-  background-color: var(--color-background);
+  background-color: var(--color-background-muted);
   border-radius: var(--border-radius-full);
+  border: 1px solid var(--color-border);
   overflow: hidden;
   width: 100%;
 }
