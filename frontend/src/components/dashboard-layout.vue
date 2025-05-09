@@ -420,7 +420,7 @@ const getDashboardRoute = () => {
   justify-content: space-between;
   padding: var(--spacing-md) var(--spacing-xl);
   background-color: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--color-shadow);
   z-index: 10;
   transition: background-color var(--transition-normal),
               box-shadow var(--transition-normal);

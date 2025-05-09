@@ -133,7 +133,7 @@ export const useApprovalsStore = defineStore('approvals', () => {
         }
 
         pending.value.splice(idx, 1)
-        history.value.unshift(req)
+        history.value.push(req) // Push to end instead of unshift to beginning
     }
 
     function approve(id: string) {
@@ -157,6 +157,12 @@ export const useApprovalsStore = defineStore('approvals', () => {
                 const req = makeFakeRequest()
                 pending.value.unshift(req)
 
+                // Sort pending items by urgency (high to low)
+                pending.value.sort((a, b) => {
+                    const urgencyOrder = { high: 0, medium: 1, low: 2 }
+                    return (urgencyOrder[a.urgency || 'low'] || 2) - (urgencyOrder[b.urgency || 'low'] || 2)
+                })
+
                 notif.addNotification({
                     message: `New approval request ${req.id} (${req.urgency?.toUpperCase()})`,
                     type: req.urgency === 'high' ? 'warning' : 'info',
@@ -179,6 +185,12 @@ export const useApprovalsStore = defineStore('approvals', () => {
     for (let i = 0; i < 7; i++) {
         pending.value.push(makeFakeRequest(i))
     }
+
+    // Sort initial pending items by urgency (high to low)
+    pending.value.sort((a, b) => {
+        const urgencyOrder = { high: 0, medium: 1, low: 2 }
+        return (urgencyOrder[a.urgency || 'low'] || 2) - (urgencyOrder[b.urgency || 'low'] || 2)
+    })
 
     return {
         pending,

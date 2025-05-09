@@ -19,20 +19,32 @@ const historyRow = ref<ApprovalRequest | null>(null)
 onMounted(() => {
   store.startMockFeed()
   // Auto-select first row when landing
-  if (store.pending.length) selectedId.value = store.pending[0].id
+  nextTick(() => {
+    // Find the first pending item in the sorted allRows array
+    const firstPendingItem = allRows.value.find(item => item.status === 'Pending')
+    selectedId.value = firstPendingItem?.id ?? null
+  })
 })
 
 // Re-select next item after approval/rejection
 function approve() {
   if (!selected.value) return
   store.approve(selected.value.id)
-  nextTick(() => (selectedId.value = store.pending[0]?.id ?? null))
+  nextTick(() => {
+    // Find the first pending item in the sorted allRows array
+    const nextPendingItem = allRows.value.find(item => item.status === 'Pending')
+    selectedId.value = nextPendingItem?.id ?? null
+  })
 }
 
 function reject() {
   if (!selected.value) return
   store.reject(selected.value.id)
-  nextTick(() => (selectedId.value = store.pending[0]?.id ?? null))
+  nextTick(() => {
+    // Find the first pending item in the sorted allRows array
+    const nextPendingItem = allRows.value.find(item => item.status === 'Pending')
+    selectedId.value = nextPendingItem?.id ?? null
+  })
 }
 
 // Helper functions
@@ -48,11 +60,24 @@ function urgencySeverity(u: 'high' | 'medium' | 'low') {
           : 'info'
 }
 
-// Merge history and pending for infinite scroll
-const allRows = computed<ApprovalRequest[]>(() => [
-  ...store.history,
-  ...store.pending
-])
+// Merge history and pending for infinite scroll, sort by urgency (high to low)
+const allRows = computed<ApprovalRequest[]>(() => {
+  // Create a copy of the arrays to avoid modifying the original data
+  const combined = [...store.history, ...store.pending]
+
+  // Sort by urgency (high > medium > low) and push approved/rejected items to the bottom
+  return combined.sort((a, b) => {
+    // First, push non-pending items to the bottom
+    if (a.status !== 'Pending' && b.status === 'Pending') return 1
+    if (a.status === 'Pending' && b.status !== 'Pending') return -1
+
+    // Then sort by urgency for items with the same status
+    const urgencyOrder = { high: 0, medium: 1, low: 2 }
+    const aUrgency = a.urgency || 'low'
+    const bUrgency = b.urgency || 'low'
+    return urgencyOrder[aUrgency] - urgencyOrder[bUrgency]
+  })
+})
 
 const selected = computed(() =>
     allRows.value.find(r => r.id === selectedId.value) ?? null
