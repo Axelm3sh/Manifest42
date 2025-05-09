@@ -643,7 +643,7 @@ onMounted(async () => {
 
 .shipment-item.selected {
   border-color: var(--color-primary);
-  background-color: var(--color-primary-light);
+  background-color: var(--color-background);
 }
 
 .shipment-header {
