@@ -232,12 +232,6 @@ npm run preview:staging
 npm run preview:prod
 ```
 
-#### Environment Configuration (unused)
-The project uses `.env` files for environment configuration:
-- `.env` - Default environment variables
-- `.env.development` - Development-specific variables
-- `.env.production` - Production-specific variables
-
 #### Contribution Guidelines
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
