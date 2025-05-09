@@ -83,7 +83,8 @@ For common issues, solutions, and getting help, please refer to the Troubleshoot
 ## Technical Stack
 - Frontend: Vue 3 with Composition API
 - Build Tool: Vite
-- UI Components: Custom-built with Vue 3
+- UI Components: A mix of Custom-built with Vue 3 and [PrimeVue components](https://primevue.org/)
+- Deployment: Vercel
 
 ## Development
 
