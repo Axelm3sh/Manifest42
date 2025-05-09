@@ -56,6 +56,7 @@
     "simulations": "Simulaciones",
     "shipping": "Envíos",
     "tracking": "Seguimiento",
+    "faq": "Preguntas Frecuentes",
     "collapse_sidebar": "Colapsar barra lateral",
     "expand_sidebar": "Expandir barra lateral",
     "unknown_user": "Usuario Desconocido",
@@ -667,6 +668,153 @@
     "title": "404 - Página No Encontrada",
     "message": "La página que está buscando no existe.",
     "return_home": "Volver al Inicio"
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "description": "Encuentre respuestas a preguntas comunes sobre el uso del sistema y sus características.",
+
+    "admin": {
+      "title": "FAQ para Administradores",
+      "overview": {
+        "title": "Descripción General del Rol",
+        "content": "Los administradores tienen el nivel más alto de acceso y son responsables de la gestión del sistema, la administración de usuarios y la supervisión de todo el sistema de gestión de inventario."
+      },
+      "features": {
+        "title": "Características Principales del Panel",
+        "item1": "Monitoreo del Estado del Sistema: Ver usuarios en línea, aprobaciones pendientes, salud del sistema y estado de las copias de seguridad",
+        "item2": "Gestión de Usuarios: Agregar, editar y desactivar cuentas de usuario",
+        "item3": "Configuración del Sistema: Configurar ajustes de la aplicación y permisos",
+        "item4": "Gestión de Inventario: Acceso a todos los datos de inventario y funciones de gestión"
+      },
+      "tasks": {
+        "title": "Tareas Comunes",
+        "item1": "Aprobar nuevos registros de usuarios",
+        "item2": "Gestionar roles y permisos de usuarios",
+        "item3": "Monitorear la salud y el rendimiento del sistema",
+        "item4": "Revisar registros del sistema e historial de actividades",
+        "item5": "Configurar ajustes globales del sistema"
+      },
+      "tips": {
+        "title": "Consejos de Navegación",
+        "item1": "Utilice el panel de acciones rápidas para acceder rápidamente a tareas administrativas comunes",
+        "item2": "Monitoree la sección de actividades recientes para mantenerse informado sobre eventos importantes del sistema",
+        "item3": "Revise regularmente la tarjeta de estado del sistema para garantizar un rendimiento óptimo"
+      }
+    },
+
+    "manager": {
+      "title": "FAQ para Gerentes",
+      "overview": {
+        "title": "Descripción General del Rol",
+        "content": "Los gerentes supervisan las operaciones, el rendimiento del equipo y toman decisiones de aprobación para ajustes de inventario y otros cambios operativos."
+      },
+      "features": {
+        "title": "Características Principales del Panel",
+        "item1": "Gestión de Aprobaciones: Revisar y procesar solicitudes de aprobación pendientes",
+        "item2": "Monitoreo del Rendimiento del Equipo: Seguimiento de métricas de rendimiento de los miembros del equipo",
+        "item3": "Supervisión de Inventario: Ver alertas y estado del inventario",
+        "item4": "Seguimiento de Ahorro de Costos: Monitorear métricas financieras relacionadas con la optimización de inventario"
+      },
+      "tasks": {
+        "title": "Tareas Comunes",
+        "item1": "Revisar y aprobar ajustes de inventario",
+        "item2": "Monitorear el rendimiento y la productividad del equipo",
+        "item3": "Analizar oportunidades de ahorro de costos",
+        "item4": "Generar y revisar informes",
+        "item5": "Tomar decisiones operativas basadas en recomendaciones de IA"
+      },
+      "tips": {
+        "title": "Consejos de Navegación",
+        "item1": "Priorice las solicitudes de aprobación según su nivel de urgencia (alta, media, baja)",
+        "item2": "Utilice la tarjeta de rendimiento del equipo para identificar a los mejores ejecutantes y áreas de mejora",
+        "item3": "Acceda a acciones rápidas para responder inmediatamente a situaciones críticas de inventario"
+      }
+    },
+
+    "analyst": {
+      "title": "FAQ para Analistas",
+      "overview": {
+        "title": "Descripción General del Rol",
+        "content": "Los analistas se centran en el análisis de datos, la ejecución de simulaciones, la generación de informes y el aprovechamiento de los insights de IA para optimizar la gestión de inventario."
+      },
+      "features": {
+        "title": "Características Principales del Panel",
+        "item1": "Gestión de Simulaciones: Crear y monitorear simulaciones de inventario",
+        "item2": "Generación de Informes: Crear y acceder a informes analíticos",
+        "item3": "Insights de IA: Ver y actuar sobre recomendaciones generadas por IA",
+        "item4": "Monitoreo de Precisión de Datos: Seguimiento y mejora de métricas de calidad de datos"
+      },
+      "tasks": {
+        "title": "Tareas Comunes",
+        "item1": "Crear y ejecutar simulaciones de inventario",
+        "item2": "Analizar resultados de simulaciones y generar insights",
+        "item3": "Producir informes para revisión de la gerencia",
+        "item4": "Monitorear la precisión y calidad de los datos",
+        "item5": "Implementar recomendaciones de IA para optimización de inventario"
+      },
+      "tips": {
+        "title": "Consejos de Navegación",
+        "item1": "Alterne la visibilidad de las secciones para personalizar la vista de su panel",
+        "item2": "Utilice las barras de progreso de simulación para seguir las simulaciones en curso",
+        "item3": "Revise las recomendaciones de IA ordenadas por nivel de confianza e impacto potencial",
+        "item4": "Acceda a la sección de analítica para una exploración de datos en profundidad"
+      }
+    },
+
+    "logistics": {
+      "title": "FAQ para Logística",
+      "overview": {
+        "title": "Descripción General del Rol",
+        "content": "El personal de logística gestiona envíos, entregas y movimientos diarios de inventario, centrándose en la ejecución operativa."
+      },
+      "features": {
+        "title": "Características Principales del Panel",
+        "item1": "Seguimiento de Envíos: Monitorear envíos pendientes, en tránsito y entregados",
+        "item2": "Alertas de Inventario: Ver y responder a advertencias de nivel de stock",
+        "item3": "Gestión de Entregas: Seguimiento de próximas entregas y su estado",
+        "item4": "Monitoreo de Riesgo de Agotamiento: Identificar y abordar posibles situaciones de agotamiento"
+      },
+      "tasks": {
+        "title": "Tareas Comunes",
+        "item1": "Crear y seguir envíos",
+        "item2": "Responder a alertas de inventario (bajo stock, riesgo de agotamiento, exceso de inventario)",
+        "item3": "Monitorear programas de entrega y abordar retrasos",
+        "item4": "Gestionar movimientos diarios de inventario",
+        "item5": "Coordinar con proveedores y centros de distribución"
+      },
+      "tips": {
+        "title": "Consejos de Navegación",
+        "item1": "Utilice indicadores de estado para identificar rápidamente envíos retrasados o alertas críticas de inventario",
+        "item2": "Revise diariamente la sección de próximas entregas para prepararse para nuevas llegadas",
+        "item3": "Responda rápidamente a alertas de inventario de nivel crítico para prevenir agotamientos",
+        "item4": "Utilice la función de creación de envíos para iniciar nuevos envíos salientes"
+      }
+    },
+
+    "troubleshooting": {
+      "title": "Solución de Problemas",
+      "login": {
+        "title": "Problemas de Inicio de Sesión",
+        "item1": "Asegúrese de estar utilizando las credenciales correctas",
+        "item2": "Verifique si su cuenta está activa",
+        "item3": "Limpie la caché y cookies del navegador",
+        "item4": "Contacte a un administrador si los problemas persisten"
+      },
+      "dashboard": {
+        "title": "El Panel no Carga",
+        "item1": "Verifique su conexión a internet",
+        "item2": "Actualice la página",
+        "item3": "Limpie la caché del navegador",
+        "item4": "Intente usar un navegador diferente"
+      },
+      "data": {
+        "title": "Los Datos no se Actualizan",
+        "item1": "Verifique si la transmisión de datos en tiempo real está habilitada",
+        "item2": "Actualice el panel",
+        "item3": "Verifique la conectividad de la API",
+        "item4": "Contacte al soporte técnico si el problema persiste"
+      }
+    }
   },
   "inventory": {
     "title": "Panel de Inventario",

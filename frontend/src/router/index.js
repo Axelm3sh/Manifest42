@@ -52,6 +52,15 @@ const routes = [
           requiresAuth: true,
           requiredRole: 'admin'
         }
+      },
+      {
+        path: 'faq',
+        name: 'AdminFAQ',
+        component: () => import('../views/faq-view.vue'),
+        meta: { 
+          requiresAuth: true,
+          requiredRole: 'admin'
+        }
       }
     ]
   },
@@ -87,6 +96,15 @@ const routes = [
         path: 'approvals',
         name: 'ManagerApprovals',
         component: () => import('../views/approvals-view.vue'),
+        meta: { 
+          requiresAuth: true,
+          requiredRole: 'manager'
+        }
+      },
+      {
+        path: 'faq',
+        name: 'ManagerFAQ',
+        component: () => import('../views/faq-view.vue'),
         meta: { 
           requiresAuth: true,
           requiredRole: 'manager'
@@ -130,6 +148,15 @@ const routes = [
           requiresAuth: true,
           requiredRole: 'analyst'
         }
+      },
+      {
+        path: 'faq',
+        name: 'AnalystFAQ',
+        component: () => import('../views/faq-view.vue'),
+        meta: { 
+          requiresAuth: true,
+          requiredRole: 'analyst'
+        }
       }
     ]
   },
@@ -165,6 +192,15 @@ const routes = [
         path: 'tracking',
         name: 'LogisticsTracking',
         component: () => import('../views/tracking-view.vue'),
+        meta: { 
+          requiresAuth: true,
+          requiredRole: 'logistics'
+        }
+      },
+      {
+        path: 'faq',
+        name: 'LogisticsFAQ',
+        component: () => import('../views/faq-view.vue'),
         meta: { 
           requiresAuth: true,
           requiredRole: 'logistics'

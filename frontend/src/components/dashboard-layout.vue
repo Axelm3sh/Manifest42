@@ -70,6 +70,12 @@ const navigationItems = computed(() => {
       label: t('navigation.inventory'),
       icon: 'pi-clipboard',           // was PhClipboardText
       route: `${base}/inventory`,
+    },
+    {
+      id: 'faq',
+      label: t('navigation.faq'),
+      icon: 'pi-question-circle',
+      route: `${base}/faq`,
     }
   ];
 

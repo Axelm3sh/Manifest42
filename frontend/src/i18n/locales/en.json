@@ -56,6 +56,7 @@
     "simulations": "Simulations",
     "shipping": "Shipping",
     "tracking": "Tracking",
+    "faq": "FAQ",
     "collapse_sidebar": "Collapse sidebar",
     "expand_sidebar": "Expand sidebar",
     "unknown_user": "Unknown User",
@@ -667,6 +668,153 @@
     "title": "404 - Page Not Found",
     "message": "The page you are looking for does not exist.",
     "return_home": "Return to Home"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "description": "Find answers to common questions about using the system and its features.",
+
+    "admin": {
+      "title": "Administrator FAQ",
+      "overview": {
+        "title": "Role Overview",
+        "content": "Administrators have the highest level of access and are responsible for system management, user administration, and overseeing the entire inventory management system."
+      },
+      "features": {
+        "title": "Key Dashboard Features",
+        "item1": "System Status Monitoring: View users online, pending approvals, system health, and backup status",
+        "item2": "User Management: Add, edit, and deactivate user accounts",
+        "item3": "System Settings: Configure application settings and permissions",
+        "item4": "Inventory Management: Access to all inventory data and management functions"
+      },
+      "tasks": {
+        "title": "Common Tasks",
+        "item1": "Approving new user registrations",
+        "item2": "Managing user roles and permissions",
+        "item3": "Monitoring system health and performance",
+        "item4": "Reviewing system logs and activity history",
+        "item5": "Configuring system-wide settings"
+      },
+      "tips": {
+        "title": "Navigation Tips",
+        "item1": "Use the quick actions panel for fast access to common administrative tasks",
+        "item2": "Monitor the recent activities section to stay informed about important system events",
+        "item3": "Check the system status card regularly to ensure optimal system performance"
+      }
+    },
+
+    "manager": {
+      "title": "Manager FAQ",
+      "overview": {
+        "title": "Role Overview",
+        "content": "Managers oversee operations, team performance, and make approval decisions for inventory adjustments and other operational changes."
+      },
+      "features": {
+        "title": "Key Dashboard Features",
+        "item1": "Approval Management: Review and process pending approval requests",
+        "item2": "Team Performance Monitoring: Track team member performance metrics",
+        "item3": "Inventory Oversight: View inventory alerts and status",
+        "item4": "Cost Savings Tracking: Monitor financial metrics related to inventory optimization"
+      },
+      "tasks": {
+        "title": "Common Tasks",
+        "item1": "Reviewing and approving inventory adjustments",
+        "item2": "Monitoring team performance and productivity",
+        "item3": "Analyzing cost savings opportunities",
+        "item4": "Generating and reviewing reports",
+        "item5": "Making operational decisions based on AI recommendations"
+      },
+      "tips": {
+        "title": "Navigation Tips",
+        "item1": "Prioritize approval requests by their urgency level (high, medium, low)",
+        "item2": "Use the team performance card to identify top performers and areas for improvement",
+        "item3": "Access quick actions for immediate response to critical inventory situations"
+      }
+    },
+
+    "analyst": {
+      "title": "Analyst FAQ",
+      "overview": {
+        "title": "Role Overview",
+        "content": "Analysts focus on data analysis, running simulations, generating reports, and leveraging AI insights to optimize inventory management."
+      },
+      "features": {
+        "title": "Key Dashboard Features",
+        "item1": "Simulation Management: Create and monitor inventory simulations",
+        "item2": "Report Generation: Create and access analytical reports",
+        "item3": "AI Insights: View and act on AI-generated recommendations",
+        "item4": "Data Accuracy Monitoring: Track and improve data quality metrics"
+      },
+      "tasks": {
+        "title": "Common Tasks",
+        "item1": "Creating and running inventory simulations",
+        "item2": "Analyzing simulation results and generating insights",
+        "item3": "Producing reports for management review",
+        "item4": "Monitoring data accuracy and quality",
+        "item5": "Implementing AI recommendations for inventory optimization"
+      },
+      "tips": {
+        "title": "Navigation Tips",
+        "item1": "Toggle section visibility to customize your dashboard view",
+        "item2": "Use the simulation progress bars to track ongoing simulations",
+        "item3": "Review AI recommendations sorted by confidence level and potential impact",
+        "item4": "Access the analytics section for in-depth data exploration"
+      }
+    },
+
+    "logistics": {
+      "title": "Logistics FAQ",
+      "overview": {
+        "title": "Role Overview",
+        "content": "Logistics personnel manage shipments, deliveries, and day-to-day inventory movements, focusing on operational execution."
+      },
+      "features": {
+        "title": "Key Dashboard Features",
+        "item1": "Shipment Tracking: Monitor pending, in-transit, and delivered shipments",
+        "item2": "Inventory Alerts: View and respond to stock level warnings",
+        "item3": "Delivery Management: Track upcoming deliveries and their status",
+        "item4": "Stockout Risk Monitoring: Identify and address potential stockout situations"
+      },
+      "tasks": {
+        "title": "Common Tasks",
+        "item1": "Creating and tracking shipments",
+        "item2": "Responding to inventory alerts (low stock, stockout risk, excess inventory)",
+        "item3": "Monitoring delivery schedules and addressing delays",
+        "item4": "Managing day-to-day inventory movements",
+        "item5": "Coordinating with suppliers and distribution centers"
+      },
+      "tips": {
+        "title": "Navigation Tips",
+        "item1": "Use status indicators to quickly identify delayed shipments or critical inventory alerts",
+        "item2": "Check the upcoming deliveries section daily to prepare for new arrivals",
+        "item3": "Respond promptly to critical-level inventory alerts to prevent stockouts",
+        "item4": "Use the shipment creation function to initiate new outbound shipments"
+      }
+    },
+
+    "troubleshooting": {
+      "title": "Troubleshooting",
+      "login": {
+        "title": "Login Problems",
+        "item1": "Ensure you're using the correct credentials",
+        "item2": "Check if your account is active",
+        "item3": "Clear browser cache and cookies",
+        "item4": "Contact an administrator if problems persist"
+      },
+      "dashboard": {
+        "title": "Dashboard Not Loading",
+        "item1": "Check your internet connection",
+        "item2": "Refresh the page",
+        "item3": "Clear browser cache",
+        "item4": "Try using a different browser"
+      },
+      "data": {
+        "title": "Data Not Updating",
+        "item1": "Check if real-time data streaming is enabled",
+        "item2": "Refresh the dashboard",
+        "item3": "Verify API connectivity",
+        "item4": "Contact technical support if the issue persists"
+      }
+    }
   },
   "inventory": {
     "title": "Inventory Dashboard",

@@ -56,6 +56,7 @@
     "simulations": "Simulations",
     "shipping": "Expédition",
     "tracking": "Suivi",
+    "faq": "FAQ",
     "collapse_sidebar": "Réduire la barre latérale",
     "expand_sidebar": "Développer la barre latérale",
     "unknown_user": "Utilisateur Inconnu",
@@ -667,6 +668,153 @@
     "title": "404 - Page Non Trouvée",
     "message": "La page que vous recherchez n'existe pas.",
     "return_home": "Retour à l'Accueil"
+  },
+  "faq": {
+    "title": "Foire Aux Questions",
+    "description": "Trouvez des réponses aux questions courantes sur l'utilisation du système et ses fonctionnalités.",
+
+    "admin": {
+      "title": "FAQ Administrateur",
+      "overview": {
+        "title": "Aperçu du Rôle",
+        "content": "Les administrateurs ont le niveau d'accès le plus élevé et sont responsables de la gestion du système, de l'administration des utilisateurs et de la supervision de l'ensemble du système de gestion d'inventaire."
+      },
+      "features": {
+        "title": "Fonctionnalités Clés du Tableau de Bord",
+        "item1": "Surveillance de l'État du Système: Voir les utilisateurs en ligne, les approbations en attente, la santé du système et l'état des sauvegardes",
+        "item2": "Gestion des Utilisateurs: Ajouter, modifier et désactiver des comptes utilisateurs",
+        "item3": "Paramètres Système: Configurer les paramètres de l'application et les permissions",
+        "item4": "Gestion d'Inventaire: Accès à toutes les données d'inventaire et fonctions de gestion"
+      },
+      "tasks": {
+        "title": "Tâches Courantes",
+        "item1": "Approuver les nouvelles inscriptions d'utilisateurs",
+        "item2": "Gérer les rôles et permissions des utilisateurs",
+        "item3": "Surveiller la santé et les performances du système",
+        "item4": "Examiner les journaux système et l'historique des activités",
+        "item5": "Configurer les paramètres globaux du système"
+      },
+      "tips": {
+        "title": "Conseils de Navigation",
+        "item1": "Utilisez le panneau d'actions rapides pour un accès rapide aux tâches administratives courantes",
+        "item2": "Surveillez la section des activités récentes pour rester informé des événements système importants",
+        "item3": "Vérifiez régulièrement la carte d'état du système pour assurer des performances optimales"
+      }
+    },
+
+    "manager": {
+      "title": "FAQ Gestionnaire",
+      "overview": {
+        "title": "Aperçu du Rôle",
+        "content": "Les gestionnaires supervisent les opérations, la performance de l'équipe et prennent des décisions d'approbation pour les ajustements d'inventaire et autres changements opérationnels."
+      },
+      "features": {
+        "title": "Fonctionnalités Clés du Tableau de Bord",
+        "item1": "Gestion des Approbations: Examiner et traiter les demandes d'approbation en attente",
+        "item2": "Surveillance de la Performance de l'Équipe: Suivre les métriques de performance des membres de l'équipe",
+        "item3": "Supervision de l'Inventaire: Voir les alertes et l'état de l'inventaire",
+        "item4": "Suivi des Économies de Coûts: Surveiller les métriques financières liées à l'optimisation de l'inventaire"
+      },
+      "tasks": {
+        "title": "Tâches Courantes",
+        "item1": "Examiner et approuver les ajustements d'inventaire",
+        "item2": "Surveiller la performance et la productivité de l'équipe",
+        "item3": "Analyser les opportunités d'économies de coûts",
+        "item4": "Générer et examiner des rapports",
+        "item5": "Prendre des décisions opérationnelles basées sur les recommandations de l'IA"
+      },
+      "tips": {
+        "title": "Conseils de Navigation",
+        "item1": "Priorisez les demandes d'approbation selon leur niveau d'urgence (haute, moyenne, basse)",
+        "item2": "Utilisez la carte de performance de l'équipe pour identifier les meilleurs performeurs et les domaines à améliorer",
+        "item3": "Accédez aux actions rapides pour une réponse immédiate aux situations d'inventaire critiques"
+      }
+    },
+
+    "analyst": {
+      "title": "FAQ Analyste",
+      "overview": {
+        "title": "Aperçu du Rôle",
+        "content": "Les analystes se concentrent sur l'analyse des données, l'exécution de simulations, la génération de rapports et l'exploitation des insights de l'IA pour optimiser la gestion de l'inventaire."
+      },
+      "features": {
+        "title": "Fonctionnalités Clés du Tableau de Bord",
+        "item1": "Gestion des Simulations: Créer et surveiller les simulations d'inventaire",
+        "item2": "Génération de Rapports: Créer et accéder à des rapports analytiques",
+        "item3": "Insights IA: Voir et agir sur les recommandations générées par l'IA",
+        "item4": "Surveillance de la Précision des Données: Suivre et améliorer les métriques de qualité des données"
+      },
+      "tasks": {
+        "title": "Tâches Courantes",
+        "item1": "Créer et exécuter des simulations d'inventaire",
+        "item2": "Analyser les résultats des simulations et générer des insights",
+        "item3": "Produire des rapports pour examen par la direction",
+        "item4": "Surveiller la précision et la qualité des données",
+        "item5": "Mettre en œuvre les recommandations de l'IA pour l'optimisation de l'inventaire"
+      },
+      "tips": {
+        "title": "Conseils de Navigation",
+        "item1": "Basculez la visibilité des sections pour personnaliser la vue de votre tableau de bord",
+        "item2": "Utilisez les barres de progression des simulations pour suivre les simulations en cours",
+        "item3": "Examinez les recommandations de l'IA triées par niveau de confiance et impact potentiel",
+        "item4": "Accédez à la section analytique pour une exploration approfondie des données"
+      }
+    },
+
+    "logistics": {
+      "title": "FAQ Logistique",
+      "overview": {
+        "title": "Aperçu du Rôle",
+        "content": "Le personnel logistique gère les expéditions, les livraisons et les mouvements quotidiens d'inventaire, en se concentrant sur l'exécution opérationnelle."
+      },
+      "features": {
+        "title": "Fonctionnalités Clés du Tableau de Bord",
+        "item1": "Suivi des Expéditions: Surveiller les expéditions en attente, en transit et livrées",
+        "item2": "Alertes d'Inventaire: Voir et répondre aux avertissements de niveau de stock",
+        "item3": "Gestion des Livraisons: Suivre les livraisons à venir et leur statut",
+        "item4": "Surveillance des Risques de Rupture: Identifier et traiter les situations potentielles de rupture de stock"
+      },
+      "tasks": {
+        "title": "Tâches Courantes",
+        "item1": "Créer et suivre les expéditions",
+        "item2": "Répondre aux alertes d'inventaire (stock bas, risque de rupture, excès d'inventaire)",
+        "item3": "Surveiller les calendriers de livraison et traiter les retards",
+        "item4": "Gérer les mouvements quotidiens d'inventaire",
+        "item5": "Coordonner avec les fournisseurs et les centres de distribution"
+      },
+      "tips": {
+        "title": "Conseils de Navigation",
+        "item1": "Utilisez les indicateurs de statut pour identifier rapidement les expéditions retardées ou les alertes d'inventaire critiques",
+        "item2": "Vérifiez quotidiennement la section des livraisons à venir pour vous préparer aux nouvelles arrivées",
+        "item3": "Répondez rapidement aux alertes d'inventaire de niveau critique pour éviter les ruptures de stock",
+        "item4": "Utilisez la fonction de création d'expédition pour initier de nouvelles expéditions sortantes"
+      }
+    },
+
+    "troubleshooting": {
+      "title": "Dépannage",
+      "login": {
+        "title": "Problèmes de Connexion",
+        "item1": "Assurez-vous d'utiliser les identifiants corrects",
+        "item2": "Vérifiez si votre compte est actif",
+        "item3": "Effacez le cache et les cookies du navigateur",
+        "item4": "Contactez un administrateur si les problèmes persistent"
+      },
+      "dashboard": {
+        "title": "Le Tableau de Bord ne se Charge Pas",
+        "item1": "Vérifiez votre connexion internet",
+        "item2": "Actualisez la page",
+        "item3": "Effacez le cache du navigateur",
+        "item4": "Essayez d'utiliser un navigateur différent"
+      },
+      "data": {
+        "title": "Les Données ne se Mettent Pas à Jour",
+        "item1": "Vérifiez si la diffusion de données en temps réel est activée",
+        "item2": "Actualisez le tableau de bord",
+        "item3": "Vérifiez la connectivité de l'API",
+        "item4": "Contactez le support technique si le problème persiste"
+      }
+    }
   },
   "inventory": {
     "title": "Tableau de Bord d'Inventaire",
