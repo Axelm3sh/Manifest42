@@ -232,7 +232,7 @@ npm run preview:prod
 5. Open a Pull Request
 
 #### Style Guidelines
-This project follows a comprehensive set of Vue.js style guidelines. Please refer to the [Vue.js Style Guide](./.junie/guidelines.md) for detailed information on:
+This project follows a comprehensive set of Vue.js style guidelines. Please refer to the [Vue.js Style Guide](https://vuejs.org/guide/introduction.html) for detailed information on:
 
 - JavaScript naming conventions and code style
 - Vue.js component structure and best practices
