@@ -28,6 +28,7 @@ const getActiveItem = () => {
   if (path === '/logistics/shipments') return 'shipping';
   if (path === '/logistics/deliveries') return 'tracking';
   if (path === '/logistics/notifications') return 'notifications';
+  if (path === '/logistics/faq') return 'faq';
   return 'dashboard';
 };
 

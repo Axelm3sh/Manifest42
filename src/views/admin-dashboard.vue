@@ -27,6 +27,7 @@ const getActiveItem = () => {
   if (path === '/admin/inventory') return 'inventory';
   if (path === '/admin/users') return 'users';
   if (path === '/admin/settings') return 'settings';
+  if (path === '/admin/faq') return 'faq';
   return 'dashboard';
 };
 

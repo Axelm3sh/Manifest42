@@ -28,6 +28,7 @@ const getActiveItem = () => {
   if (path === '/manager/notifications') return 'notifications';
   if (path === '/manager/reports') return 'reports';
   if (path === '/manager/approvals') return 'approvals';
+  if (path === '/manager/faq') return 'faq';
   return 'dashboard';
 };
 

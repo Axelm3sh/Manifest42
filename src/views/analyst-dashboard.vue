@@ -29,6 +29,7 @@ const getActiveItem = () => {
   if (path === '/analyst/reports') return 'reports';
   if (path === '/analyst/ai-insights') return 'ai_insights';
   if (path === '/analyst/analytics') return 'analytics';
+  if (path === '/analyst/faq') return 'faq';
   return 'dashboard';
 };
 
