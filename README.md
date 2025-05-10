@@ -106,6 +106,10 @@ Or if you want to try it on your local machine, follow these steps:
 
 #### Steps
 
+> **Note:** `npm install` and/or `npm audit` may show vulnerabilities in dev dependencies that don't affect production builds since they're not
+> included in the final bundle.
+> Read more about "why" this blog post: https://overreacted.io/npm-audit-broken-by-design/
+
 1. Clone the repository
    ```bash
    git clone https://github.com/Axelm3sh/Manifest42.git
