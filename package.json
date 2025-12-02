@@ -34,7 +34,7 @@
     "@vitejs/plugin-vue": "^6.0.2",
     "@vue/test-utils": "^2.4.4",
     "cypress": "^13.6.4",
-    "jsdom": "^24.0.0",
+    "jsdom": "^27.2.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "terser": "^5.28.1",
     "typescript": "^5.8.3",
