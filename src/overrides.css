@@ -1,10 +1,10 @@
 :root {
-  /* Base colors */
-  --color-primary: #646cff;
-  --color-primary-hover: #535bf2;
-  --color-primary-light: #8891ff;
-  --color-primary-dark: #4b51cc;
-  --color-primary-muted: rgba(100, 108, 255, 0.1);
+  /* Base colors - Industrial Steel Blue Theme */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-light: #3b82f6;
+  --color-primary-dark: #1e40af;
+  --color-primary-muted: rgba(37, 99, 235, 0.1);
 
   --color-secondary: #42b883;
   --color-secondary-hover: #33a06f;
@@ -85,7 +85,7 @@
 /* Dark theme */
 [data-theme="dark"] {
   /* Base colors remain the same */
-  --color-primary-muted: rgba(100, 108, 255, 0.15);
+  --color-primary-muted: rgba(37, 99, 235, 0.15);
   --color-success-muted: rgba(16, 185, 129, 0.15);
   --color-warning-muted: rgba(245, 158, 11, 0.15);
 
@@ -127,8 +127,8 @@
 
   --color-shadow: rgba(0, 0, 0, 0.3);
   --color-shadow-dark: rgba(0, 0, 0, 0.5);
-  --shadow-glow-light: 0 0 15px rgba(100, 108, 255, 0.3);
-  --shadow-glow-dark: 0 0 15px rgba(100, 108, 255, 0.5);
+  --shadow-glow-light: 0 0 15px rgba(37, 99, 235, 0.3);
+  --shadow-glow-dark: 0 0 15px rgba(37, 99, 235, 0.5);
 
   /* remap surfaces for dark mode */
   --surface-card:  var(--color-background-secondary);
