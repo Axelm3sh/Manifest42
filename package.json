@@ -29,17 +29,17 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
-    "@types/node": "^25.0.3",
+    "@types/node": "^25.0.6",
     "@vercel/node": "^5.5.16",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vue/test-utils": "^2.4.4",
-    "cypress": "^15.8.1",
+    "cypress": "^15.8.2",
     "jsdom": "^27.4.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "terser": "^5.28.1",
     "typescript": "^5.8.3",
-    "vite": "^7.3.0",
-    "vitest": "^4.0.16"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.17"
   },
   "overrides": {
     "@vercel/node": {
