@@ -33,7 +33,7 @@
     "@vercel/node": "^5.5.16",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vue/test-utils": "^2.4.4",
-    "cypress": "^15.8.2",
+    "cypress": "^15.9.0",
     "jsdom": "^27.4.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "terser": "^5.28.1",
