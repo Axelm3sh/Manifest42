@@ -1,6 +1,6 @@
 <script setup>
 import {computed, ref} from 'vue';
-import {useRouter} from 'vue-router/dist/vue-router.esm-bundler.js';
+import {useRouter} from 'vue-router';
 import {useAuthStore} from '../stores/auth';
 import {useNotificationsStore} from '../stores/notifications';
 import {useI18n} from 'vue-i18n';

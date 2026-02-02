@@ -1,6 +1,6 @@
 <script setup>
 import {computed, onMounted, reactive, ref} from 'vue';
-import {useRoute, useRouter} from 'vue-router/dist/vue-router.esm-bundler.js';
+import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from '../stores/auth';
 import {useI18n} from 'vue-i18n';
 import DotMatrixBackground from "@/components/DotMatrixBackground.vue";
