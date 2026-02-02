@@ -5,7 +5,7 @@ import {createPinia, setActivePinia} from 'pinia';
 import ManagerDashboard from '../../src/views/manager-dashboard.vue';
 
 // Mock vue-router
-vi.mock('vue-router/dist/vue-router.esm-bundler.js', () => ({
+vi.mock('vue-router', () => ({
   useRoute: vi.fn(() => ({
     path: '/manager'
   }))

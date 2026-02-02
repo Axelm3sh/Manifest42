@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router/dist/vue-router.esm-bundler.js';
+import {createRouter, createWebHistory} from 'vue-router';
 import {useAuthStore} from '../stores/auth';
 
 /**
@@ -230,15 +230,14 @@ const router = createRouter({
 /**
  * Global navigation guard for authentication and role-based access
  */
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to) => {
   const authStore = useAuthStore();
 
   // Check if route requires authentication
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
   if (!requiresAuth) {
-    // Route doesn't require auth, allow access
-    return next();
+    return;
   }
 
   // Check if user is logged in
@@ -246,7 +245,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (!isLoggedIn) {
     // User is not logged in, redirect to login
-    return next({ name: 'Login', query: { redirect: to.fullPath } });
+    return { name: 'Login', query: { redirect: to.fullPath } };
   }
 
   // Check if route has role requirements
@@ -254,32 +253,19 @@ router.beforeEach(async (to, from, next) => {
 
   if (requiredRole && authStore.role !== requiredRole) {
     // User doesn't have required role, redirect to appropriate dashboard
-
-    // Determine which dashboard to redirect to based on user's role
-    let redirectRoute;
     switch (authStore.role) {
       case 'admin':
-        redirectRoute = { name: 'AdminDashboard' };
-        break;
+        return { name: 'AdminDashboard' };
       case 'manager':
-        redirectRoute = { name: 'ManagerDashboard' };
-        break;
+        return { name: 'ManagerDashboard' };
       case 'analyst':
-        redirectRoute = { name: 'AnalystDashboard' };
-        break;
+        return { name: 'AnalystDashboard' };
       case 'logistics':
-        redirectRoute = { name: 'LogisticsDashboard' };
-        break;
+        return { name: 'LogisticsDashboard' };
       default:
-        // If role is unknown, redirect to login
-        redirectRoute = { name: 'Login' };
+        return { name: 'Login' };
     }
-
-    return next(redirectRoute);
   }
-
-  // User is authenticated and has required role, allow access
-  next();
 });
 
 export default router;
