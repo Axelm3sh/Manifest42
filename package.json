@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.0.10",
-    "@vitejs/plugin-vue": "^6.0.3",
+    "@vitejs/plugin-vue": "^6.0.4",
     "@vue/test-utils": "^2.4.4",
     "cypress": "^15.9.0",
     "jsdom": "^27.4.0",
