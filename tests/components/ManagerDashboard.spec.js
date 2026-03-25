@@ -22,14 +22,14 @@ vi.mock('../../src/components/dashboard-layout.vue', () => ({
 
 // No need to mock inventory components as they are loaded via router-view
 
-vi.mock('../../src/components/ai-insights-dashboard.vue', () => ({
+vi.mock('../../src/components/ai-insights/ai-insights-dashboard-view.vue', () => ({
   default: {
     name: 'AiInsightsDashboard',
     template: '<div class="mock-ai-insights-dashboard"></div>'
   }
 }));
 
-vi.mock('../../src/components/notification-center.vue', () => ({
+vi.mock('../../src/components/notification/notification-center.vue', () => ({
   default: {
     name: 'NotificationCenter',
     template: '<div class="mock-notification-center"></div>'
@@ -113,6 +113,32 @@ const i18n = createI18n({
   }
 });
 
+vi.mock('../../src/stores/auth', () => ({
+  useAuthStore: vi.fn(() => ({
+    user: { name: 'Manager User' },
+    role: 'manager',
+    isLoggedIn: true
+  }))
+}));
+
+vi.mock('../../src/stores/inventoryData', () => ({
+  useInventoryStore: vi.fn(() => ({
+    totalItems: 1250
+  }))
+}));
+
+vi.mock('../../src/stores/aiInsights', () => ({
+  useAiInsightsStore: vi.fn(() => ({
+    insights: []
+  }))
+}));
+
+vi.mock('../../src/stores/notifications', () => ({
+  useNotificationsStore: vi.fn(() => ({
+    notifications: []
+  }))
+}));
+
 describe('ManagerDashboard.vue', () => {
   let wrapper;
 
@@ -120,36 +146,6 @@ describe('ManagerDashboard.vue', () => {
     // Create a fresh pinia instance for each test
     const pinia = createPinia();
     setActivePinia(pinia);
-
-    // Mock the auth store
-    vi.mock('../../src/stores/auth', () => ({
-      useAuthStore: vi.fn(() => ({
-        user: { name: 'Manager User' },
-        role: 'manager',
-        isLoggedIn: true
-      }))
-    }));
-
-    // Mock the inventory store
-    vi.mock('../../src/stores/inventoryData', () => ({
-      useInventoryStore: vi.fn(() => ({
-        totalItems: 1250
-      }))
-    }));
-
-    // Mock the AI insights store
-    vi.mock('../../src/stores/aiInsights', () => ({
-      useAiInsightsStore: vi.fn(() => ({
-        insights: []
-      }))
-    }));
-
-    // Mock the notifications store
-    vi.mock('../../src/stores/notifications', () => ({
-      useNotificationsStore: vi.fn(() => ({
-        notifications: []
-      }))
-    }));
 
     // Mount the component with the necessary props and plugins
     wrapper = mount(ManagerDashboard, {
