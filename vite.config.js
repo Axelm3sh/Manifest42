@@ -83,8 +83,8 @@ export default defineConfig(({ command, mode }) => {
       minify: 'terser',
       terserOptions: {
         compress: {
-          drop_console: env.NODE_ENV === 'production',
-          drop_debugger: env.NODE_ENV === 'production',
+          drop_console: mode === 'production',
+          drop_debugger: mode === 'production',
         }
       },
 
@@ -95,8 +95,10 @@ export default defineConfig(({ command, mode }) => {
       rollupOptions: {
         output: {
           // Chunk files by type
-          manualChunks: {
-            'vendor': ['vue', 'vue-router', 'pinia'],
+          manualChunks(id) {
+            if (id.includes('node_modules/vue') || id.includes('node_modules/vue-router') || id.includes('node_modules/pinia')) {
+              return 'vendor'
+            }
           },
           // Control chunk file naming
           chunkFileNames: 'assets/js/[name]-[hash].js',
