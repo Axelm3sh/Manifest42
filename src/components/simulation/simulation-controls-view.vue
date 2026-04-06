@@ -372,9 +372,9 @@ const resetToDefaults = () => {
 
 .scenario-select {
   padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
 }
 
 /* Save Dialog */
@@ -392,11 +392,11 @@ const resetToDefaults = () => {
 }
 
 .save-dialog {
-  background-color: white;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
   width: 400px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 15px -3px var(--color-shadow), 0 4px 6px -2px var(--color-shadow);
 }
 
 .save-dialog h3 {
@@ -437,9 +437,9 @@ const resetToDefaults = () => {
 .scenario-name-input {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
 }
 
 .dialog-actions {

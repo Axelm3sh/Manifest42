@@ -289,15 +289,15 @@ const renderComparisonChart = () => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem;
-  background-color: #f3f4f6;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
 }
 
 .remove-button {
   background: none;
   border: none;
-  color: #6b7280;
+  color: var(--color-text-tertiary);
   font-size: 1rem;
   cursor: pointer;
   padding: 0;
@@ -305,7 +305,7 @@ const renderComparisonChart = () => {
 }
 
 .remove-button:hover {
-  color: #ef4444;
+  color: var(--color-danger);
 }
 
 .comparison-chart-container {
@@ -327,13 +327,13 @@ const renderComparisonChart = () => {
 .comparison-table th {
   text-align: left;
   padding: 0.75rem;
-  border-bottom: 2px solid #e5e7eb;
-  font-weight: 600;
+  border-bottom: var(--border-width-thick) solid var(--color-border);
+  font-weight: var(--font-weight-semibold);
 }
 
 .comparison-table td {
   padding: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: var(--border-width-thin) solid var(--color-border);
 }
 
 .comparison-table tr td:first-child {

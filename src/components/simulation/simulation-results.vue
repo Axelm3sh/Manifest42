@@ -338,19 +338,19 @@ const renderDemandChart = () => {
 }
 
 .summary-item[data-type="stock"]::before {
-  background-color: #3b82f6;
+  background-color: var(--color-info);
 }
 
 .summary-item[data-type="demand"]::before {
-  background-color: #f59e0b;
+  background-color: var(--color-warning);
 }
 
 .summary-item[data-type="orders"]::before {
-  background-color: #10b981;
+  background-color: var(--color-success);
 }
 
 .summary-item[data-type="stockout"]::before {
-  background-color: #ef4444;
+  background-color: var(--color-danger);
 }
 
 .summary-item[data-type="service"]::before {
@@ -373,28 +373,28 @@ const renderDemandChart = () => {
   height: 2.5rem;
   border-radius: 50%;
   margin-right: 1rem;
-  background-color: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
+  background-color: var(--color-primary-muted);
+  color: var(--color-info);
 }
 
 .summary-item[data-type="stock"] .summary-icon {
-  background-color: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
+  background-color: var(--color-primary-muted);
+  color: var(--color-info);
 }
 
 .summary-item[data-type="demand"] .summary-icon {
-  background-color: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
+  background-color: var(--color-warning-muted);
+  color: var(--color-warning);
 }
 
 .summary-item[data-type="orders"] .summary-icon {
-  background-color: rgba(16, 185, 129, 0.1);
-  color: #10b981;
+  background-color: var(--color-success-muted);
+  color: var(--color-success);
 }
 
 .summary-item[data-type="stockout"] .summary-icon {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
 }
 
 .summary-item[data-type="service"] .summary-icon {
