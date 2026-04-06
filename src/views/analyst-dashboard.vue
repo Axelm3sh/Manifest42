@@ -738,18 +738,18 @@ const createNewReport = () => {
 }
 
 .status-completed {
-  background-color: var(--color-success-light);
-  color: var(--color-success-dark);
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .status-in-progress {
-  background-color: var(--color-info-light);
-  color: var(--color-info-dark);
+  background-color: var(--color-info-bg);
+  color: var(--color-info-text);
 }
 
 .status-pending {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning-dark);
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .simulation-description, .report-insights {
@@ -833,8 +833,8 @@ const createNewReport = () => {
 }
 
 .view-all-button:hover {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary-dark);
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary-text);
   text-decoration: none;
 }
 
@@ -850,7 +850,7 @@ const createNewReport = () => {
 }
 
 .toggle-button:hover {
-  background-color: var(--color-primary-light);
+  background-color: var(--color-primary-bg);
 }
 
 .toggle-button .pi {

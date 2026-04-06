@@ -718,7 +718,7 @@ const getStatusClass = (status) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 .section-title {
@@ -834,12 +834,12 @@ const getStatusClass = (status) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
   transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
 .kpi-card:hover {
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 .kpi-title {
@@ -888,12 +888,12 @@ const getStatusClass = (status) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
   transition: box-shadow var(--transition-normal);
 }
 
 .chart-card:hover {
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 .chart-title {

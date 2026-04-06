@@ -298,7 +298,7 @@ const selected = computed(() =>
   border-bottom: 1px solid var(--color-border);
   transition: background .15s;
   position: relative;
-  color: var(--text-color, var(--color-text)); /* Ensure text is visible */
+  color: var(--color-text-primary);
 }
 
 .request-info {
@@ -316,17 +316,17 @@ const selected = computed(() =>
 
 .id-label, .item-label {
   font-size: 0.75rem;
-  color: var(--color-text);
+  color: var(--color-text-primary);
   min-width: 4rem;
 }
 
 .id {
   font-weight: 600;
-  color: var(--text-color);
+  color: var(--color-text-primary);
 }
 
 .item {
-  color: var(--color-text);
+  color: var(--color-text-primary);
 }
 
 .item-quantity {

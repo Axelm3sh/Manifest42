@@ -665,23 +665,23 @@ onMounted(async () => {
 }
 
 .status-pending {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning-dark);
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .status-processing {
-  background-color: var(--color-info-light);
-  color: var(--color-info-dark);
+  background-color: var(--color-info-bg);
+  color: var(--color-info-text);
 }
 
 .status-shipped {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary-dark);
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary-text);
 }
 
 .status-delivered {
-  background-color: var(--color-success-light);
-  color: var(--color-success-dark);
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .shipment-location {
@@ -706,18 +706,18 @@ onMounted(async () => {
 }
 
 .priority-high {
-  background-color: var(--color-error-light);
-  color: var(--color-error-dark);
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text);
 }
 
 .priority-medium {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning-dark);
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .priority-low {
-  background-color: var(--color-success-light);
-  color: var(--color-success-dark);
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .shipment-items {

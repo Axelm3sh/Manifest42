@@ -352,7 +352,7 @@ const quickLogin = (role, event) => {
 .login-title {
   font-size: var(--font-size-lg);
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-text-primary);
   margin-bottom: var(--spacing-xs);
   text-align: center;
 }
@@ -382,7 +382,7 @@ const quickLogin = (role, event) => {
   display: block;
   font-size: var(--font-size-sm);
   font-weight: 500;
-  color: var(--color-text-light);
+  color: var(--color-text-secondary);
   margin-bottom: var(--spacing-xs);
 }
 
@@ -485,7 +485,7 @@ const quickLogin = (role, event) => {
 .demo-title {
   font-size: var(--font-size-md);
   font-weight: 500;
-  color: var(--color-text-light);
+  color: var(--color-text-secondary);
   margin-bottom: var(--spacing-md);
   text-align: center;
 }

@@ -727,7 +727,7 @@ onMounted(async () => {
   padding: var(--spacing-lg);
   border: var(--border-width-thin) solid var(--color-border);
   margin-bottom: var(--spacing-lg);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 /* Shipment Type Selector */
@@ -771,7 +771,7 @@ onMounted(async () => {
   background-color: var(--color-surface-hover);
   border-color: var(--color-primary-light);
   transform: translateY(-2px);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 .type-option.active {
@@ -1162,7 +1162,7 @@ onMounted(async () => {
   border-radius: var(--border-radius-md);
   padding: var(--spacing-md);
   border: var(--border-width-thin) solid var(--color-border);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
@@ -1196,13 +1196,13 @@ onMounted(async () => {
 }
 
 .shipment-type.warehouse {
-  background-color: var(--p-blue-50);
-  color: var(--p-blue-700);
+  background-color: var(--color-info-bg);
+  color: var(--color-info-text);
 }
 
 .shipment-type.customer {
-  background-color: var(--p-green-50);
-  color: var(--p-green-700);
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .shipment-details {

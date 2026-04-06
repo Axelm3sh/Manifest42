@@ -430,7 +430,7 @@ export const getPerformanceClass = (value) => {
   background-color: var(--color-surface, var(--color-background));
   border-radius: var(--border-radius-lg, 8px);
   padding: var(--spacing-lg, 1.5rem);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
   transition: box-shadow var(--transition-normal, 0.2s), background-color var(--transition-normal, 0.2s);
 }
 
@@ -511,7 +511,7 @@ export const getPerformanceClass = (value) => {
   background-color: var(--color-surface, var(--color-background-secondary));
   border-radius: var(--border-radius-lg, 8px);
   padding: var(--spacing-lg, 1.5rem);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
   margin-bottom: var(--spacing-lg, 1.5rem);
   transition: box-shadow var(--transition-normal, 0.2s), background-color var(--transition-normal, 0.2s);
 }
@@ -652,7 +652,7 @@ export const getPerformanceClass = (value) => {
   background-color: var(--color-surface, var(--color-background));
   border-radius: var(--border-radius-lg, 8px);
   padding: var(--spacing-lg, 1.5rem);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
   margin-bottom: var(--spacing-lg, 1.5rem);
   transition: box-shadow var(--transition-normal, 0.2s), background-color var(--transition-normal, 0.2s);
 }
@@ -683,7 +683,7 @@ export const getPerformanceClass = (value) => {
 }
 
 .action-button:hover {
-  background-color: var(--color-surface-hover, var(--color-bg-hover));
+  background-color: var(--color-surface-hover);
   border-color: var(--color-primary, var(--color-border-hover));
   text-decoration: none;
 }
@@ -793,7 +793,7 @@ export const getPerformanceClass = (value) => {
   padding: 1.5rem;
   border-radius: 8px;
   background-color: var(--color-background-secondary);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 .member-header {
@@ -925,6 +925,6 @@ export const getPerformanceClass = (value) => {
 }
 
 .member-action-button:hover {
-  background-color: var(--color-bg-hover);
+  background-color: var(--color-surface-hover);
 }
 </style>

@@ -553,12 +553,12 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
   transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
 .kpi-card:hover {
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 .kpi-title {
@@ -632,13 +632,13 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
   margin-bottom: var(--spacing-lg);
   transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
 .overview-card:hover {
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 .empty-state {
@@ -658,7 +658,7 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-background);
   border-radius: var(--border-radius-md);
   padding: var(--spacing-lg);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 .shipment-header, .alert-header {
@@ -680,23 +680,23 @@ const handleInventoryAction = (id, action) => {
 }
 
 .status-success {
-  background-color: var(--color-success-light);
-  color: var(--color-success-dark);
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .status-in-progress {
-  background-color: var(--color-info-light);
-  color: var(--color-info-dark);
+  background-color: var(--color-info-bg);
+  color: var(--color-info-text);
 }
 
 .status-pending {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning-dark);
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .status-warning {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning-dark);
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .shipment-destination, .alert-title {
@@ -762,18 +762,18 @@ const handleInventoryAction = (id, action) => {
 }
 
 .priority-high {
-  background-color: var(--color-error-light);
-  color: var(--color-error-dark);
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text);
 }
 
 .priority-medium {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning-dark);
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .priority-low {
-  background-color: var(--color-success-light);
-  color: var(--color-success-dark);
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .alert-critical {
@@ -802,18 +802,18 @@ const handleInventoryAction = (id, action) => {
 }
 
 .alert-level-critical {
-  background-color: var(--color-error-light);
-  color: var(--color-error-dark);
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text);
 }
 
 .alert-level-warning {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning-dark);
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .alert-level-info {
-  background-color: var(--color-info-light);
-  color: var(--color-info-dark);
+  background-color: var(--color-info-bg);
+  color: var(--color-info-text);
 }
 
 .alert-actions {
@@ -860,13 +860,13 @@ const handleInventoryAction = (id, action) => {
   background-color: var(--color-surface);
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
   margin-bottom: var(--spacing-lg);
   transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
 .logistics-actions:hover {
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
 
 .actions-grid {
@@ -912,87 +912,87 @@ const handleInventoryAction = (id, action) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-lg);
 }
 
 .primary-button {
-  padding: 0.75rem 1.5rem;
-  background-color: #4299e1;
-  color: white;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--color-primary);
+  color: var(--color-button-text);
   border: none;
-  border-radius: 4px;
-  font-weight: 500;
+  border-radius: var(--border-radius-sm);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
 }
 
 .shipments-grid, .deliveries-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  gap: var(--spacing-lg);
 }
 
 .shipment-card, .delivery-card {
-  background-color: #f8fafc;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: 0 1px 2px var(--color-shadow);
 }
 
 .shipment-card-header, .delivery-card-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .shipment-card-id, .delivery-card-id {
-  font-weight: 600;
-  color: #1a202c;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 
 .shipment-card-status, .delivery-card-status {
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-full);
 }
 
 .shipment-card-destination, .delivery-card-supplier {
-  font-weight: 500;
-  color: #1a202c;
-  margin-bottom: 0.75rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
 }
 
 .shipment-card-details, .delivery-card-details {
-  font-size: 0.875rem;
-  color: #4a5568;
-  margin-bottom: 1rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
 }
 
 .shipment-card-delivery {
-  font-size: 0.875rem;
-  color: #718096;
-  margin-bottom: 1rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
 }
 
 .shipment-card-actions, .delivery-card-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 .shipment-action-button, .delivery-action-button {
   flex: 1;
-  padding: 0.5rem;
-  background-color: #f7fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #4a5568;
+  padding: var(--spacing-sm);
+  background-color: var(--color-surface);
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
   cursor: pointer;
 }
 
 .shipment-action-button:hover, .delivery-action-button:hover {
-  background-color: #edf2f7;
+  background-color: var(--color-surface-hover);
 }
 
 @media (max-width: 768px) {

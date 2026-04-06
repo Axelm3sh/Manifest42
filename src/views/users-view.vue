@@ -557,7 +557,7 @@ const notificationTags = computed(() => {
   height: 2rem;
   border-radius: 50%;
   background: var(--color-border);
-  color: var(--text-color);
+  color: var(--color-text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
