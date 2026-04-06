@@ -86,83 +86,83 @@ const formatDate = (dateString) => {
 .risk-table-container {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .empty-state-card {
   padding: 2rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 
 .risk-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
 }
 
 .risk-table th {
   text-align: left;
   padding: 0.75rem;
-  border-bottom: 2px solid #e5e7eb;
-  font-weight: 600;
+  border-bottom: var(--border-width-thick) solid var(--color-border);
+  font-weight: var(--font-weight-semibold);
 }
 
 .risk-table td {
   padding: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: var(--border-width-thin) solid var(--color-border);
 }
 
 .risk-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
 }
 
 .risk-critical {
-  background-color: #fee2e2;
-  color: #b91c1c;
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text);
 }
 
 .risk-high {
-  background-color: #fef3c7;
-  color: #b45309;
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .risk-medium {
-  background-color: #e0f2fe;
-  color: #0369a1;
+  background-color: var(--color-info-bg);
+  color: var(--color-info-text);
 }
 
 .risk-low {
-  background-color: #dcfce7;
-  color: #15803d;
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .risk-none {
-  background-color: #f3f4f6;
-  color: #4b5563;
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-secondary);
 }
 
 .action-button {
-  background-color: #3b82f6;
-  border: 1px solid #2563eb;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  background-color: var(--color-primary);
+  border: var(--border-width-thin) solid var(--color-primary-dark);
+  color: var(--color-button-text);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-fast);
 }
 
 .action-button:hover {
-  background-color: #2563eb;
+  background-color: var(--color-primary-hover);
 }
 
 .action-button.small {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
 }
 </style>

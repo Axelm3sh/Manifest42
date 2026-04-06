@@ -105,13 +105,13 @@ const formatConfidence = (confidence) => {
 .recommendations-container {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .empty-state-card {
   padding: 2rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 
@@ -125,29 +125,29 @@ const formatConfidence = (confidence) => {
 .recommendation-header h3 {
   margin: 0;
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .urgency-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
 }
 
 .urgency-high {
-  background-color: #fee2e2;
-  color: #b91c1c;
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text);
 }
 
 .urgency-medium {
-  background-color: #fef3c7;
-  color: #b45309;
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .urgency-low {
-  background-color: #dcfce7;
-  color: #15803d;
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .recommendation-details {
@@ -159,52 +159,52 @@ const formatConfidence = (confidence) => {
 .detail-item {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--spacing-xs);
 }
 
 .detail-label {
-  font-size: 0.75rem;
-  color: #6b7280;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
 }
 
 .detail-value {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 .recommendation-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 .action-button {
-  background-color: #3b82f6;
-  border: 1px solid #2563eb;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  background-color: var(--color-primary);
+  border: var(--border-width-thin) solid var(--color-primary-dark);
+  color: var(--color-button-text);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-fast);
 }
 
 .action-button:hover {
-  background-color: #2563eb;
+  background-color: var(--color-primary-hover);
 }
 
 .dismiss-button {
-  background-color: #f3f4f6;
-  border: 1px solid #d1d5db;
-  color: #4b5563;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  background-color: var(--color-surface);
+  border: var(--border-width-thin) solid var(--color-border);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .dismiss-button:hover {
-  background-color: #e5e7eb;
-  color: #1f2937;
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
 }
 </style>

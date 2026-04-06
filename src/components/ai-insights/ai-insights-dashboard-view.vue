@@ -119,76 +119,76 @@ const refreshData = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .dashboard-header h2 {
   margin: 0;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .dashboard-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 .settings-button,
 .refresh-button {
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .settings-button {
-  background-color: #f3f4f6;
-  border: 1px solid #d1d5db;
-  color: #4b5563;
+  background-color: var(--color-surface);
+  border: var(--border-width-thin) solid var(--color-border);
+  color: var(--color-text-secondary);
 }
 
 .settings-button.active {
-  background-color: #e5e7eb;
-  color: #1f2937;
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
 }
 
 .refresh-button {
-  background-color: #3b82f6;
-  border: 1px solid #2563eb;
-  color: white;
+  background-color: var(--color-primary);
+  border: var(--border-width-thin) solid var(--color-primary-dark);
+  color: var(--color-button-text);
 }
 
 .refresh-button:hover {
-  background-color: #2563eb;
+  background-color: var(--color-primary-hover);
 }
 
 .tabs-navigation {
   display: flex;
   gap: 0.25rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: var(--spacing-md);
+  border-bottom: var(--border-width-thin) solid var(--color-border);
 }
 
 .tab-button {
-  padding: 0.75rem 1rem;
+  padding: 0.75rem var(--spacing-md);
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #6b7280;
+  border-bottom: var(--border-width-thick) solid transparent;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .tab-button:hover {
-  color: #4b5563;
+  color: var(--color-text-primary);
 }
 
 .tab-button.active {
-  color: #3b82f6;
-  border-bottom-color: #3b82f6;
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
 }
 
 .loading-indicator {
@@ -196,7 +196,7 @@ const refreshData = () => {
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 </style>
