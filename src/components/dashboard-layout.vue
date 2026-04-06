@@ -315,7 +315,7 @@ const getDashboardRoute = () => {
   height: 40px;
   border-radius: var(--border-radius-full);
   background-color: var(--color-primary);
-  color: white;
+  color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -426,7 +426,7 @@ const getDashboardRoute = () => {
   justify-content: space-between;
   padding: var(--spacing-md) var(--spacing-xl);
   background-color: var(--color-surface);
-  box-shadow: var(--color-shadow);
+  box-shadow: 0 1px 3px var(--color-shadow);
   z-index: 10;
   transition: background-color var(--transition-normal),
               box-shadow var(--transition-normal);
@@ -514,7 +514,7 @@ const getDashboardRoute = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;          /* PrimeIcons glyph size */
+  font-size: var(--font-size-xl);
   margin-right: var(--spacing-sm);
 }
 

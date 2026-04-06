@@ -151,36 +151,36 @@ const handleRestock = (itemId, urgent = false) => {
 .stock-alerts {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--spacing-lg);
 }
 
 .alerts-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
 }
 
 .alerts-table th {
   text-align: left;
-  padding: 0.75rem;
-  border-bottom: 2px solid var(--color-border);
-  font-weight: 600;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: var(--border-width-thick) solid var(--color-border);
+  font-weight: var(--font-weight-semibold);
 }
 
 .alerts-table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: var(--border-width-thin) solid var(--color-border);
 }
 
 .alert-row:hover {
-  background-color: var(--color-hover);
+  background-color: var(--color-surface-hover);
 }
 
 .stock-level {
   display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-weight: 500;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-weight: var(--font-weight-medium);
 }
 
 .stock-level-low {
@@ -189,7 +189,7 @@ const handleRestock = (itemId, urgent = false) => {
 }
 
 .activity-time {
-  font-size: 0.75rem;
+  font-size: var(--font-size-xs);
 }
 
 .activity-recent {
@@ -206,7 +206,7 @@ const handleRestock = (itemId, urgent = false) => {
 
 .no-alerts {
   text-align: center;
-  padding: 2rem;
+  padding: var(--spacing-xl);
   color: var(--color-text-secondary);
   font-style: italic;
 }

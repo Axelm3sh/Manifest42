@@ -125,7 +125,7 @@ onBeforeUnmount(() => {
 .language-switcher {
   position: relative;
   display: inline-block;
-  margin: 1rem;
+  margin: var(--spacing-md);
 }
 
 .visually-hidden {
@@ -166,8 +166,8 @@ onBeforeUnmount(() => {
 }
 
 .arrow {
-  font-size: 0.75rem;
-  transition: transform 0.2s;
+  font-size: var(--font-size-xs);
+  transition: transform var(--transition-fast);
 }
 
 .arrow-up {
@@ -185,7 +185,7 @@ onBeforeUnmount(() => {
   margin-top: var(--spacing-xs);
   overflow: hidden;
   z-index: 10;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 6px -1px var(--color-shadow), 0 2px 4px -2px var(--color-shadow);
 }
 
 .language-option {

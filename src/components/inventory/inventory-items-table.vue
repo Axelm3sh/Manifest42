@@ -105,7 +105,7 @@ const getLastActivityClass = (lastActivity) => {
 }
 
 .item-row:hover {
-  background-color: var(--color-hover);
+  background-color: var(--color-surface-hover);
 }
 
 .stock-level {
