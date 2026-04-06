@@ -56,7 +56,7 @@ const buttonClasses = computed(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
   border-radius: var(--border-radius-md);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
@@ -64,7 +64,7 @@ const buttonClasses = computed(() => {
 }
 
 .base-button .pi {
-  font-size: 1rem;
+  font-size: var(--font-size-md);
 }
 
 .base-button.disabled {
@@ -75,7 +75,7 @@ const buttonClasses = computed(() => {
 /* Variants */
 .variant-default {
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   color: var(--color-text-secondary);
 }
 .variant-default:hover:not(.disabled),
@@ -86,7 +86,7 @@ const buttonClasses = computed(() => {
 
 .variant-primary {
   background-color: var(--color-primary);
-  border: 1px solid var(--color-primary-dark);
+  border: var(--border-width-thin) solid var(--color-primary-dark);
   color: var(--color-button-text);
 }
 .variant-primary:hover:not(.disabled) {
@@ -98,7 +98,7 @@ const buttonClasses = computed(() => {
 
 .variant-danger {
   background-color: var(--color-danger);
-  border: 1px solid var(--color-danger-dark);
+  border: var(--border-width-thin) solid var(--color-danger-dark);
   color: var(--color-button-text);
 }
 .variant-danger:hover:not(.disabled) {
@@ -107,7 +107,7 @@ const buttonClasses = computed(() => {
 
 .variant-success {
   background-color: var(--color-success);
-  border: 1px solid var(--color-success-dark);
+  border: var(--border-width-thin) solid var(--color-success-dark);
   color: var(--color-button-text);
 }
 .variant-success:hover:not(.disabled) {
@@ -116,7 +116,7 @@ const buttonClasses = computed(() => {
 
 .variant-warning {
   background-color: var(--color-warning);
-  border: 1px solid var(--color-warning-dark);
+  border: var(--border-width-thin) solid var(--color-warning-dark);
   color: var(--color-button-text);
 }
 .variant-warning:hover:not(.disabled) {

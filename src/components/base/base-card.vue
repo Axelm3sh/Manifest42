@@ -49,21 +49,21 @@ defineProps({
 
 <style scoped>
 .card-header {
-  padding: 1rem;
-  border-bottom: 1px solid var(--color-surface);
+  padding: var(--spacing-md);
+  border-bottom: var(--border-width-thin) solid var(--color-border);
 }
 
 .card-title {
   margin: 0;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--text-color);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 
-.card-body { padding: 1rem; }
+.card-body { padding: var(--spacing-md); }
 
 .card-footer {
-  padding: 1rem;
-  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  border-top: var(--border-width-thin) solid var(--color-border);
 }
 </style>

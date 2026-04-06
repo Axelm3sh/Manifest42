@@ -76,37 +76,37 @@ const setActiveTab = (tabId) => {
 
 .tabs-navigation {
   display: flex;
-  gap: 0.25rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+  border-bottom: var(--border-width-thin) solid var(--color-border);
 }
 
 .tab-button {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #6b7280;
+  border-bottom: var(--border-width-thick) solid transparent;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .tab-button .pi {
-  font-size: 1rem;
+  font-size: var(--font-size-md);
 }
 
 .tab-button:hover:not(.disabled) {
-  color: #4b5563;
+  color: var(--color-text-primary);
 }
 
 .tab-button.active {
-  color: #3b82f6;
-  border-bottom-color: #3b82f6;
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
 }
 
 .tab-button.disabled {
@@ -122,17 +122,17 @@ const setActiveTab = (tabId) => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.65rem;
-  font-weight: 600;
-  padding: 0.15rem 0.35rem;
-  border-radius: 1rem;
-  background-color: #ef4444;
-  color: white;
-  margin-left: 0.5rem;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 2px var(--spacing-xs);
+  border-radius: var(--border-radius-full);
+  background-color: var(--color-danger);
+  color: var(--color-white);
+  margin-left: var(--spacing-sm);
 }
 
 .new-result-badge {
-  background-color: #10b981;
+  background-color: var(--color-success);
   animation: pulse 1.5s infinite;
 }
 
