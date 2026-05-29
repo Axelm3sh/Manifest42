@@ -37,7 +37,6 @@ app.use(PrimeVue,
             }
         },
     ripple: true})
-// app.use(PhosphorVue)
 app.use(i18n)
 app.use(router)
 app.use(ConfirmationService)
