@@ -4,12 +4,34 @@
  */
 
 /**
- * Generate a CSRF token
+ * Return the platform crypto implementation (browser or Node) or throw.
+ * @returns {Crypto}
+ */
+function getCrypto() {
+  const cryptoObj = globalThis.crypto;
+  if (!cryptoObj || typeof cryptoObj.getRandomValues !== 'function') {
+    throw new Error('Secure crypto API is not available in this environment');
+  }
+  return cryptoObj;
+}
+
+/**
+ * Generate a hex string backed by cryptographically secure random bytes.
+ * @param {number} byteLength - Number of random bytes to generate
+ * @returns {string} Hex-encoded random string
+ */
+function randomHex(byteLength) {
+  const bytes = new Uint8Array(byteLength);
+  getCrypto().getRandomValues(bytes);
+  return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * Generate a CSRF token using a cryptographically secure RNG.
  * @returns {string} The generated CSRF token
  */
 export function generateCSRFToken() {
-  return Math.random().toString(36).substring(2, 15) + 
-         Math.random().toString(36).substring(2, 15);
+  return randomHex(32);
 }
 
 /**
@@ -85,10 +107,12 @@ export function validateOrigin(origin, allowedOrigins = []) {
     // Exact match
     if (allowed === origin) return true;
     
-    // Wildcard match (e.g., *.example.com)
+    // Wildcard match (e.g., *.example.com) — only match the apex domain or a
+    // true subdomain. Using endsWith(domain) alone would also accept
+    // look-alike domains such as "evilexample.com", so require a dot boundary.
     if (allowed.startsWith('*.')) {
       const domain = allowed.substring(2);
-      return origin.endsWith(domain) && origin.includes('.');
+      return origin === domain || origin.endsWith('.' + domain);
     }
     
     return false;
@@ -100,7 +124,7 @@ export function validateOrigin(origin, allowedOrigins = []) {
  * @returns {string} A random nonce value
  */
 export function createNonce() {
-  return Math.random().toString(36).substring(2, 15);
+  return randomHex(16);
 }
 
 // Export a default object with all functions
