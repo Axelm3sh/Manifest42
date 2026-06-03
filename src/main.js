@@ -7,7 +7,7 @@ import router from './router/index.js'
 
 // Import order matters for CSS
 import './base.css' // fonts, spacing, etc.
-import Lara from '@primevue/themes/lara' // PrimeVue theme
+import Lara from '@primeuix/themes/lara' // PrimeVue theme
 import './overrides.css' // color tokens
 import 'primeicons/primeicons.css' // PrimeIcons
 import 'primeflex/primeflex.css' // tiny flex/grid helper set
