@@ -3,6 +3,11 @@ name: Frontend CI/CD
 permissions:
   contents: read
 
+# Cancel superseded runs on the same ref to save CI minutes
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ main, master, 'dev/*' ]
@@ -33,6 +38,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     strategy:
       matrix:
@@ -40,20 +46,21 @@ jobs:
         node-version: [24.x]
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@9f698171ed81b15d1823a05fc7211befd50c8ae0 # v6.0.3
       with:
         # The build job never pushes, so don't leave the GITHUB_TOKEN on disk
         persist-credentials: false
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: './package-lock.json'
 
     - name: Install dependencies
-      run: npm ci
+      # --ignore-scripts blocks arbitrary lifecycle scripts from dependencies (supply-chain hardening)
+      run: npm ci --ignore-scripts
 
     - name: Security audit
       # Fail the pipeline on high/critical advisories in the dependency tree
@@ -69,7 +76,7 @@ jobs:
       run: npm test --if-present
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: frontend-build
         path: dist
