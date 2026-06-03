@@ -8,6 +8,12 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # Group minor and patch updates into a single PR to reduce review noise
+    groups:
+      npm-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
     # Specify labels for npm pull requests
     labels:
       - "npm"

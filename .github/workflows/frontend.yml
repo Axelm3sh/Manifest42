@@ -3,6 +3,11 @@ name: Frontend CI/CD
 permissions:
   contents: read
 
+# Cancel superseded runs on the same ref to save CI minutes
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ main, master, 'dev/*' ]
@@ -33,6 +38,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     strategy:
       matrix:
@@ -53,7 +59,8 @@ jobs:
         cache-dependency-path: './package-lock.json'
 
     - name: Install dependencies
-      run: npm ci
+      # --ignore-scripts blocks arbitrary lifecycle scripts from dependencies (supply-chain hardening)
+      run: npm ci --ignore-scripts
 
     - name: Security audit
       # Fail the pipeline on high/critical advisories in the dependency tree
