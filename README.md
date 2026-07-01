@@ -195,6 +195,11 @@ npm run test:e2e
 npm run test:e2e:open
 ```
 
+> **Note:** This repo blocks npm lifecycle scripts by default (`.npmrc`) as a
+> supply-chain hardening measure, so Cypress's binary isn't fetched on
+> `npm install`. Before running e2e tests for the first time, install it
+> explicitly: `npx cypress install`.
+
 ##### Storybook
 ```bash
 # Start Storybook development server
