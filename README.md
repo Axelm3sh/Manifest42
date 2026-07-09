@@ -1,5 +1,9 @@
 # AI-Powered Inventory Management Dashboard
 
+> **Archived:** This project is no longer maintained. The repository is read-only;
+> issues and pull requests are closed and no longer accepted. The code and docs below
+> are preserved as-is for reference.
+
 ## Project Overview
 This project is an advanced inventory management dashboard with AI-driven insights mock.
 Built with Vue 3 and Vite, it provides a comprehensive solution for warehouse operations, 
